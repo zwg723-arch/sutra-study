@@ -306,6 +306,8 @@ html[data-theme="classic"]{
   --border:#5a4020;--outline:#d4a017;
   --shadow:rgba(0,0,0,.6);
   --gold:#d4a017;--gold-light:#e8c060;--gold-pale:#2a1800;
+  --yellow-pale:#2a1800;--yellow-dk:#d4a017;
+  --table-even:#1e1000;--table-hover:#2a1800;
   --nav-bg:#080300;--hdr1:#080300;--hdr2:#1a0a00;--voice-bg:#050200;
 }
 html[data-theme="classic"] body{background-color:#0a0500;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='%23b8860b' fill-opacity='0.04'/%3E%3C/svg%3E");}
@@ -349,6 +351,18 @@ html[data-theme="classic"] .fz-btn{background:rgba(255,255,255,.05);}
 html[data-theme="classic"] .theme-bar{background:#080300;}
 html[data-theme="classic"] .theme-btn{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.15);}
 html[data-theme="classic"] .theme-btn.active{background:#d4a017;border-color:#8b6508;}
+/* Table rows */
+html[data-theme="classic"] .deed-table td,
+html[data-theme="classic"] .ten-deeds-table td,
+html[data-theme="classic"] .spaced-table td{background:#1a0d00;color:#f0e0c0;border-color:#3a2010;}
+html[data-theme="classic"] .deed-table tr:nth-child(even) td,
+html[data-theme="classic"] .ten-deeds-table tr:nth-child(even) td,
+html[data-theme="classic"] .spaced-table tr:nth-child(even) td{background:#1e1000;}
+html[data-theme="classic"] .deed-table tr:hover td{background:#2a1800;}
+/* Story connect */
+html[data-theme="classic"] .story-connect{background:#150a00 !important;border-color:#5a4020;border-left-color:#d4a017;color:#f0e0c0 !important;}
+html[data-theme="classic"] .story-connect strong{color:#e8c060;}
+html[data-theme="classic"] .deed-zh{color:#d4a017;}
 }
 
 /* ── INK DARK (水墨夜間) ── */
@@ -360,6 +374,8 @@ html[data-theme="ink"]{
   --border:#1a3a5c;--outline:#7BA4FF;
   --shadow:rgba(0,0,0,.7);
   --gold:#c4a870;--gold-light:#d8c090;--gold-pale:#1a1400;
+  --yellow-pale:#0a1400;--yellow-dk:#c4a870;
+  --table-even:#0d1a2e;--table-hover:#1a2a3e;
   --nav-bg:#05101e;--hdr1:#05101e;--hdr2:#0d1a30;--voice-bg:#030810;
   --jade:#3a9060;--jade-light:#5aaa80;
 }
@@ -406,6 +422,18 @@ html[data-theme="ink"] .fz-btn{background:rgba(255,255,255,.05);}
 html[data-theme="ink"] .theme-bar{background:#05101e;}
 html[data-theme="ink"] .theme-btn{background:rgba(255,255,255,.08);color:rgba(255,255,255,.55);border-color:rgba(255,255,255,.15);}
 html[data-theme="ink"] .theme-btn.active{background:#8b7355;color:#fff;border-color:#5a4a30;}
+/* Table rows */
+html[data-theme="ink"] .deed-table td,
+html[data-theme="ink"] .ten-deeds-table td,
+html[data-theme="ink"] .spaced-table td{background:#0d1a2e;color:#d8e8f0;border-color:#1a3a5c;}
+html[data-theme="ink"] .deed-table tr:nth-child(even) td,
+html[data-theme="ink"] .ten-deeds-table tr:nth-child(even) td,
+html[data-theme="ink"] .spaced-table tr:nth-child(even) td{background:#121f30;}
+html[data-theme="ink"] .deed-table tr:hover td{background:#1a2a3e;}
+/* Story connect */
+html[data-theme="ink"] .story-connect{background:#07101e !important;border-color:#1a3a5c;border-left-color:#c4a870;color:#d8e8f0 !important;}
+html[data-theme="ink"] .story-connect strong{color:#c4a870;}
+html[data-theme="ink"] .deed-zh{color:#7ba4ff;}
 }
 
 }
@@ -453,9 +481,9 @@ body{
 .header-subtitle{color:rgba(255,255,255,.85);font-size:.8rem;letter-spacing:.07em;}
 
 /* Font bar */
-.font-bar{background:#FFE9F3;border-bottom:3px solid var(--outline);padding:6px 14px;display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap;}
-.font-bar-label{color:var(--muted);font-size:.82rem;margin-right:4px;white-space:nowrap;font-weight:700;}
-.fz-btn{padding:5px 14px;border:2.5px solid var(--outline);border-radius:20px;background:#fff;color:var(--text);cursor:pointer;font-family:'M PLUS Rounded 1c',sans-serif;font-size:.85rem;font-weight:700;transition:all .18s;-webkit-appearance:none;box-shadow:2px 2px 0 var(--outline);}
+.font-bar{background:#FFE9F3;border-bottom:2px solid var(--outline);padding:4px 12px;display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:wrap;}
+.font-bar-label{color:var(--muted);font-size:12px;margin-right:4px;white-space:nowrap;font-weight:700;}
+.fz-btn{padding:5px 14px;border:2.5px solid var(--outline);border-radius:20px;background:#fff;color:var(--text);cursor:pointer;font-family:'M PLUS Rounded 1c',sans-serif;font-size:12px;font-weight:700;transition:all .18s;-webkit-appearance:none;box-shadow:2px 2px 0 var(--outline);}
 .fz-btn:hover{transform:translateY(-2px);box-shadow:3px 4px 0 var(--outline);}
 .fz-btn:active{transform:translateY(1px);box-shadow:1px 1px 0 var(--outline);}
 .fz-btn.active{background:var(--yellow);color:var(--outline);border-color:var(--outline);}
@@ -467,6 +495,8 @@ body{
   padding:8px 10px;position:sticky;top:0;z-index:100;
   border-bottom:3px solid var(--outline);
   box-shadow:0 4px 0 var(--pink);
+  width:100%;max-width:100%;overflow:hidden;
+  box-sizing:border-box;
 }
 .nav-tab{
   background:#FFE9F3;border:2.5px solid var(--outline);
@@ -1116,18 +1146,18 @@ html{font-size:var(--base-font);}
 
 /* ── Theme Switcher Bar ── */
 .theme-bar{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:8px 14px;flex-wrap:wrap;
-  border-bottom:3px solid var(--outline);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:5px 12px;flex-wrap:wrap;
+  border-bottom:2px solid var(--outline);
 }
-.theme-bar-label{font-size:.8rem;font-weight:700;color:var(--muted);white-space:nowrap;}
+.theme-bar-label{font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;}
 .theme-btn{
-  padding:6px 16px;border-radius:20px;cursor:pointer;
-  font-family:inherit;font-size:.82rem;font-weight:800;
+  padding:5px 14px;border-radius:18px;cursor:pointer;
+  font-family:inherit;font-size:12px;font-weight:800;
   transition:all .18s;-webkit-appearance:none;
-  border:2.5px solid var(--outline);
+  border:2px solid var(--outline);
   background:var(--card-bg);color:var(--text);
-  box-shadow:2px 3px 0 var(--outline);
+  box-shadow:2px 2px 0 var(--outline);
 }
 .theme-btn:hover{transform:translateY(-2px);box-shadow:3px 5px 0 var(--outline);}
 .theme-btn:active{transform:translateY(1px);box-shadow:1px 1px 0 var(--outline);}
@@ -1176,12 +1206,244 @@ html[data-theme="ink"] .plb-item.plb-me{border-color:#1a3a5c;background:#e8eef5;
 .plb-detail{font-size:.74rem;color:var(--muted);margin-top:2px;}
 .plb-score{font-size:.88rem;font-weight:900;color:var(--mint);}
 html[data-theme="classic"] .plb-score{color:var(--jade);}
+
+/* ── Grouped Nav ── */
+.nav-tabs{
+  flex-direction:column;gap:3px;padding:5px 0;
+  /* Must constrain width so children can't overflow */
+  width:100%;max-width:100%;overflow:hidden;
+  box-sizing:border-box;
+}
+.nav-group{
+  display:flex;align-items:center;gap:5px;
+  width:100%;max-width:100%;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  padding:2px 8px 4px;
+  box-sizing:border-box;
+}
+.nav-group::-webkit-scrollbar{display:none;}
+.nav-group-label{
+  font-size:10px;font-weight:900;
+  color:rgba(255,255,255,.45);
+  letter-spacing:.06em;white-space:nowrap;
+  flex-shrink:0;padding-right:5px;
+  border-right:1.5px solid rgba(255,255,255,.2);
+  margin-right:1px;
+}
+html[data-theme="kawaii"] .nav-group-label{color:var(--muted);border-color:var(--border);}
+.nav-group-btns{
+  display:flex;gap:4px;flex-shrink:0;
+}
+/* More compact nav tabs in grouped layout */
+.nav-group .nav-tab{
+  padding:5px 10px;font-size:13px;white-space:nowrap;
+  flex-shrink:0; /* prevent squishing */
+}
+html[data-theme="kawaii"] .nav-group .nav-tab{
+  padding:5px 11px;font-size:13px;
+  box-shadow:2px 2px 0 var(--outline);
+  flex-shrink:0;
+}
+@media(prefers-color-scheme:dark){
+  html[data-theme="classic"] .nav-group-label{color:rgba(255,255,255,.3);}
+  html[data-theme="ink"] .nav-group-label{color:rgba(255,255,255,.3);}
+  html[data-theme="kawaii"] .nav-group-label{color:#B090CC;border-color:#5A3070;}
+}
+
+/* ═══ GLOBAL dark mode text clarity fixes ═══ */
+@media(prefers-color-scheme:dark){
+  /* Classic dark */
+  html[data-theme="classic"] .story-body p{color:#f0e0c0;}
+  html[data-theme="classic"] .story-connect{color:#f0e0c0 !important;}
+  html[data-theme="classic"] .story-connect strong{color:#e8c060;}
+  html[data-theme="classic"] .deed-tag{color:#f0a080;border-color:#f0a080;}
+  html[data-theme="classic"] .kp-card p{color:#d4b890;}
+  html[data-theme="classic"] .kp-tag{background:#2a1800;color:#d4a017;border-color:#5a4020;}
+  html[data-theme="classic"] .prac-item-card{background:#1a0d00;border-color:#5a4020;color:#f0e0c0;}
+  html[data-theme="classic"] .prac-q{color:#f0e0c0;}
+  html[data-theme="classic"] .prac-a{color:#b09060;}
+  html[data-theme="classic"] .section-title-en{color:#b09060;}
+  html[data-theme="classic"] .ornament{color:#d4a017;}
+  html[data-theme="classic"] .j-day-select{background:#1e1000;color:#f0e0c0;border-color:#5a4020;}
+  html[data-theme="classic"] .j-note-textarea{background:#1e1000;color:#f0e0c0;border-color:#5a4020;}
+  html[data-theme="classic"] .j-note-text{color:#f0e0c0;}
+  html[data-theme="classic"] .j-note-date{color:#b09060;}
+  html[data-theme="classic"] .score-num{color:#d4a017;}
+  html[data-theme="classic"] .score-label{color:rgba(255,255,255,.6);}
+  html[data-theme="classic"] .nav-group-label{color:rgba(255,255,255,.4);border-color:#5a4020;}
+  html[data-theme="classic"] .outline-content{background:#150a00;color:#f0e0c0;}
+  html[data-theme="classic"] .feynman-box{background:#1a0d00;border-color:#5a4020;}
+  html[data-theme="classic"] .feynman-box h3{color:#d4a017;}
+  html[data-theme="classic"] .sa-textarea{background:#1e1000;color:#f0e0c0;border-color:#5a4020;}
+  html[data-theme="classic"] .quiz-q{color:#f0e0c0;}
+  html[data-theme="classic"] .quiz-q strong{color:#e8c060;}
+  html[data-theme="classic"] .deed-table td,
+  html[data-theme="classic"] .ten-deeds-table td,
+  html[data-theme="classic"] .spaced-table td{color:#f0e0c0 !important;background:#1a0d00 !important;border-color:#3a2010;}
+  html[data-theme="classic"] .deed-table tr:nth-child(even) td,
+  html[data-theme="classic"] .ten-deeds-table tr:nth-child(even) td{background:#1e1000 !important;}
+  html[data-theme="classic"] .story-connect{background:#150a00 !important;color:#f0e0c0 !important;border-color:#5a4020;}
+  html[data-theme="classic"] .story-connect strong{color:#e8c060;}
+  html[data-theme="classic"] .deed-table th{background:linear-gradient(90deg,#5a0e0e,#3a0808);}
+  html[data-theme="classic"] .img-assoc{color:#b09060;}
+  html[data-theme="classic"] .ai-speech-box{background:#1a0d00;border-color:#5a4020;}
+  html[data-theme="classic"] .ai-speech-box h3{color:#d4a017;}
+  /* Journal section - classic dark */
+  html[data-theme="classic"] .section-title{color:#d4a017 !important;}
+  html[data-theme="classic"] .section-title-en{color:#b09060 !important;}
+  html[data-theme="classic"] .ornament{color:#d4a017 !important;}
+  html[data-theme="classic"] .j-tab{background:#1e1000 !important;color:#f0e0c0 !important;border-color:#5a4020 !important;box-shadow:2px 2px 0 #080300 !important;}
+  html[data-theme="classic"] .j-tab.active{background:#5a0e0e !important;color:#f5e0c0 !important;border-color:#d4a017 !important;}
+  html[data-theme="classic"] .j-note-textarea{background:#1a0d00 !important;color:#f0e0c0 !important;border-color:#5a4020 !important;}
+  html[data-theme="classic"] .j-note-textarea::placeholder{color:#6a4830 !important;}
+  html[data-theme="classic"] .j-day-select{background:#1a0d00 !important;color:#f0e0c0 !important;border-color:#5a4020 !important;}
+  html[data-theme="classic"] .j-char-count{color:#b09060 !important;}
+  html[data-theme="classic"] .j-note-card{background:#1a0d00 !important;border-color:#5a4020 !important;}
+  html[data-theme="classic"] .j-note-text{color:#f0e0c0 !important;}
+  html[data-theme="classic"] .j-note-day{color:#d4a017 !important;}
+  html[data-theme="classic"] .j-note-date{color:#b09060 !important;}
+  html[data-theme="classic"] .j-saved-notes p{color:#b09060 !important;}
+  html[data-theme="classic"] .social-label{color:#b09060 !important;}
+  html[data-theme="classic"] #myCodeDisplay{color:#d4a017 !important;}
+  html[data-theme="classic"] .social-code-box{background:#150a00 !important;border-color:#5a4020 !important;}
+  html[data-theme="classic"] .social-nick-input{background:#1a0d00 !important;color:#f0e0c0 !important;border-color:#5a4020 !important;}
+
+  /* Ink dark */
+  html[data-theme="ink"] .story-body p{color:#d8e8f0;}
+  html[data-theme="ink"] .story-connect{color:#d8e8f0 !important;}
+  html[data-theme="ink"] .deed-tag{color:#a0c8e0;border-color:#a0c8e0;}
+  html[data-theme="ink"] .kp-card p{color:#b0c8d8;}
+  html[data-theme="ink"] .kp-tag{background:#0a1400;color:#7ba4ff;border-color:#1a3a5c;}
+  html[data-theme="ink"] .prac-item-card{background:#0d1a2e;border-color:#1a3a5c;color:#d8e8f0;}
+  html[data-theme="ink"] .prac-q{color:#d8e8f0;}
+  html[data-theme="ink"] .prac-a{color:#7890a8;}
+  html[data-theme="ink"] .section-title-en{color:#7890a8;}
+  html[data-theme="ink"] .j-day-select{background:#121f30;color:#d8e8f0;border-color:#1a3a5c;}
+  html[data-theme="ink"] .j-note-textarea{background:#121f30;color:#d8e8f0;border-color:#1a3a5c;}
+  html[data-theme="ink"] .j-note-text{color:#d8e8f0;}
+  html[data-theme="ink"] .j-note-date{color:#7890a8;}
+  html[data-theme="ink"] .nav-group-label{color:rgba(255,255,255,.35);border-color:#1a3a5c;}
+  html[data-theme="ink"] .outline-content{background:#07101e;color:#d8e8f0;}
+  html[data-theme="ink"] .feynman-box{background:#0d1a2e;border-color:#1a3a5c;}
+  html[data-theme="ink"] .feynman-box h3{color:#7ba4ff;}
+  html[data-theme="ink"] .quiz-q{color:#d8e8f0;}
+  html[data-theme="ink"] .quiz-q strong{color:#c4a870;}
+  html[data-theme="ink"] .deed-table td,
+  html[data-theme="ink"] .ten-deeds-table td,
+  html[data-theme="ink"] .spaced-table td{color:#d8e8f0 !important;background:#0d1a2e !important;border-color:#1a3a5c;}
+  html[data-theme="ink"] .deed-table tr:nth-child(even) td,
+  html[data-theme="ink"] .ten-deeds-table tr:nth-child(even) td{background:#121f30 !important;}
+  html[data-theme="ink"] .story-connect{background:#07101e !important;color:#d8e8f0 !important;border-color:#1a3a5c;}
+  html[data-theme="ink"] .story-connect strong{color:#c4a870;}
+  /* Journal section - ink dark */
+  html[data-theme="ink"] .section-title{color:#7ba4ff !important;}
+  html[data-theme="ink"] .section-title-en{color:#7890a8 !important;}
+  html[data-theme="ink"] .ornament{color:#c4a870 !important;}
+  html[data-theme="ink"] .j-tab{background:#121f30 !important;color:#d8e8f0 !important;border-color:#1a3a5c !important;}
+  html[data-theme="ink"] .j-tab.active{background:#1a3a5c !important;color:#d8e8f0 !important;border-color:#7ba4ff !important;}
+  html[data-theme="ink"] .j-note-textarea{background:#0d1a2e !important;color:#d8e8f0 !important;border-color:#1a3a5c !important;}
+  html[data-theme="ink"] .j-note-textarea::placeholder{color:#4a6a88 !important;}
+  html[data-theme="ink"] .j-day-select{background:#0d1a2e !important;color:#d8e8f0 !important;border-color:#1a3a5c !important;}
+  html[data-theme="ink"] .j-char-count{color:#7890a8 !important;}
+  html[data-theme="ink"] .j-note-card{background:#0d1a2e !important;border-color:#1a3a5c !important;color:#d8e8f0 !important;}
+  html[data-theme="ink"] .j-note-text{color:#d8e8f0 !important;}
+  html[data-theme="ink"] .j-note-day{color:#7ba4ff !important;}
+  html[data-theme="ink"] .j-note-date{color:#7890a8 !important;}
+  html[data-theme="ink"] p[style*="color:var(--muted)"]{color:#7890a8 !important;}
+  html[data-theme="ink"] .j-saved-notes p{color:#7890a8 !important;}
+  html[data-theme="ink"] .social-label{color:#7890a8 !important;}
+  html[data-theme="ink"] #myCodeDisplay{color:#c4a870 !important;}
+  html[data-theme="ink"] .social-code-box{background:#07101e !important;border-color:#1a3a5c !important;}
+  html[data-theme="ink"] .social-nick-input{background:#0d1a2e !important;color:#d8e8f0 !important;border-color:#1a3a5c !important;}
+  html[data-theme="ink"] .img-assoc{color:#7890a8;}
+  html[data-theme="ink"] .ai-speech-box{background:#0d1a2e;border-color:#1a3a5c;}
+  html[data-theme="ink"] .ai-speech-box h3{color:#7ba4ff;}
+
+  /* Kawaii dark */
+  html[data-theme="kawaii"] .story-body p{color:#F5E8FF;}
+  html[data-theme="kawaii"] .story-connect{color:#F5E8FF !important;}
+  html[data-theme="kawaii"] .kp-card p{color:#C9A8FF;}
+  html[data-theme="kawaii"] .prac-item-card{background:#1E1228;border-color:#5A3070;color:#F5E8FF;}
+  html[data-theme="kawaii"] .prac-q{color:#F5E8FF;}
+  html[data-theme="kawaii"] .prac-a{color:#B090CC;}
+  html[data-theme="kawaii"] .section-title-en{color:#B090CC;}
+  html[data-theme="kawaii"] .j-day-select{background:#22162C;color:#F5E8FF;border-color:#5A3070;}
+  html[data-theme="kawaii"] .j-note-text{color:#F5E8FF;}
+  html[data-theme="kawaii"] .j-note-date{color:#B090CC;}
+  html[data-theme="kawaii"] .quiz-q{color:#F5E8FF;}
+  html[data-theme="kawaii"] .quiz-q strong{color:#FFE566;}
+  html[data-theme="kawaii"] .deed-table td{color:#C9A8FF;}
+  html[data-theme="kawaii"] .img-assoc{color:#B090CC;}
+  html[data-theme="kawaii"] .ai-speech-box{background:#1E1228;border-color:#5A3070;}
+  html[data-theme="kawaii"] .ai-speech-box h3{color:#FF6BAD;}
+  html[data-theme="kawaii"] .nav-group-label{color:#B090CC;border-color:#5A3070;}
+}
+
+/* ── Speech duration buttons ── */
+.speech-dur-btn{padding:6px 16px;border:2px solid var(--border);border-radius:20px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:.82rem;font-weight:700;transition:all .18s;-webkit-appearance:none;}
+.speech-dur-btn:hover{border-color:var(--pink);background:var(--pink-pale);}
+.speech-dur-btn.active{background:var(--pink);color:#fff;border-color:var(--outline);}
+html[data-theme="classic"] .speech-dur-btn.active{background:var(--gold);color:#fff;border-color:var(--gold-dk);}
+html[data-theme="ink"] .speech-dur-btn.active{background:#1a3a5c;color:#d4c4a0;border-color:#8b7355;}
+@media(prefers-color-scheme:dark){
+  html[data-theme="classic"] .speech-dur-btn{background:#1e1000;color:#f0e0c0;border-color:#5a4020;}
+  html[data-theme="ink"] .speech-dur-btn{background:#121f30;color:#d8e8f0;border-color:#1a3a5c;}
+  html[data-theme="kawaii"] .speech-dur-btn{background:#1E1228;color:#F5E8FF;border-color:#5A3070;}
+}
+
+/* ── Collapsible Header ── */
+.header-compact{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:9px 14px;cursor:pointer;
+  position:relative;user-select:none;-webkit-user-select:none;
+  transition:background .2s;
+  /* Fixed height so large font setting never breaks layout */
+  min-height:0;
+  font-size:16px; /* reset — children use px, not rem */
+}
+.header-compact:active{opacity:.85;}
+.header-compact-lotus{font-size:17px;opacity:.85;flex-shrink:0;line-height:1;}
+.header-compact-title{
+  font-family:'cwTeXKai','M PLUS Rounded 1c',serif;
+  font-size:17px;   /* fixed px — immune to --base-font scaling */
+  font-weight:700;color:#fff;
+  letter-spacing:.12em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  flex:1;text-align:center;
+  text-shadow:2px 2px 0 var(--pink-dk);
+  line-height:1.2;
+}
+html[data-theme="classic"] .header-compact-title{
+  color:#f5e6c8;text-shadow:1px 1px 0 rgba(0,0,0,.4);
+}
+html[data-theme="ink"] .header-compact-title{
+  color:#d4c4a0;text-shadow:1px 1px 0 rgba(0,0,0,.4);
+}
+.header-compact-toggle{
+  font-size:11px;color:rgba(255,255,255,.6);
+  transition:transform .3s;flex-shrink:0;width:14px;text-align:center;line-height:1;
+}
+.header-compact-toggle.open{transform:rotate(180deg);}
+/* Smooth expand/collapse */
+.header-inner{
+  overflow:hidden;
+  animation:slideDown .3s ease;
+}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+/* Site header — no bottom border when collapsed */
+.site-header.collapsed{border-bottom:none;}
 </style>
 </head>
 <body>
 
-<header class="site-header">
-  <div class="header-inner">
+<header class="site-header" id="siteHeader">
+  <div class="header-compact" id="headerCompact" onclick="toggleHeader()">
+    <span class="header-compact-lotus">☸</span>
+    <span class="header-compact-title">佛說十善業道經</span>
+    <span class="header-compact-toggle" id="headerToggleIcon">▼</span>
+  </div>
+  <div class="header-inner" id="headerFull" style="display:none;">
     <span class="header-lotus">🌸 ☸ 🌸</span>
     <h1 class="header-title-zh">佛說十善業道經</h1>
     <div class="header-divider"></div>
@@ -1192,9 +1454,9 @@ html[data-theme="classic"] .plb-score{color:var(--jade);}
 
 <div class="theme-bar">
   <span class="theme-bar-label">🎨 風格</span>
-  <button class="theme-btn" data-t="classic" onclick="setTheme('classic')">🏛 成熟</button>
+  <button class="theme-btn" data-t="classic" onclick="setTheme('classic')">🏛 禪風</button>
   <button class="theme-btn" data-t="ink" onclick="setTheme('ink')">🖌 古風</button>
-  <button class="theme-btn active" data-t="kawaii" onclick="setTheme('kawaii')">🌸 少女</button>
+  <button class="theme-btn active" data-t="kawaii" onclick="setTheme('kawaii')">🌸 少女風風</button>
 </div>
 <div class="font-bar">
   <span class="font-bar-label">字體大小：</span>
@@ -1204,19 +1466,34 @@ html[data-theme="classic"] .plb-score{color:var(--jade);}
 </div>
 
 <nav class="nav-tabs">
-  <button class="nav-tab active" onclick="showSection('story',0)">📖 故事</button>
-  <button class="nav-tab" onclick="showSection('text',1)">📜 經文</button>
-  <button class="nav-tab" onclick="showSection('knowledge',2)">💡 知識</button>
-  <button class="nav-tab" onclick="showSection('mindmap',3)">🗺 導圖</button>
-  <button class="nav-tab" onclick="showSection('flashcard',4)">🃏 閃卡</button>
-  <button class="nav-tab" onclick="showSection('truefalse',5)">✅ 是非</button>
-  <button class="nav-tab" onclick="showSection('mcq',6)">❓ 問答</button>
-  <button class="nav-tab" onclick="showSection('shortans',7)">✏️ 簡答</button>
-  <button class="nav-tab" onclick="showSection('voice',8)">🎙 語音</button>
-  <button class="nav-tab" onclick="showSection('speech',9)">🎤 演講</button>
-  <button class="nav-tab" onclick="showSection('memory',10)">🧠 記憶</button>
-  <button class="nav-tab" onclick="showSection('plan',11)">📅 學習計劃</button>
-  <button class="nav-tab" onclick="showSection('journal',12)">📔 學習日誌</button>
+  <div class="nav-group">
+    <span class="nav-group-label">📚 學習</span>
+    <div class="nav-group-btns">
+      <button class="nav-tab active" onclick="showSection('story',0)">📖 故事</button>
+      <button class="nav-tab" onclick="showSection('text',1)">📜 經文</button>
+      <button class="nav-tab" onclick="showSection('knowledge',2)">💡 知識</button>
+      <button class="nav-tab" onclick="showSection('mindmap',3)">🗺 導圖</button>
+      <button class="nav-tab" onclick="showSection('memory',10)">🧠 記憶</button>
+    </div>
+  </div>
+  <div class="nav-group">
+    <span class="nav-group-label">✏️ 練習</span>
+    <div class="nav-group-btns">
+      <button class="nav-tab" onclick="showSection('flashcard',4)">🃏 閃卡</button>
+      <button class="nav-tab" onclick="showSection('truefalse',5)">✅ 是非</button>
+      <button class="nav-tab" onclick="showSection('mcq',6)">❓ 問答</button>
+      <button class="nav-tab" onclick="showSection('shortans',7)">✏️ 簡答</button>
+      <button class="nav-tab" onclick="showSection('voice',8)">🎙 AI 問答</button>
+    </div>
+  </div>
+  <div class="nav-group">
+    <span class="nav-group-label">🎯 進階</span>
+    <div class="nav-group-btns">
+      <button class="nav-tab" onclick="showSection('speech',9)">🎤 演講</button>
+      <button class="nav-tab" onclick="showSection('plan',11)">📅 計劃</button>
+      <button class="nav-tab" onclick="showSection('journal',12)">📔 日誌</button>
+    </div>
+  </div>
 </nav>
 
 <!-- ═══════ 0. 白話故事 ═══════ -->
@@ -1465,13 +1742,20 @@ html[data-theme="classic"] .plb-score{color:var(--jade);}
 
   <!-- AI opener -->
   <div class="ai-speech-box">
-    <h3>🤖 AI 個性化演講開場生成</h3>
-    <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:14px;">告訴 AI 您的聽眾是誰，AI 為您生成量身訂做的 60 秒開場白。</p>
+    <h3>🤖 AI 個性化演講稿生成</h3>
+    <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:14px;">告訴 AI 您的聽眾是誰，選擇演講時長，AI 為您生成完整演講稿。</p>
     <textarea class="sa-textarea" id="audienceInput" placeholder="例如：我的聽眾是老年社區的長輩，大約 20 人，大多數沒有接觸過佛法。" style="min-height:65px;"></textarea>
-    <button class="btn btn-gold" onclick="generateOpener()">✨ 生成演講開場</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px;">
+      <span style="font-size:.85rem;color:var(--text-muted);font-weight:700;align-self:center;">演講時長：</span>
+      <button class="speech-dur-btn active" data-dur="60" onclick="setSpeechDur(this)">⏱ 60秒</button>
+      <button class="speech-dur-btn" data-dur="180" onclick="setSpeechDur(this)">⏱ 3分鐘</button>
+      <button class="speech-dur-btn" data-dur="300" onclick="setSpeechDur(this)">⏱ 5分鐘</button>
+    </div>
+    <button class="btn btn-gold" onclick="generateOpener()" style="margin-top:8px;">✨ 生成演講稿</button>
     <div class="ai-result" id="aiOpenerResult" style="display:none;"></div>
     <div class="btn-row" id="openerBtnRow" style="display:none;margin-top:10px;">
-      <button class="btn btn-jade" onclick="speakText(document.getElementById('aiOpenerResult').textContent,'zh-TW')">🔊 朗讀開場白</button>
+      <button class="btn btn-jade" onclick="speakText(document.getElementById('aiOpenerResult').textContent,'zh-TW')">🔊 朗讀演講稿</button>
+      <button class="btn btn-secondary" onclick="copyOpener()">📋 複製</button>
     </div>
   </div>
 
@@ -1776,6 +2060,39 @@ html[data-theme="classic"] .plb-score{color:var(--jade);}
 
 <script>
 // ── Error handler in <head> ──
+
+// ── Collapsible Header ──
+var headerExpanded = false;
+function toggleHeader(){
+  try{
+    headerExpanded = !headerExpanded;
+    var full = document.getElementById('headerFull');
+    var icon = document.getElementById('headerToggleIcon');
+    var hdr  = document.getElementById('siteHeader');
+    if(full){full.style.display = headerExpanded ? 'block' : 'none';}
+    if(icon){icon.classList.toggle('open', headerExpanded);}
+    if(hdr){hdr.classList.toggle('collapsed', !headerExpanded);}
+    try{localStorage.setItem('sjyd_hdr', headerExpanded?'1':'0');}catch(e){}
+  }catch(e){console.warn('toggleHeader:',e);}
+}
+// Restore preference
+(function(){
+  try{
+    var pref = localStorage.getItem('sjyd_hdr');
+    // Default collapsed (pref null = collapsed, '0' = collapsed, '1' = expanded)
+    if(pref === '1'){
+      var full = document.getElementById('headerFull');
+      var icon = document.getElementById('headerToggleIcon');
+      if(full)full.style.display='block';
+      if(icon)icon.classList.add('open');
+      headerExpanded = true;
+    } else {
+      // Already collapsed by default (display:none on headerFull)
+      var hdr = document.getElementById('siteHeader');
+      if(hdr)hdr.classList.add('collapsed');
+    }
+  }catch(e){}
+})();
 // ── Theme System ──
 function setTheme(t){
   try{
@@ -1816,7 +2133,7 @@ var CLAUDE_ENV = (function(){
 
 // 方法3: 留空 = 使用 Claude 環境的代理（預設）
 var ANTHROPIC_API_KEY = '';
-var PROXY_URL = '';
+var PROXY_URL = '/api/claude'; // Vercel proxy
 
 async function callAnthropicAPI(reqBody){
   var url, headers;
@@ -1890,8 +2207,12 @@ function showSection(id,idx){
     document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.remove('active');});
     var el=document.getElementById(id);
     if(el)el.classList.add('active');
-    var tabs=document.querySelectorAll('.nav-tab');
-    if(tabs[idx])tabs[idx].classList.add('active');
+    // Find the tab that calls showSection with this id
+    document.querySelectorAll('.nav-tab').forEach(function(t){
+      if(t.getAttribute('onclick')&&t.getAttribute('onclick').indexOf("'"+id+"'")>=0){
+        t.classList.add('active');
+      }
+    });
     window.scrollTo({top:0,behavior:'smooth'});
   }catch(e){console.warn('showSection:',e);}
 }
@@ -2083,6 +2404,21 @@ const tfBank=[
   {q:'十善業道中，口業的種類最多，共有四種。',ans:true,exp:'正確！口業有四種，是十善中數量最多的類別。'},
   {q:'「不邪淫」只適用於出家修行者。',ans:false,exp:'不正確。不邪淫對在家居士同樣重要，指不行不正當男女關係。'},
   {q:'佛說佈施、持戒、忍辱、精進、禪定、智慧皆以十善業道為根本。',ans:true,exp:'正確！經文明言：「皆由十善業道而為根本，具足得生。」'},
+{q:'「不瞋恚」屬於意業，指不生氣、不懷恨，保持平靜的心。',ans:true,exp:'正確！意業三種之二，瞋恚是心念中的惡業。'},
+  {q:'離偷盜可得「多人愛念」的功德。',ans:true,exp:'正確！離偷盜十種可保信法之第二。'},
+  {q:'本經說「施莊嚴故，能捨一切所有」是以布施修行。',ans:true,exp:'正確！菩薩以十善業為基礎，先以施莊嚴，能捨一切。'},
+  {q:'十善業道中，「不邪淫」共可得八種功德。',ans:false,exp:'不邪淫得四種智所讚法，不是八種。離妄語才得八種。'},
+  {q:'離惡口可成就「言不乖度、言皆利益」等八種淨業。',ans:true,exp:'正確！離惡口八種淨業之首兩種。'},
+  {q:'「戒莊嚴」意指以持戒修行，能遠離一切過失毀辱。',ans:true,exp:'正確！菩薩修行次第：施、戒、忍、進、禪、慧，皆以十善為根。'},
+  {q:'本經流通分記載：大眾聞佛所說法，「皆大歡喜，各作禮而退」。',ans:false,exp:'流通分是「皆大歡喜，信受奉行」，不是「各作禮而退」。'},
+  {q:'離邪見可得「真善意樂、真善等侶」的功德。',ans:true,exp:'正確！離邪見十功德法之第一。'},
+  {q:'本經的十善業道可以幫助人成就人天福報，但無法成就佛果。',ans:false,exp:'錯誤！本經明言迴向無上菩提後，可成就圓滿佛果。'},
+  {q:'「忍辱莊嚴故，得佛圓音，具眾相好。」',ans:true,exp:'正確！忍辱莊嚴的功德是佛圓音及眾相好。'},
+  {q:'不兩舌可得「五種不可壞法」，包括「不壞身、不壞眷屬」。',ans:true,exp:'正確！五種不可壞：不壞身、不壞眷屬、不壞信、不壞法行、不壞善知識。'},
+  {q:'「禪定莊嚴故，能生慚愧輕安等法」。',ans:true,exp:'正確！禪定莊嚴的功德是生慚愧、輕安。'},
+  {q:'海龍王的名字是娑竭羅（Sāgara）。',ans:true,exp:'正確！娑竭羅是梵文 Sāgara，意為「海」。'},
+  {q:'本經的核心主題是「持咒可以消業」。',ans:false,exp:'本經核心是十善業道，強調行為、語言、心念的淨化，非持咒。'},
+  {q:'「智慧莊嚴故，能斷一切分別妄見」。',ans:true,exp:'正確！智慧莊嚴的功德是斷一切分別妄見。'},
 ];
 
 const mcqBank=[
@@ -2116,8 +2452,19 @@ const mcqBank=[
   {q:'依本經，十善業道能「生」的最高境界是？',opts:['A.生天道','B.生阿羅漢果','C.生辟支佛','D.生無上正等菩提（佛果）'],ans:3,exp:'經文明列能生人天、聲聞、獨覺，乃至「無上正等菩提」，佛果為最高。'},
   {q:'「不貪欲」對應的修養核心是？',opts:['A.禪定','B.般若智慧','C.知足喜捨','D.精進勇猛'],ans:2,exp:'不貪欲對應知足與喜捨，培養放下、無私的心態。'},
   {q:'本經中「迴向阿耨多羅三藐三菩提」的意思是？',opts:['A.念佛求生淨土','B.將修行功德轉向成就無上佛果','C.懺悔過去所有惡業','D.修習禪定達到三昧境界'],ans:1,exp:'「迴向」是將功德轉向，以成就無上正等正覺為目標發願。'},
+{q:'菩薩修行六度，哪一度與「戒莊嚴」直接對應？',opts:['A.布施','B.持戒','C.忍辱','D.精進'],ans:1,exp:'戒莊嚴對應持戒波羅蜜，能遠離一切過失。'},
+  {q:'離兩舌可得幾種「不可壞法」？',opts:['A.三種','B.四種','C.五種','D.六種'],ans:2,exp:'離兩舌得五種不可壞法：不壞身、眷屬、信、法行、善知識。'},
+  {q:'以下哪項不是「離惡口」的功德？',opts:['A.言皆利益','B.言必契理','C.言詞美妙','D.多人愛念'],ans:3,exp:'多人愛念是離偷盜的功德，不是離惡口的功德。'},
+  {q:'本經說十善業道是一切哪些法的根本？',opts:['A.只是人天福報','B.只是出家戒律','C.聲聞、獨覺、菩薩菩提','D.只是在家五戒'],ans:2,exp:'經文明言：為根本，人天乃至三乘菩提皆依此建立。'},
+  {q:'「忍辱莊嚴」的功德是什麼？',opts:['A.得大神通','B.得佛圓音具眾相好','C.能捨一切所有','D.能生慚愧輕安'],ans:1,exp:'忍辱莊嚴故，得佛圓音，具眾相好。'},
+  {q:'十善業道梵文「kuśala」的意思是？',opts:['A.業道','B.善','C.十','D.道路'],ans:1,exp:'kuśala意為「善、善巧」，daśa意為十，karmapatha意為業道。'},
+  {q:'離邪淫可得幾種「智所讚法」？',opts:['A.兩種','B.三種','C.四種','D.五種'],ans:2,exp:'離邪行得四種智所讚法：諸根調順、永離諠掉、世所稱歎、妻莫能侵。'},
+  {q:'以下哪個不屬於「意業」的範疇？',opts:['A.不貪欲','B.不瞋恚','C.不邪見','D.不惡口'],ans:3,exp:'不惡口屬口業，意業三種是：不貪欲、不瞋恚、不邪見。'},
+  {q:'「精進莊嚴」的功德是什麼？',opts:['A.能摧伏魔怨，入佛法藏','B.能生慚愧輕安','C.得佛圓音','D.能捨一切所有'],ans:0,exp:'精進莊嚴故，能摧伏魔怨，入佛法藏。'},
+  {q:'離妄語可得多少種「天所讚法」？',opts:['A.四種','B.六種','C.八種','D.十種'],ans:2,exp:'離妄語得八種天所讚法，包括口常清淨如蓮香等。'},
+  {q:'本經在哪個王朝被翻譯成中文？',opts:['A.漢朝','B.隋朝','C.唐朝','D.宋朝'],ans:2,exp:'唐代于闐三藏實叉難陀（652–710）奉制翻譯。'},
+  {q:'「禪定莊嚴」能帶來什麼功德？',opts:['A.能斷一切分別妄見','B.能生慚愧輕安等法','C.能摧伏魔怨','D.得佛圓音'],ans:1,exp:'禪定莊嚴故，能生慚愧、輕安等善法。'},
 ];
-
 const saBank=[
   {q:'請解釋「十善業道」是哪十種，並按身、口、意三業分類列舉。',ans:`<strong>身業（3種）：</strong>不殺生、不偷盜、不邪淫<br><strong>口業（4種）：</strong>不妄語、不兩舌、不惡口、不綺語<br><strong>意業（3種）：</strong>不貪欲、不瞋恚、不邪見<br><br>記憶口訣：「3-4-3」結構，身守三門、口言四德、意持三慧。`},
   {q:'《佛說十善業道經》中，佛陀在哪裡說法？主要聽法對象是誰？說法的緣起是什麼？',ans:`<strong>說法地點：</strong>娑竭羅龍宮（海龍王宮殿）<br><strong>聽法對象：</strong>八千大比丘眾、三萬二千菩薩摩訶薩，以及娑竭羅龍王等<br><strong>說法緣起：</strong>佛以海中眾生形色種類各別為喻，開示一切皆由「心」造業之差異，以龍王請法為緣起，說十善業道是一切善法的根本。`},
@@ -2184,7 +2531,19 @@ function checkMCQ(idx,chosen,el){
 function updateMCQScore(){document.getElementById('mcqScore').textContent=`${mcqCorrect} / ${mcqAnswered}`;}
 
 // SA
-let saCurrent=[];
+let saCurrent=[{q:'請說明「菩薩六度」與十善業道的關係。',
+   ans:'菩薩六度（布施、持戒、忍辱、精進、禪定、智慧）皆以十善業道為根本。本經分別說：①施莊嚴故，能捨一切；②戒莊嚴故，遠離過失；③忍莊嚴故，得佛圓音；④進莊嚴故，摧伏魔怨；⑤禪莊嚴故，生慚愧輕安；⑥慧莊嚴故，斷一切妄見。'},
+  {q:'「大地譬喻」在本經中有何意義？',
+   ans:'本經以大地為喻，說明十善業道是一切善法之根本。就如大地能支撐一切山川草木，十善業道亦能支撐人天福報、聲聞菩提、獨覺菩提乃至無上正等菩提，一切善法皆依此根本而建立。'},
+  {q:'請解釋「心業觀」的核心思想。',
+   ans:'心業觀指一切業報皆由心念所造。本經說「一切眾生，心想異故，造業亦異，由是故有諸趣輪轉」，意即心念不同，造業不同，業力不同，輪迴果報就不同。修行根本在淨化心念，十善業道正是從身口意三業入手淨化心念。'},
+  {q:'「迴向菩提」如何將十善業道從世間善提升至出世間善？',
+   ans:'不迴向菩提的十善業道，僅能感召人天福報；若將修行功德迴向無上正等菩提（阿耨多羅三藐三菩提），則每一種善業均能成為佛道資糧。本經每種善業後均說「若能迴向阿耨多羅三藐三菩提，後成佛時得…圓滿功德」，體現大乘佛法的特色。'},
+  {q:'請列舉「離不綺語」的三種決定，並說明其現代意義。',
+   ans:'離綺語三種決定：①定為智人所愛—智慧之人喜歡言語有意義者；②定能以智慧如實答問—說話有質量者能正確回答問題；③定於人天威德最勝無有虛妄—言辭謹慎者最受尊重。現代意義：少刷無聊短影片、減少廢話聊天、說話前思考「這句話有意義嗎？」'},
+  {q:'本經「序分」描述了怎樣的說法場景？其象徵意義為何？',
+   ans:'序分描述：佛在娑竭羅龍宮，與八千大比丘眾、三萬二千菩薩摩訶薩俱。世尊問龍王：「海中眾生形色種類各別，為何？」象徵意義：以海中眾生因業力不同而形色各異，引出「心想異故，造業亦異」的核心教理，說明萬法唯心，業由心造，善惡自取。'},
+];
 function buildSA(){
   saCurrent=pickRandom(saBank,6);const con=document.getElementById('saContainer');con.innerHTML='';
   saCurrent.forEach((item,idx)=>{
@@ -2238,6 +2597,26 @@ const vqPool=[
    ref:'身業三種：①不殺生——慈悲對待一切生命，不奪取生命②不偷盜——不取未被允許的財物，守廉潔③不邪淫——守護清淨的人際關係，不發生不正當男女關係。口訣：「身守三門心清淨」。'},
   {q:'什麼叫做「不綺語」？在現代生活中有哪些例子？',
    ref:'不綺語：不說無意義散亂之言，語言莊重有益。離綺語得三種決定：定為智人所愛、定能如實答問、定於人天威德最勝。現代例子：少刷無意義短影片、不說廢話、說話前問「這句話有意義嗎？」'},
+{q:'請說明「六度」各與哪種莊嚴對應，並舉其功德。',
+   ref:'施莊嚴→能捨一切所有；戒莊嚴→遠離過失毀辱；忍莊嚴→得佛圓音具眾相好；進莊嚴→摧伏魔怨入佛法藏；禪莊嚴→生慚愧輕安；慧莊嚴→斷一切分別妄見。六度各有對應功德，以十善為根本。'},
+  {q:'本經「大地譬喻」說明了什麼道理？',
+   ref:'以大地能承載一切山河草木為喻，說明十善業道是一切善法的根本。人天福報、聲聞菩提、獨覺菩提、無上菩提，皆以十善業道為根本而建立，如萬物依大地而生長。'},
+  {q:'您如何理解「心想異故，造業亦異」這句話在日常生活中的應用？',
+   ref:'這是本經的核心：心念不同則造業不同，業不同則輪迴果報不同。實際應用：遇到不順心的事，先觀察自己的起心動念是否貪、瞋、痴；每天反思當天的身口意三業；以十善業道作為生活準則，從根本上改善命運。'},
+  {q:'十善業道中，您覺得「口業四種」在現代社會最難實踐的是哪一種，為什麼？',
+   ref:'開放性問題，重點在能連結現代生活。不綺語最難：社交媒體充斥無意義資訊，短影片、閒聊消耗大量時間。不兩舌難：群組傳播是非已成習慣。不妄語難：商業談判或人際關係中常有善意謊言。任何答案合理即可，重點是能舉出具體理由。'},
+  {q:'離不偷盜可得十種「可保信法」，請舉出您記得的三種。',
+   ref:'十種可保信法：①資財盈積不散失；②多人愛念；③人不欺負；④十方讚美；⑤不憂損害；⑥善名流布；⑦處眾無畏；⑧財命色力辯才具足；⑨常懷施意；⑩命終生天。能說出其中三種即算完整。'},
+  {q:'本經說「不惡口」得八種「淨業」，請說出其中三種並解釋。',
+   ref:'八種淨業：①言不乖度（說話適當）②言皆利益（說話有益）③言必契理（說話合理）④言詞美妙（語言悅耳）⑤言可承領（可被接受）⑥言則信用（說話可信）⑦言無可譏（無從挑剔）⑧言盡愛樂（令人歡喜）。能說出三種並簡單解釋即可。'},
+  {q:'如果要向一個完全不了解佛法的人解釋「十善業道」，您會怎麼說？',
+   ref:'可以用通俗語言：十善業道是佛陀教我們的十個讓人生變好的行為準則，分三類：行為上不傷害人（不殺、不盜、不邪淫）；說話上不欺騙傷人（不妄語、不兩舌、不惡口、不廢話）；心念上不貪嫉、不發怒、不亂信（不貪、不瞋、不邪見）。把這十條做到，人際關係、健康、財富都會改善。'},
+  {q:'離殺生與離瞋恚有何內在關聯？',
+   ref:'兩者都與「慈悲心」有深刻關聯。離殺生第三個功德是「永斷一切嗔恚習氣」——不殺生可以對治瞋恚。而離瞋恚的根本是培養慈悲心。佛教認為，殺生的動機往往來自瞋恚，因此兩者相互扣連：行不殺生可以熄滅瞋火，培養慈心則自然不起殺念。'},
+  {q:'本經提到「智慧莊嚴故，能斷一切分別妄見」，請解釋「分別妄見」是什麼。',
+   ref:'分別妄見指妄加分別判斷，以虛妄的認知看待世界，例如：執著「我」與「他人」的對立、對事物生起貪愛或憎恨的偏見、不相信因果的邪見等。智慧莊嚴（般若波羅蜜）能破除這些虛妄分別，見到諸法實相，與不邪見相輔相成。'},
+  {q:'「三業清淨」是什麼意思？如何在日常生活中實踐？',
+   ref:'三業清淨指身業（行為）、口業（語言）、意業（心念）全部合乎十善業道。日常實踐：身業清淨——不傷害任何生命，對人誠信；口業清淨——說話真實、和諧、有益、有意義；意業清淨——每天反思起心動念，不起貪念、不發怒、保持正確的因果觀。三業配合，就是真正的修行。'},
 ];
 let vSession={active:false,qIdx:0,pool:[],history:[],recognition:null,currentQ:''};
 function speakAvatar(text,onEnd){
@@ -2479,21 +2858,44 @@ function phraseSpeak(btn){
 }
 
 // AI Opener
+var speechDurSec=60;
+function setSpeechDur(btn){
+  speechDurSec=parseInt(btn.getAttribute('data-dur'))||60;
+  document.querySelectorAll('.speech-dur-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+}
+function copyOpener(){
+  var txt=document.getElementById('aiOpenerResult').textContent;
+  safeCopy(txt,'✅ 演講稿已複製！');
+}
 async function generateOpener(){
   var audience=document.getElementById('audienceInput').value.trim()||'一般大眾';
   var res=document.getElementById('aiOpenerResult');
   res.style.display='block';res.classList.add('loading');
   document.getElementById('openerBtnRow').style.display='none';
-  res.textContent='AI 正在生成演講開場白...';
+
+  var durLabel=speechDurSec===60?'60秒':speechDurSec===180?'3分鐘':'5分鐘';
+  var wordCount=speechDurSec===60?'150-200字':speechDurSec===180?'450-550字':'750-900字';
+  res.textContent='AI 正在生成'+durLabel+'演講稿…';
+
+  var structureGuide='';
+  if(speechDurSec===60){
+    structureGuide='結構：①問題或故事開頭（30字）②點出十善業道主題（60字）③一個核心亮點（60字）④讓聽眾想繼續聽的結尾（30字）。';
+  } else if(speechDurSec===180){
+    structureGuide='結構：①開場問題或故事（80字）②介紹十善業道是什麼（100字）③身口意三業各舉一例說明（150字）④十善如何改變人生（100字）⑤呼籲行動的結尾（80字）。';
+  } else {
+    structureGuide='結構：①引人入勝的開場故事（150字）②十善業道背景與意義（150字）③身業三種詳解與現代應用（150字）④口業四種詳解與現代應用（150字）⑤意業三種詳解（100字）⑥迴向菩提與人生改變（100字）⑦有力的結語與行動呼籲（80字）。';
+  }
+
   try{
     var txt=await callAnthropicAPI({
-      model:'claude-sonnet-4-20250514',max_tokens:800,
-      system:'你是一位演講教練，專精佛學推廣。請生成一段60秒（約150-200字）的演講開場白，關於《佛說十善業道經》的十善業道。要求：①有吸引力的問題或故事開頭 ②自然流暢 ③適合指定聽眾 ④結尾要讓聽眾想繼續聽。用繁體中文，直接輸出開場白內容。',
-      messages:[{role:'user',content:'聽眾：'+audience+'\n請為這個聽眾生成《佛說十善業道經》演講開場白（60秒，約150-200字）'}]
+      model:'claude-sonnet-4-20250514',max_tokens:1500,
+      system:'你是一位演講教練，專精佛學推廣。請生成一篇關於《佛說十善業道經》十善業道的演講稿。要求：①適合指定聽眾 ②流暢自然如口語 ③有具體例子 ④'+structureGuide+'用繁體中文，直接輸出演講稿內容，不要標題或說明文字。',
+      messages:[{role:'user',content:'聽眾：'+audience+'\n演講時長：'+durLabel+'（約'+wordCount+'）\n請生成完整演講稿'}]
     });
     res.textContent=txt;res.classList.remove('loading');document.getElementById('openerBtnRow').style.display='flex';
   }catch(e){
-    res.textContent='⚠️ AI功能目前不可用。此功能需在 Claude.ai 環境中使用。';
+    res.textContent='⚠️ AI功能目前不可用。此功能需在 Claude.ai 或已設定 API Key 的環境中使用。';
     res.classList.remove('loading');
     document.getElementById('openerBtnRow').style.display='flex';
   }
