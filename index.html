@@ -1434,8 +1434,6 @@ html[data-theme="ink"] .header-compact-title{
 /* Site header — no bottom border when collapsed */
 .site-header.collapsed{border-bottom:none;}
 </style>
-<!-- Vercel Analytics -->
-<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -2170,7 +2168,7 @@ async function callAnthropicAPI(reqBody){
   }
   var d;
   try{ d = await r.json(); }catch(e){ throw new Error('parse'); }
-  if(!r.ok){ throw new Error((d&&d.error?d.error.message:'HTTP ')+r.status); }
+  if(!r.ok){ throw new Error(d&&d.error?d.error.message:'HTTP '+r.status); }
   if(!d||!d.content){ throw new Error('no content'); }
   return d.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');
 }
@@ -2215,13 +2213,13 @@ function showSection(id,idx){
     document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.remove('active');});
     var el=document.getElementById(id);
     if(el)el.classList.add('active');
+    // Find the tab that calls showSection with this id
     document.querySelectorAll('.nav-tab').forEach(function(t){
       if(t.getAttribute('onclick')&&t.getAttribute('onclick').indexOf("'"+id+"'")>=0){
         t.classList.add('active');
       }
     });
     window.scrollTo({top:0,behavior:'smooth'});
-    try{if(window.va)window.va('event',{name:'section_view',section:id});}catch(e){}
   }catch(e){console.warn('showSection:',e);}
 }
 
@@ -2637,7 +2635,6 @@ function speakAvatar(text,onEnd){
 }
 function setVS(msg){document.getElementById('voiceStatus').textContent=msg;}
 function startVoiceSession(){
-  try{if(window.va)window.va('event',{name:'voice_qa_start'});}catch(e){}
   vSession.active=true;vSession.qIdx=0;vSession.history=[];
   vSession.pool=pickRandom(vqPool,6);
   document.getElementById('startBtn').style.display='none';
@@ -2904,16 +2901,7 @@ async function generateOpener(){
     });
     res.textContent=txt;res.classList.remove('loading');document.getElementById('openerBtnRow').style.display='flex';
   }catch(e){
-    var msg=e&&e.message?e.message:'unknown';
-    if(msg==='network'){
-      res.textContent='⚠️ 網路錯誤：無法連線到 AI 伺服器。請確認網路連線後重試。';
-    } else if(msg.indexOf('401')>=0||msg.indexOf('403')>=0||msg.indexOf('API key')>=0){
-      res.textContent='⚠️ API Key 錯誤：請到 Vercel → Settings → Environment Variables 確認 ANTHROPIC_API_KEY 已正確設定，並重新部署。';
-    } else if(msg.indexOf('500')>=0||msg.indexOf('502')>=0){
-      res.textContent='⚠️ 伺服器錯誤 ('+msg+')：Vercel API 端點有問題，請確認 api/claude.js 已正確部署。';
-    } else {
-      res.textContent='⚠️ AI 暫時無法使用 ('+msg+')。請稍後再試，或到 Vercel 確認 ANTHROPIC_API_KEY 環境變數已設定。';
-    }
+    res.textContent='⚠️ AI功能目前不可用。此功能需在 Claude.ai 或已設定 API Key 的環境中使用。';
     res.classList.remove('loading');
     document.getElementById('openerBtnRow').style.display='flex';
   }
@@ -3262,7 +3250,7 @@ function planMarkDone(){
   document.getElementById('planDoneBtn').style.display='none';
   document.getElementById('planDoneTag').style.display='inline-flex';
   updatePlanProg();renderPlanCal();
-  try{var d=P[planCurDay-1];logActivity('plan',{q:'第'+planCurDay+'天：'+(d?d.title:'')});if(window.va)window.va('event',{name:'plan_day_done',day:planCurDay});}catch(e){}
+  try{var d=P[planCurDay-1];logActivity('plan',{q:'第'+planCurDay+'天：'+(d?d.title:'')});}catch(e){}
 }
 function updatePlanProg(){
   var pct=Math.round(planDone.length/30*100);
