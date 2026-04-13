@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🚀 一鍵更新 GitHub</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif;
+  background:#0f0a14;color:#f0e8ff;
+  min-height:100vh;padding:20px 16px 40px;
+}
+.card{background:#1e1228;border:2px solid #5a3070;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:4px 4px 0 #0a0514;}
+h1{color:#ff6bad;font-size:1.4rem;margin-bottom:4px;text-align:center;}
+.sub{color:#b090cc;font-size:.85rem;text-align:center;margin-bottom:20px;}
+label{display:block;font-size:.82rem;color:#b090cc;font-weight:700;margin-bottom:6px;}
+input,textarea,select{
+  width:100%;background:#0f0a14;color:#f0e8ff;
+  border:1.5px solid #5a3070;border-radius:10px;
+  padding:12px;font-size:.95rem;font-family:inherit;
+  outline:none;-webkit-appearance:none;
+}
+input:focus,textarea:focus{border-color:#ff6bad;box-shadow:0 0 0 3px rgba(255,107,173,.15);}
+textarea{min-height:160px;resize:vertical;font-family:monospace;font-size:.78rem;line-height:1.5;}
+.row{display:flex;gap:10px;align-items:flex-end;}
+.row>div{flex:1;}
+.btn{
+  width:100%;padding:14px;border:none;border-radius:14px;
+  font-size:1rem;font-weight:800;cursor:pointer;
+  -webkit-appearance:none;transition:all .15s;
+  margin-top:8px;
+}
+.btn-push{background:#ff6bad;color:#fff;box-shadow:0 4px 0 #cc1f65;}
+.btn-push:active{transform:translateY(3px);box-shadow:0 1px 0 #cc1f65;}
+.btn-push:disabled{background:#5a3070;color:#b090cc;box-shadow:none;cursor:not-allowed;}
+.btn-paste{background:#3a1050;color:#c9a8ff;border:1.5px solid #5a3070;font-size:.9rem;padding:10px;}
+.status{
+  border-radius:12px;padding:14px 16px;margin-top:14px;
+  font-size:.9rem;line-height:1.6;display:none;
+}
+.status.ok{background:rgba(61,221,212,.12);border:1.5px solid #3dddd4;color:#3dddd4;}
+.status.err{background:rgba(255,107,107,.12);border:1.5px solid #ff6b6b;color:#ff6b6b;}
+.status.loading{background:rgba(180,142,245,.12);border:1.5px solid #b48ef5;color:#c9a8ff;}
+.steps{list-style:none;counter-reset:step;}
+.steps li{counter-increment:step;padding:10px 0 10px 44px;position:relative;border-bottom:1px solid #2a1a38;font-size:.9rem;color:#c9a8ff;line-height:1.6;}
+.steps li:last-child{border-bottom:none;}
+.steps li::before{content:counter(step);position:absolute;left:0;top:10px;width:28px;height:28px;background:#ff6bad;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:900;}
+.char-count{font-size:.72rem;color:#7a5a90;margin-top:4px;text-align:right;}
+.badge{display:inline-block;background:#2a1050;color:#c9a8ff;border:1.5px solid #5a3070;border-radius:8px;padding:2px 8px;font-size:.72rem;font-weight:700;margin-left:6px;}
+</style>
+</head>
+<body>
+
+<h1>🚀 一鍵推送到 GitHub</h1>
+<p class="sub">在 Claude 修改完畢後，用這個頁面直接更新網站<br>Vercel 會自動重新部署（約 1 分鐘）</p>
+
+<!-- How to use -->
+<div class="card">
+  <div style="font-weight:800;color:#ff6bad;margin-bottom:12px;">📱 使用步驟</div>
+  <ol class="steps">
+    <li>在 Claude 對話中，點擊最新的 <code style="background:#0f0a14;padding:1px 5px;border-radius:4px;">index.html</code> 檔案 → 下載</li>
+    <li>回到這個頁面，點「📋 從剪貼簿貼上」或直接貼到下方文字框</li>
+    <li>輸入你設定的推送密碼</li>
+    <li>按「🚀 推送到 GitHub」— 完成！</li>
+  </ol>
+</div>
+
+<!-- Push form -->
+<div class="card">
+  <div style="margin-bottom:14px;">
+    <label>HTML 內容 <span class="badge">必填</span></label>
+    <button class="btn btn-paste" onclick="pasteFromClipboard()">📋 從剪貼簿貼上</button>
+    <textarea id="content" placeholder="將 index.html 的完整內容貼在這裡……（應該很長，大約 30 萬字符）" oninput="updateCount()"></textarea>
+    <div class="char-count" id="charCount">0 字符</div>
+  </div>
+
+  <div class="row" style="margin-bottom:14px;">
+    <div>
+      <label>推送密碼 <span class="badge">必填</span></label>
+      <input type="password" id="secret" placeholder="你設定的 PUSH_SECRET">
+    </div>
+    <div>
+      <label>檔案名稱</label>
+      <input type="text" id="filename" value="index.html" placeholder="index.html">
+    </div>
+  </div>
+
+  <div style="margin-bottom:6px;">
+    <label>Commit 說明（選填）</label>
+    <input type="text" id="message" placeholder="例如：修復深色模式文字對比度">
+  </div>
+
+  <button class="btn btn-push" id="pushBtn" onclick="pushToGitHub()">🚀 推送到 GitHub</button>
+
+  <div class="status" id="status"></div>
+</div>
+
+<!-- Settings reminder -->
+<div class="card" style="font-size:.82rem;color:#7a5a90;line-height:1.8;">
+  <div style="font-weight:800;color:#b090cc;margin-bottom:8px;">⚙️ Vercel 環境變數設定（一次性）</div>
+  需在 Vercel → Settings → Environment Variables 加入：<br>
+  <code style="color:#ff6bad;">GITHUB_TOKEN</code> — GitHub Personal Access Token（repo 權限）<br>
+  <code style="color:#ff6bad;">GITHUB_OWNER</code> — 你的 GitHub 用戶名<br>
+  <code style="color:#ff6bad;">GITHUB_REPO</code> — Repository 名稱（如 sutra-study）<br>
+  <code style="color:#ff6bad;">PUSH_SECRET</code> — 自訂一個推送密碼（隨機字串）
+</div>
+
+<script>
+// Auto-fill API URL from current domain
+var API_URL = window.location.origin + '/api/github-push';
+
+function updateCount(){
+  var len = document.getElementById('content').value.length;
+  document.getElementById('charCount').textContent = len.toLocaleString() + ' 字符' + (len > 200000 ? ' ✅' : ' ⚠️ 太短？');
+}
+
+async function pasteFromClipboard(){
+  try{
+    var text = await navigator.clipboard.readText();
+    document.getElementById('content').value = text;
+    updateCount();
+  }catch(e){
+    alert('無法讀取剪貼簿。請手動長按文字框 → 貼上。');
+  }
+}
+
+async function pushToGitHub(){
+  var content  = document.getElementById('content').value.trim();
+  var secret   = document.getElementById('secret').value.trim();
+  var filename = document.getElementById('filename').value.trim() || 'index.html';
+  var message  = document.getElementById('message').value.trim() || 'Update via Claude mobile';
+  var btn      = document.getElementById('pushBtn');
+  var status   = document.getElementById('status');
+
+  if(!content){ showStatus('err','請先貼上 HTML 內容'); return; }
+  if(!secret){  showStatus('err','請輸入推送密碼'); return; }
+  if(content.length < 10000){ showStatus('err','內容太短（'+content.length+' 字符），請確認貼上完整的 index.html'); return; }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ 推送中…';
+  showStatus('loading','正在推送到 GitHub，請稍候…');
+
+  try{
+    var res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({secret, content, filename, message})
+    });
+    var data = await res.json();
+    if(data.success){
+      showStatus('ok','✅ 推送成功！Commit: '+(data.sha||'')+'<br>Vercel 將在約 1 分鐘內自動重新部署。<br>'+(data.commit?'<a href="'+data.commit+'" target="_blank" style="color:#3dddd4;">查看 Commit ↗</a>':''));
+      // Save secret for convenience
+      try{sessionStorage.setItem('push_secret', secret);}catch(e){}
+    } else {
+      showStatus('err','❌ '+(data.error||'未知錯誤'));
+    }
+  }catch(e){
+    showStatus('err','❌ 網路錯誤：'+e.message+'<br>請確認已部署 api/github-push.js 到 Vercel');
+  }
+
+  btn.disabled = false;
+  btn.textContent = '🚀 推送到 GitHub';
+}
+
+function showStatus(type, html){
+  var el = document.getElementById('status');
+  el.className = 'status ' + type;
+  el.innerHTML = html;
+  el.style.display = 'block';
+  el.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+// Restore secret from session
+try{
+  var saved = sessionStorage.getItem('push_secret');
+  if(saved) document.getElementById('secret').value = saved;
+}catch(e){}
+</script>
+</body>
+</html>
