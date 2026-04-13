@@ -1907,8 +1907,21 @@ function showMemPanel(id,btn){
 // ══ TTS Helper ══
 let currentTtsBtn=null;
 function speakText(text,lang,btn){
+  // If clicking the same button that's already playing → stop
+  if(btn && btn===currentTtsBtn){
+    window.speechSynthesis.cancel();
+    btn.classList.remove('playing');
+    btn.textContent=btn.dataset.orig||btn.textContent;
+    currentTtsBtn=null;
+    return;
+  }
+  // Stop any currently playing button
   window.speechSynthesis.cancel();
-  if(currentTtsBtn){currentTtsBtn.classList.remove('playing');currentTtsBtn.textContent=currentTtsBtn.dataset.orig||currentTtsBtn.textContent;}
+  if(currentTtsBtn){
+    currentTtsBtn.classList.remove('playing');
+    currentTtsBtn.textContent=currentTtsBtn.dataset.orig||currentTtsBtn.textContent;
+    currentTtsBtn=null;
+  }
   if(btn){currentTtsBtn=btn;btn.dataset.orig=btn.textContent;btn.classList.add('playing');btn.textContent='⏹ 停止';}
   const u=new SpeechSynthesisUtterance(text);
   u.lang=lang||'zh-TW';u.rate=0.85;
