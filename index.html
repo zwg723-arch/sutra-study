@@ -1815,8 +1815,8 @@ var CLAUDE_ENV = (function(){
 // var PROXY_URL = 'https://your-app.vercel.app/api/claude';
 
 // 方法3: 留空 = 使用 Claude 環境的代理（預設）
-var ANTHROPIC_API_KEY = ''; // Leave empty — key is stored safely on Vercel server
-var PROXY_URL = '/api/claude'; // Vercel proxy — auto-configured
+var ANTHROPIC_API_KEY = '';
+var PROXY_URL = '';
 
 async function callAnthropicAPI(reqBody){
   var url, headers;
@@ -3568,6 +3568,13 @@ function buildSutraPassagesWithRec(){
     con.appendChild(div);
   });
   setTimeout(function(){try{initRecCtrls();}catch(e){console.warn("initRecCtrls:",e);}},200);
+}
+function readPassage(idx,lang,btn){
+  try{
+    var t=lang==='zh'?sutraData[idx].zh:sutraData[idx].en;
+    var l=lang==='zh'?'zh-TW':'en-US';
+    speakText(t,l,btn);
+  }catch(e){console.warn('readPassage:',e);}
 }
 function readPassageBtn(btn){
   var idx=parseInt(btn.getAttribute('data-idx'));
