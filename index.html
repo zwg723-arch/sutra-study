@@ -3906,6 +3906,182 @@ function renderLeaderboard(){
       +'</div>';
   }).join('');
 }
+function genShareCard(){
+  try{
+    var stats = getPracticeStats();
+    var done = planDone.length;
+    var pct = Math.round(done/30*100);
+    var nick = getNickname();
+    var earned = getEarnedAchvs();
+    var achvCount = Object.keys(earned).length;
+    var theme = document.documentElement.getAttribute('data-theme')||'kawaii';
+
+    // Theme colours
+    var themes = {
+      classic: {bg:'#1a0d00', card:'#2a1800', title:'#d4a017', text:'#f0e0c0', sub:'#b09060', accent:'#8b1a1a', bar:'#d4a017'},
+      ink:     {bg:'#07101e', card:'#0d1a2e', title:'#7ba4ff', text:'#d8e8f0', sub:'#7890a8', accent:'#1a3a5c', bar:'#7ba4ff'},
+      kawaii:  {bg:'#1E1228', card:'#2A0A3E', title:'#FF6BAD', text:'#F5E8FF', sub:'#B090CC', accent:'#FF6BAD', bar:'#FF6BAD'}
+    };
+    var t = themes[theme] || themes.kawaii;
+
+    // Create canvas
+    var W=600, H=340;
+    var cv = document.createElement('canvas');
+    cv.width = W; cv.height = H;
+    var ctx = cv.getContext('2d');
+
+    // Background
+    ctx.fillStyle = t.bg;
+    ctx.fillRect(0,0,W,H);
+
+    // Decorative top stripe
+    ctx.fillStyle = t.accent;
+    ctx.fillRect(0,0,W,6);
+
+    // Card background
+    ctx.fillStyle = t.card;
+    roundRect(ctx, 20, 20, W-40, H-40, 16);
+    ctx.fill();
+
+    // Title
+    ctx.fillStyle = t.title;
+    ctx.font = 'bold 22px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('佛說十善業道經　學習進度', W/2, 66);
+
+    // Divider line
+    ctx.strokeStyle = t.title;
+    ctx.globalAlpha = 0.3;
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(60,80); ctx.lineTo(W-60,80); ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Nickname
+    ctx.fillStyle = t.text;
+    ctx.font = 'bold 28px serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('🙏 '+nick, 50, 122);
+
+    // Stats row
+    var stats_items = [
+      {label:'完成天數', val:done+'/30'},
+      {label:'練習題數', val:stats.total+'題'},
+      {label:'練習積分', val:stats.points+'分'},
+      {label:'成就數量', val:achvCount+'個'},
+    ];
+    var sx = 50, sy = 165, sw = (W-100)/4;
+    stats_items.forEach(function(item, i){
+      var x = sx + i*sw + sw/2;
+      // Value
+      ctx.fillStyle = t.title;
+      ctx.font = 'bold 24px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(item.val, x, sy);
+      // Label
+      ctx.fillStyle = t.sub;
+      ctx.font = '13px sans-serif';
+      ctx.fillText(item.label, x, sy+22);
+    });
+
+    // Progress bar background
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    roundRect(ctx, 50, 202, W-100, 16, 8);
+    ctx.fill();
+    // Progress bar fill
+    ctx.fillStyle = t.bar;
+    var barW = Math.max(16, (W-100)*pct/100);
+    roundRect(ctx, 50, 202, barW, 16, 8);
+    ctx.fill();
+    // Progress label
+    ctx.fillStyle = t.sub;
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(pct+'% 完成', W-50, 197);
+
+    // Motto
+    ctx.fillStyle = t.sub;
+    ctx.font = '13px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('身守三門心清淨・口言四德世人敬・意持三慧業道成', W/2, 240);
+
+    // Footer
+    ctx.fillStyle = t.sub;
+    ctx.font = '12px sans-serif';
+    ctx.fillText('sutra-study.vercel.app', W/2, 268);
+
+    // Border
+    ctx.strokeStyle = t.title;
+    ctx.globalAlpha = 0.4;
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, 20, 20, W-40, H-40, 16);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Show in modal
+    var img = cv.toDataURL('image/png');
+    showShareCardModal(img);
+
+  }catch(e){
+    console.warn('genShareCard:', e);
+    alert('生成分享卡失敗：'+e.message);
+  }
+}
+
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y);
+  ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r);
+  ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  ctx.lineTo(x+r, y+h);
+  ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+  ctx.lineTo(x, y+r);
+  ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
+}
+
+function showShareCardModal(imgSrc){
+  // Remove existing modal if any
+  var old = document.getElementById('shareCardModal');
+  if(old) old.remove();
+
+  var modal = document.createElement('div');
+  modal.id = 'shareCardModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:3000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;';
+
+  var img = document.createElement('img');
+  img.src = imgSrc;
+  img.style.cssText = 'max-width:100%;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.6);margin-bottom:16px;';
+
+  var hint = document.createElement('div');
+  hint.style.cssText = 'color:rgba(255,255,255,.8);font-size:.9rem;margin-bottom:14px;text-align:center;';
+  hint.textContent = '📱 長按圖片儲存到相冊，即可分享！';
+
+  var btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;justify-content:center;';
+
+  var dlBtn = document.createElement('a');
+  dlBtn.href = imgSrc;
+  dlBtn.download = '十善業道學習進度.png';
+  dlBtn.textContent = '⬇️ 下載圖片';
+  dlBtn.style.cssText = 'padding:10px 22px;background:var(--pink,#FF4F8B);color:#fff;border-radius:24px;font-weight:800;font-size:.9rem;text-decoration:none;';
+
+  var closeBtn = document.createElement('button');
+  closeBtn.textContent = '✕ 關閉';
+  closeBtn.style.cssText = 'padding:10px 22px;background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.3);border-radius:24px;cursor:pointer;font-size:.9rem;-webkit-appearance:none;';
+  closeBtn.onclick = function(){ modal.remove(); };
+
+  modal.onclick = function(e){ if(e.target===modal) modal.remove(); };
+
+  btnRow.appendChild(dlBtn);
+  btnRow.appendChild(closeBtn);
+  modal.appendChild(img);
+  modal.appendChild(hint);
+  modal.appendChild(btnRow);
+  document.body.appendChild(modal);
+}
+
 function genProgressText(){
   var stats=getPracticeStats();
   var done=planDone.length;var pct=Math.round(done/30*100);
