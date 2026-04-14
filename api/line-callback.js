@@ -2,12 +2,12 @@
 // LINE Login OAuth 2.0 callback handler
 //
 // 【Vercel 環境變數（需設定）】:
-//   LINE_CHANNEL_ID      — LINE Login Channel ID
+//   LINE_CHANNEL_ID     — LINE Login Channel ID
 //   LINE_CHANNEL_SECRET — LINE Login Channel Secret
-//   LINE_REDIRECT_URI   ₄─ callback URL，例如:
+//   LINE_REDIRECT_URI   — 完整的 callback URL，例如:
 //                         https://sutra-study.vercel.app/api/line-callback
 //
-// 【LBNE DevKoper Console �J立】:
+// 【LINE Developer Console 設定】:
 //   1. https://developers.line.biz → 建立 LINE Login channel
 //   2. Callback URL 填入: https://sutra-study.vercel.app/api/line-callback
 
