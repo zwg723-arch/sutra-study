@@ -1490,8 +1490,11 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <span class="header-compact-title">佛說十善業道經</span>
     <span class="header-compact-toggle" id="headerToggleIcon">▼</span>
   </div>
-  <div id="userAvatarBar" style="display:none;position:absolute;top:5px;right:10px;z-index:10;">
-    <div class="user-avatar-wrap" onclick="showUserMenu(event)">
+  <div id="userAvatarBar" style="position:absolute;top:5px;right:10px;z-index:10;">
+    <!-- Login button (shown when logged out) -->
+    <button id="loginBtn" class="user-login-btn" onclick="openLoginModal()" style="display:block;">🔐 登入</button>
+    <!-- Avatar (shown when logged in) -->
+    <div id="avatarWrap" class="user-avatar-wrap" onclick="showUserMenu(event)" style="display:none;">
       <img id="userAvatarImg" class="user-avatar-img" src="" alt="">
       <span id="userAvatarName" class="user-avatar-name"></span>
     </div>
@@ -4691,25 +4694,28 @@ function showToast(msg){
 // ── Avatar bar ──
 function updateAvatarBar(){
   try{
-    var bar=document.getElementById('userAvatarBar');
-    var img=document.getElementById('userAvatarImg');
-    var name=document.getElementById('userAvatarName');
-    if(FIREBASE_USER){
-      if(bar)bar.style.display='block';
-      if(img){ img.src=FIREBASE_USER.photoURL||''; img.alt=FIREBASE_USER.displayName||'用戶'; }
-      if(name)name.textContent=(FIREBASE_USER.displayName||FIREBASE_USER.email||'用戶').split(' ')[0].substring(0,8);
-    } else if(LINE_USER){
-      if(bar)bar.style.display='block';
-      if(img){ img.src=LINE_USER.pic||''; img.alt=LINE_USER.name; }
-      if(name)name.textContent=LINE_USER.name.substring(0,8);
-    } else {
-      // Show login button
-      if(bar){
-        bar.style.display='block';
-        bar.innerHTML='<button class="user-login-btn" onclick="openLoginModal()">🔐 登入</button>';
+    var loginBtn  = document.getElementById('loginBtn');
+    var avatarWrap= document.getElementById('avatarWrap');
+    var img       = document.getElementById('userAvatarImg');
+    var name      = document.getElementById('userAvatarName');
+
+    if(FIREBASE_USER || LINE_USER){
+      // Show avatar, hide login button
+      if(loginBtn)  loginBtn.style.display  = 'none';
+      if(avatarWrap)avatarWrap.style.display = 'flex';
+      if(FIREBASE_USER){
+        if(img){ img.src = FIREBASE_USER.photoURL||''; img.alt = FIREBASE_USER.displayName||'用戶'; }
+        if(name) name.textContent = (FIREBASE_USER.displayName||FIREBASE_USER.email||'用戶').split(' ')[0].substring(0,8);
+      } else {
+        if(img){ img.src = LINE_USER.pic||''; img.alt = LINE_USER.name; }
+        if(name) name.textContent = LINE_USER.name.substring(0,8);
       }
+    } else {
+      // Show login button, hide avatar
+      if(loginBtn)  loginBtn.style.display  = 'block';
+      if(avatarWrap)avatarWrap.style.display = 'none';
     }
-  }catch(e){}
+  }catch(e){ console.warn('updateAvatarBar:',e); }
 }
 
 function showUserMenu(ev){
