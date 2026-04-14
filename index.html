@@ -4521,14 +4521,21 @@ var _cloudSyncTimer = null;
     FIREBASE_DB   = firebase.firestore();
     FIREBASE_AUTH.onAuthStateChanged(function(user){
       try{
+        var isNewLogin = !FIREBASE_USER && !!user; // true only on actual login, not page refresh
         FIREBASE_USER = user;
         if(user){
-          // Firebase user wins over LINE URL params
-          loadFromFirestore(user.uid, function(){
+          loadFromFirestore(user.uid, function(hadCloudData){
             updateAvatarBar();
-            try{if(typeof renderPracticePanel==='function')renderPracticePanel();}catch(e){}
+            refreshAppState();
+            // Only show toast on actual login action, not on page refresh
+            if(isNewLogin){
+              showToast(hadCloudData
+                ? '✅ 已登入，資料已從雲端載入！'
+                : '✅ 已登入：'+(user.displayName||user.email||'用戶'));
+            }
           });
         } else {
+          FIREBASE_USER = null;
           updateAvatarBar();
         }
       }catch(e){console.warn('onAuthStateChanged:',e);}
@@ -4576,23 +4583,67 @@ function loadFromFirestore(uid, cb){
   try{
     FIREBASE_DB.collection('users').doc(uid).get().then(function(doc){
       try{
+        var pfx = 'fb_'+uid+'_';
         if(doc.exists){
+          // ── Cloud has data → write to localStorage and refresh ──
           var d = doc.data();
-          var pfx = 'fb_'+uid+'_';
-          if(d.nickname)       localStorage.setItem(pfx+'sjyd_nickname', d.nickname);
-          if(d.planDone)       localStorage.setItem(pfx+'sjyd_done', JSON.stringify(d.planDone));
-          if(d.planStart)      localStorage.setItem(pfx+'sjyd_start', d.planStart);
-          if(d.achievements)   localStorage.setItem(pfx+'sjyd_achv', JSON.stringify(d.achievements));
-          if(d.notes)          localStorage.setItem(pfx+'sjyd_notes', JSON.stringify(d.notes));
-          if(d.activities)     localStorage.setItem(pfx+'sjyd_acts', JSON.stringify(d.activities));
-          if(d.friends)        localStorage.setItem(pfx+'sjyd_friends', JSON.stringify(d.friends));
-          // Reload plan state from refreshed storage
-          try{ if(typeof planLoadState==='function') planLoadState(); }catch(e){}
+          if(d.nickname)     localStorage.setItem(pfx+'sjyd_nickname', d.nickname);
+          if(d.planDone)     localStorage.setItem(pfx+'sjyd_done', JSON.stringify(d.planDone));
+          if(d.planStart)    localStorage.setItem(pfx+'sjyd_start', d.planStart);
+          if(d.achievements) localStorage.setItem(pfx+'sjyd_achv', JSON.stringify(d.achievements));
+          if(d.notes)        localStorage.setItem(pfx+'sjyd_notes', JSON.stringify(d.notes));
+          if(d.activities)   localStorage.setItem(pfx+'sjyd_acts', JSON.stringify(d.activities));
+          if(d.friends)      localStorage.setItem(pfx+'sjyd_friends', JSON.stringify(d.friends));
+          if(cb) cb(true); // hadCloudData = true
+        } else {
+          // ── Cloud is empty (first login) ──
+          // Look for guest data in legacy keys (no prefix) OR other prefixed keys
+          var migratedAny = false;
+          Object.keys(CLOUD_MAP).forEach(function(lsKey){
+            // Check un-prefixed (guest) data
+            var val = localStorage.getItem(lsKey);
+            if(val!==null){
+              localStorage.setItem(pfx+lsKey, val);
+              localStorage.removeItem(lsKey);
+              migratedAny = true;
+            }
+          });
+          if(migratedAny){
+            // Push migrated local data up to Firestore
+            syncToFirestore();
+            showToast('☁️ 本地資料已上傳到雲端，換裝置也能看到了！');
+          }
+          if(cb) cb(false); // hadCloudData = false
         }
-        if(cb) cb();
-      }catch(e){ console.warn('loadFromFirestore parse:',e); if(cb)cb(); }
-    }).catch(function(e){ console.warn('loadFromFirestore:',e); if(cb)cb(); });
-  }catch(e){ if(cb)cb(); }
+      }catch(e){ console.warn('loadFromFirestore parse:',e); if(cb)cb(false); }
+    }).catch(function(e){ console.warn('loadFromFirestore:',e); if(cb)cb(false); });
+  }catch(e){ if(cb)cb(false); }
+}
+
+// ── Refresh all in-memory state from localStorage after cloud load ──
+function refreshAppState(){
+  try{ if(typeof planLoadState==='function') planLoadState(); }catch(e){}
+  try{
+    // Re-render currently active section
+    var active = document.querySelector('.section.active');
+    var activeId = active ? active.id : '';
+    if(activeId==='journal'){
+      var activePanel = document.querySelector('.j-panel.active');
+      var panelId = activePanel ? activePanel.id.replace('jp-','') : 'notes';
+      if(typeof showJPanel==='function') showJPanel(panelId, null);
+    }
+    if(activeId==='plan'){
+      try{if(typeof renderPlanCal==='function')renderPlanCal();}catch(e){}
+      try{if(typeof updatePlanProg==='function')updatePlanProg();}catch(e){}
+    }
+  }catch(e){}
+  try{
+    // Update nickname field if visible
+    var nn=document.getElementById('myNickname');
+    if(nn) nn.value=lsGet('sjyd_nickname')||'';
+  }catch(e){}
+  try{if(typeof renderPracticePanel==='function')renderPracticePanel();}catch(e){}
+  try{if(typeof renderLeaderboard==='function')renderLeaderboard();}catch(e){}
 }
 
 // ── Debounced cloud sync ──
