@@ -1310,6 +1310,39 @@ html[data-theme="kawaii"] .nav-group .nav-tab{
   html[data-theme="classic"] .social-nick-input{background:#1a0d00 !important;color:#f0e0c0 !important;border-color:#5a4020 !important;}
 
   /* Ink dark */
+  /* pstat cards dark mode */
+  html[data-theme="classic"] .pstat{background:#1a0d00 !important;border-color:#5a4020 !important;}
+  html[data-theme="classic"] .pstat-num{color:#d4a017 !important;}
+  html[data-theme="classic"] .pstat-lbl{color:#b09060 !important;}
+  html[data-theme="classic"] .pstat-acc{color:#3a9060 !important;}
+  html[data-theme="ink"] .pstat{background:#0d1a2e !important;border-color:#1a3a5c !important;}
+  html[data-theme="ink"] .pstat-num{color:#7ba4ff !important;}
+  html[data-theme="ink"] .pstat-lbl{color:#7890a8 !important;}
+  html[data-theme="ink"] .pstat-acc{color:#3dddd4 !important;}
+  html[data-theme="kawaii"] .pstat{background:#1E1228 !important;border-color:#5A3070 !important;}
+  html[data-theme="kawaii"] .pstat-num{color:#FF6BAD !important;}
+  html[data-theme="kawaii"] .pstat-lbl{color:#B090CC !important;}
+  html[data-theme="kawaii"] .pstat-acc{color:#3DDDD4 !important;}
+  /* Flashcard back dark mode */
+  html[data-theme="classic"] .fc-back{background:linear-gradient(135deg,#1a0d00,#2a1800) !important;border-color:#5a4020 !important;}
+  html[data-theme="classic"] .fc-back .fc-en{color:#f0e0c0 !important;}
+  html[data-theme="classic"] .fc-back .fc-desc{color:#b09060 !important;}
+  html[data-theme="classic"] .fc-front .fc-zh{color:#e8c060 !important;}
+  html[data-theme="classic"] .fc-front .fc-label{color:rgba(255,255,255,.9) !important;}
+  html[data-theme="ink"] .fc-back{background:linear-gradient(135deg,#07101e,#0d1a2e) !important;border-color:#1a3a5c !important;}
+  html[data-theme="ink"] .fc-back .fc-en{color:#d8e8f0 !important;}
+  html[data-theme="ink"] .fc-back .fc-desc{color:#7ba4ff !important;}
+  html[data-theme="ink"] .fc-front .fc-zh{color:#c4a870 !important;}
+  html[data-theme="ink"] .fc-front .fc-label{color:rgba(255,255,255,.9) !important;}
+  html[data-theme="kawaii"] .fc-back .fc-en{color:#F5E8FF !important;}
+  html[data-theme="kawaii"] .fc-back .fc-desc{color:#C9A8FF !important;}
+  html[data-theme="kawaii"] .fc-front .fc-zh{color:#FFE566 !important;}
+  html[data-theme="kawaii"] .fc-front .fc-label{color:rgba(255,255,255,.95) !important;}
+  html[data-theme="kawaii"] .fc-front .fc-hint{background:rgba(255,255,255,.2) !important;color:#fff !important;}
+  /* prac-item-card filter buttons dark */
+  html[data-theme="classic"] [data-pf]{background:#1e1000 !important;color:#f0e0c0 !important;border-color:#5a4020 !important;}
+  html[data-theme="ink"] [data-pf]{background:#121f30 !important;color:#d8e8f0 !important;border-color:#1a3a5c !important;}
+  html[data-theme="kawaii"] [data-pf]{background:#1E1228 !important;color:#C9A8FF !important;border-color:#5A3070 !important;}
   html[data-theme="ink"] .story-body p{color:#d8e8f0;}
   html[data-theme="ink"] .story-connect{color:#d8e8f0 !important;}
   html[data-theme="ink"] .deed-tag{color:#a0c8e0;border-color:#a0c8e0;}
@@ -1395,12 +1428,11 @@ html[data-theme="ink"] .speech-dur-btn.active{background:#1a3a5c;color:#d4c4a0;b
 /* ── Collapsible Header ── */
 .header-compact{
   display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:9px 14px;cursor:pointer;
+  padding:9px 80px 9px 14px;cursor:pointer;
   position:relative;user-select:none;-webkit-user-select:none;
   transition:background .2s;
-  /* Fixed height so large font setting never breaks layout */
   min-height:0;
-  font-size:16px; /* reset — children use px, not rem */
+  font-size:16px;
 }
 .header-compact:active{opacity:.85;}
 .header-compact-lotus{font-size:17px;opacity:.85;flex-shrink:0;line-height:1;}
@@ -1434,113 +1466,35 @@ html[data-theme="ink"] .header-compact-title{
 /* Site header — no bottom border when collapsed */
 .site-header.collapsed{border-bottom:none;}
 
-/* ── Login Modal ── */
-#loginOverlay{
-  position:fixed;top:0;left:0;right:0;bottom:0;
-  background:rgba(0,0,0,.65);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  z-index:8000;display:flex;align-items:center;justify-content:center;padding:16px;
-}
-#loginOverlay.hidden{display:none;}
-.login-box{
-  background:var(--card-bg);border-radius:20px;padding:32px 24px;max-width:380px;width:100%;
-  box-shadow:0 20px 60px rgba(0,0,0,.35);text-align:center;
-}
-.login-logo{font-size:44px;margin-bottom:8px;}
-.login-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px;}
-.login-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
-.login-btn{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  width:100%;padding:13px 16px;border-radius:12px;border:none;
-  font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px;
-  transition:transform .15s,box-shadow .15s;box-sizing:border-box;
-}
-.login-btn:active{transform:scale(.97);}
-.login-btn-google{background:#fff;color:#3c4043;box-shadow:0 2px 8px rgba(0,0,0,.2);border:1.5px solid #dadce0;}
-.login-btn-line{background:#06C755;color:#fff;}
-.login-btn-email{background:var(--pink);color:#fff;}
-.login-divider{display:flex;align-items:center;gap:8px;margin:8px 0 16px;color:var(--muted);font-size:12px;}
-.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border);}
-.login-email-form{text-align:left;}
-.login-email-form input{
-  width:100%;padding:11px 14px;border-radius:10px;
-  border:1.5px solid var(--border);background:var(--input-bg);
-  color:var(--text);font-size:14px;margin-bottom:10px;box-sizing:border-box;
-}
-.login-email-form input:focus{outline:none;border-color:var(--pink);}
-.login-skip{
-  margin-top:8px;font-size:12px;color:var(--muted);
-  background:none;border:none;cursor:pointer;text-decoration:underline;padding:4px;
-}
-/* ── User Avatar in Header ── */
-.header-user-btn{
-  width:28px;height:28px;border-radius:50%;
-  border:2px solid rgba(255,255,255,.5);
-  background:rgba(255,255,255,.2);
-  cursor:pointer;overflow:hidden;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;color:#fff;
-  transition:transform .15s;
-  padding:0;line-height:1;
-}
-.header-user-btn:active{transform:scale(.9);}
-.header-user-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+/* ── LINE User Avatar ── */
+.user-avatar-wrap{display:flex;align-items:center;gap:7px;flex-shrink:0;margin-left:4px;cursor:pointer;}
+.user-avatar-img{width:30px;height:30px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;flex-shrink:0;}
+.user-avatar-name{font-size:11px;font-weight:700;color:rgba(255,255,255,.75);white-space:nowrap;max-width:70px;overflow:hidden;text-overflow:ellipsis;line-height:1;}
+.user-login-btn{font-size:11px;font-weight:700;color:rgba(255,255,255,.55);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:4px 10px;cursor:pointer;white-space:nowrap;-webkit-appearance:none;}
+.user-login-btn:hover{background:rgba(255,255,255,.18);}
+html[data-theme="kawaii"] .user-avatar-img{border-color:var(--pink);}
+html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 </style>
 <!-- Vercel Analytics -->
 <script defer src="/_vercel/insights/script.js"></script>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
-<!-- ══════════════════════════════════
-     LOGIN MODAL
-     ══════════════════════════════════ -->
-<div id="loginOverlay" class="hidden">
-  <div class="login-box">
-    <div class="login-logo">🌸</div>
-    <div class="login-title">歡迎來到十善業道經</div>
-    <div class="login-sub">登入後可保存學習進度與成就</div>
-
-    <button class="login-btn login-btn-google" onclick="loginWithGoogle()">
-      <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-        <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
-        <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
-        <path d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" fill="#FBBC05"/>
-        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
-      </svg>
-      Google 帳號登入
-    </button>
-
-    <button class="login-btn login-btn-line" onclick="loginWithLINE()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-        <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
-      </svg>
-      LINE 帳號登入
-    </button>
-
-    <div class="login-divider">或</div>
-
-    <div id="emailLoginForm" style="display:none;">
-      <div class="login-email-form">
-        <input type="email" id="loginEmail" placeholder="📧 電子郵件">
-        <input type="password" id="loginPassword" placeholder="🔒 密碼（至少6位）">
-        <button class="login-btn login-btn-email" onclick="loginWithEmail()">登入 / 註冊</button>
-      </div>
-    </div>
-    <button class="login-btn login-btn-email" id="showEmailBtn" onclick="toggleEmailForm()">📧 Email 登入</button>
-
-    <br>
-    <button class="login-skip" onclick="skipLogin()">稍後再登入（不儲存進度）</button>
-  </div>
-</div>
-
 <header class="site-header" id="siteHeader">
-  <div class="header-compact" id="headerCompact">
-    <span class="header-compact-lotus" onclick="toggleHeader()" style="cursor:pointer;">☸</span>
-    <span class="header-compact-title" onclick="toggleHeader()" style="cursor:pointer;">佛說十善業道經</span>
-    <button class="header-user-btn" id="headerUserBtn" onclick="headerUserAction()" title="登入">👤</button>
-    <span class="header-compact-toggle" id="headerToggleIcon" onclick="toggleHeader()" style="cursor:pointer;">▼</span>
+  <div class="header-compact" id="headerCompact" onclick="toggleHeader()">
+    <span class="header-compact-lotus">☸</span>
+    <span class="header-compact-title">佛說十善業道經</span>
+    <span class="header-compact-toggle" id="headerToggleIcon">▼</span>
+  </div>
+  <div id="userAvatarBar" style="display:none;position:absolute;top:5px;right:10px;z-index:10;">
+    <div class="user-avatar-wrap" onclick="showUserMenu(event)">
+      <img id="userAvatarImg" class="user-avatar-img" src="" alt="">
+      <span id="userAvatarName" class="user-avatar-name"></span>
+    </div>
   </div>
   <div class="header-inner" id="headerFull" style="display:none;">
     <span class="header-lotus">🌸 ☸ 🌸</span>
@@ -2239,250 +2193,6 @@ var CLAUDE_ENV = (function(){
 // 方法3: 留空 = 使用 Claude 環境的代理（預設）
 var ANTHROPIC_API_KEY = '';
 var PROXY_URL = '/api/claude'; // Vercel proxy
-
-// ══════════════════════════════════════════════════════
-// AUTH — Firebase (Google + Email) + LINE Login
-// ══════════════════════════════════════════════════════
-
-// 【設定步驟】:
-//   1. 到 https://console.firebase.google.com 建立專案
-//   2. 啟用 Authentication → Sign-in method → Google、Email/Password
-//   3. 複製 Firebase 設定貼到下方
-//   4. LINE: 到 https://developers.line.biz 建立 LINE Login channel
-//      取得 Channel ID → 設定 Vercel 環境變數:
-//      LINE_CHANNEL_ID / LINE_CHANNEL_SECRET / LINE_REDIRECT_URI
-
-var FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyBrJBqa-osA04qXrzOsK8BScGiToxFOGp8",
-  authDomain:        "sutra-study.firebaseapp.com",
-  projectId:         "sutra-study",
-  storageBucket:     "sutra-study.firebasestorage.app",
-  messagingSenderId: "394146119260",
-  appId:             "1:394146119260:web:95d60c174a70f4d2feb099",
-  measurementId:     "G-7SPLKNLMZ2"
-};
-
-var LINE_CHANNEL_ID = "2009792377"; // LINE Login Channel ID
-
-// ── Firebase init ──
-var fbApp = null, fbAuth = null, currentUser = null;
-(function(){
-  try{
-    if(typeof firebase === 'undefined') return;
-    if(FIREBASE_CONFIG.apiKey === 'YOUR_FIREBASE_API_KEY') return; // 尚未設定
-    fbApp  = firebase.initializeApp(FIREBASE_CONFIG);
-    fbAuth = firebase.auth();
-    fbAuth.onAuthStateChanged(function(user){
-      try{
-        currentUser = user || null;
-        updateUserUI(currentUser);
-        if(currentUser) hideLoginModal();
-      }catch(e){}
-    });
-  }catch(e){console.warn('Firebase init:',e);}
-})();
-
-// ── Update header user button ──
-function updateUserUI(user){
-  try{
-    var btn = document.getElementById('headerUserBtn');
-    if(!btn) return;
-    if(user && user.photoURL){
-      btn.innerHTML = '<img src="'+user.photoURL+'" alt="" onerror="this.parentNode.textContent=\'👤\'">';
-    } else if(user && user.displayName){
-      btn.textContent = user.displayName.charAt(0).toUpperCase();
-    } else if(user && user.email){
-      btn.textContent = user.email.charAt(0).toUpperCase();
-    } else {
-      btn.textContent = '👤';
-    }
-    btn.title = user ? (user.displayName || user.email || '已登入') : '登入';
-  }catch(e){}
-}
-
-// ── Modal show / hide ──
-function showLoginModal(){
-  try{
-    var ov = document.getElementById('loginOverlay');
-    if(ov) ov.classList.remove('hidden');
-  }catch(e){}
-}
-function hideLoginModal(){
-  try{
-    var ov = document.getElementById('loginOverlay');
-    if(ov) ov.classList.add('hidden');
-  }catch(e){}
-}
-function skipLogin(){
-  try{
-    localStorage.setItem('sjyd_skip_login','1');
-    hideLoginModal();
-  }catch(e){}
-}
-function headerUserAction(){
-  try{
-    if(currentUser){ showUserMenu(); } else { showLoginModal(); }
-  }catch(e){}
-}
-function showUserMenu(){
-  try{
-    var name = (currentUser && (currentUser.displayName || currentUser.email)) || '用戶';
-    var provider = (currentUser && currentUser.provider) || 'firebase';
-    var msg = '👋 ' + name + '\n\n登出帳號？';
-    if(confirm(msg)){
-      if(fbAuth && provider !== 'line'){
-        fbAuth.signOut().catch(function(e){});
-      }
-      // 清除 LINE / localStorage 用戶
-      try{ localStorage.removeItem('sjyd_user'); }catch(err){}
-      currentUser = null;
-      updateUserUI(null);
-    }
-  }catch(e){}
-}
-
-// ── Toggle email form ──
-function toggleEmailForm(){
-  try{
-    var form = document.getElementById('emailLoginForm');
-    var btn  = document.getElementById('showEmailBtn');
-    var show = form.style.display === 'none';
-    form.style.display = show ? 'block' : 'none';
-    if(btn) btn.style.display = show ? 'none' : 'flex';
-    if(show){
-      var inp = document.getElementById('loginEmail');
-      if(inp) setTimeout(function(){ try{ inp.focus(); }catch(e){} }, 100);
-    }
-  }catch(e){}
-}
-
-// ── Google Login ──
-function loginWithGoogle(){
-  try{
-    if(!fbAuth){
-      alert('⚠️ Firebase 尚未設定。\n請在 index.html 填入 FIREBASE_CONFIG，\n並在 Firebase Console 啟用 Google 登入。');
-      return;
-    }
-    var provider = new firebase.auth.GoogleAuthProvider();
-    fbAuth.signInWithPopup(provider).then(function(){
-      hideLoginModal();
-    }).catch(function(err){
-      if(err.code !== 'auth/popup-closed-by-user'){
-        alert('Google 登入失敗：' + err.message);
-      }
-    });
-  }catch(e){ alert('錯誤：' + e.message); }
-}
-
-// ── Email Login / Register ──
-function loginWithEmail(){
-  try{
-    if(!fbAuth){
-      alert('⚠️ Firebase 尚未設定。\n請在 index.html 填入 FIREBASE_CONFIG，\n並在 Firebase Console 啟用 Email/Password 登入。');
-      return;
-    }
-    var email = document.getElementById('loginEmail').value.trim();
-    var pw    = document.getElementById('loginPassword').value;
-    if(!email || !pw){ alert('請輸入 Email 和密碼'); return; }
-    if(pw.length < 6){ alert('密碼至少需要 6 位'); return; }
-    fbAuth.signInWithEmailAndPassword(email, pw).then(function(){
-      hideLoginModal();
-    }).catch(function(err){
-      // 如果用戶不存在就自動建立帳號
-      if(err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password'){
-        return fbAuth.createUserWithEmailAndPassword(email, pw).then(function(){
-          hideLoginModal();
-        });
-      }
-      throw err;
-    }).catch(function(err){
-      alert('Email 登入失敗：' + err.message);
-    });
-  }catch(e){ alert('錯誤：' + e.message); }
-}
-
-// ── LINE Login ──
-function loginWithLINE(){
-  try{
-    if(LINE_CHANNEL_ID === 'YOUR_LINE_CHANNEL_ID'){
-      alert('⚠️ LINE Login 尚未設定。\n請到 https://developers.line.biz 建立 LINE Login channel，\n取得 Channel ID 填入 index.html 的 LINE_CHANNEL_ID，\n並在 Vercel 設定 LINE_CHANNEL_SECRET 環境變數。');
-      return;
-    }
-    var state = Math.random().toString(36).substring(2, 14);
-    try{ localStorage.setItem('sjyd_line_state', state); }catch(e){}
-    var redirectUri = encodeURIComponent(window.location.origin + '/api/line-callback');
-    var url = 'https://access.line.me/oauth2/v2.1/authorize'
-      + '?response_type=code'
-      + '&client_id=' + LINE_CHANNEL_ID
-      + '&redirect_uri=' + redirectUri
-      + '&state=' + state
-      + '&scope=profile%20openid';
-    window.location.href = url;
-  }catch(e){ alert('錯誤：' + e.message); }
-}
-
-// ── Handle LINE callback redirect params ──
-(function(){
-  try{
-    var params = new URLSearchParams(window.location.search);
-    var lineUser = params.get('line_user');
-    var linePic  = params.get('line_pic');
-    var lineId   = params.get('line_id');
-    var lineErr  = params.get('line_error');
-    if(lineErr){
-      console.warn('LINE login error:', lineErr);
-      try{ history.replaceState(null, '', window.location.pathname); }catch(e){}
-      return;
-    }
-    if(lineUser && lineId){
-      var userData = {
-        displayName: decodeURIComponent(lineUser),
-        photoURL:    linePic ? decodeURIComponent(linePic) : null,
-        uid:         decodeURIComponent(lineId),
-        email:       null,
-        provider:    'line'
-      };
-      try{ localStorage.setItem('sjyd_user', JSON.stringify(userData)); }catch(e){}
-      try{ localStorage.removeItem('sjyd_skip_login'); }catch(e){}
-      currentUser = userData;
-      updateUserUI(userData);
-      hideLoginModal();
-      try{ history.replaceState(null, '', window.location.pathname); }catch(e){}
-    }
-  }catch(e){ console.warn('LINE param parse:', e); }
-})();
-
-// ── Restore LINE user from localStorage ──
-(function(){
-  try{
-    if(currentUser) return;
-    var stored = localStorage.getItem('sjyd_user');
-    if(!stored) return;
-    var u = JSON.parse(stored);
-    if(u && u.provider === 'line' && u.uid){
-      currentUser = u;
-      setTimeout(function(){ try{ updateUserUI(currentUser); }catch(e){} }, 200);
-    }
-  }catch(e){}
-})();
-
-// ── Show login modal on first visit (after delay) ──
-(function(){
-  try{
-    var skipped = localStorage.getItem('sjyd_skip_login');
-    var hasLine = localStorage.getItem('sjyd_user');
-    if(!skipped && !hasLine){
-      // Firebase user check happens via onAuthStateChanged; show modal if still no user after 1.5s
-      setTimeout(function(){
-        try{
-          if(!currentUser && !localStorage.getItem('sjyd_skip_login')){
-            showLoginModal();
-          }
-        }catch(e){}
-      }, 1500);
-    }
-  }catch(e){}
-})();
 
 async function callAnthropicAPI(reqBody){
   var url, headers;
@@ -3556,16 +3266,16 @@ var P=[
 // ── Plan State ──
 function planLoadState(){
   try{
-    var sd=localStorage.getItem('sjyd_start');
-    var cp=localStorage.getItem('sjyd_done');
+    var sd=lsGet('sjyd_start');
+    var cp=lsGet('sjyd_done');
     if(sd){planStartDate=new Date(sd);}
     if(cp){planDone=JSON.parse(cp);}
   }catch(e){}
 }
 function planSaveState(){
   try{
-    if(planStartDate)localStorage.setItem('sjyd_start',planStartDate.toISOString());
-    localStorage.setItem('sjyd_done',JSON.stringify(planDone));
+    if(planStartDate)lsSet('sjyd_start',planStartDate.toISOString());
+    lsSet('sjyd_done',JSON.stringify(planDone));
   }catch(e){}
 }
 function planCalcDay(){
@@ -3825,9 +3535,9 @@ var recState={active:false,key:null,recorder:null,chunks:[],stream:null};
 var recMeta={};  // key -> {label, date}
 
 function recGetMeta(){
-  try{return JSON.parse(localStorage.getItem('sjyd_recmeta')||'{}');}catch(e){return {};}
+  try{return JSON.parse(lsGet('sjyd_recmeta')||'{}');}catch(e){return {};}
 }
-function recSaveMeta(m){try{localStorage.setItem('sjyd_recmeta',JSON.stringify(m));}catch(e){}}
+function recSaveMeta(m){try{lsSet('sjyd_recmeta',JSON.stringify(m));}catch(e){}}
 
 function recStart(key,label,updateFn){
   if(recState.active){recStop(function(){recStart(key,label,updateFn);});return;}
@@ -3974,7 +3684,7 @@ function initRecCtrls(){
 
 // ── Notes ──
 function getAllNotes(){
-  try{return JSON.parse(localStorage.getItem('sjyd_notes')||'{}');}catch(e){return {};}
+  try{return JSON.parse(lsGet('sjyd_notes')||'{}');}catch(e){return {};}
 }
 function saveNote(){
   var dayEl=document.getElementById('noteDay');
@@ -3985,7 +3695,7 @@ function saveNote(){
   var all=getAllNotes();
   if(!all[day])all[day]=[];
   all[day].unshift({text:text,date:new Date().toISOString()});
-  localStorage.setItem('sjyd_notes',JSON.stringify(all));
+  lsSet('sjyd_notes',JSON.stringify(all));
   try{logActivity('note',{q:'第'+day+'天學習筆記',a:text.substring(0,60)});}catch(e){}
   document.getElementById('noteInput').value='';
   document.getElementById('charCount').textContent='0 字';
@@ -4002,7 +3712,7 @@ function loadNote(){
 function delNote(day,idx){
   var all=getAllNotes();
   if(all[day]){all[day].splice(idx,1);if(!all[day].length)delete all[day];}
-  localStorage.setItem('sjyd_notes',JSON.stringify(all));
+  lsSet('sjyd_notes',JSON.stringify(all));
   renderSavedNotes(day);
 }
 function renderSavedNotes(day){
@@ -4056,7 +3766,7 @@ var ACHVS=[
   {id:'friend1',icon:'👥',name:'善友相伴',desc:'加入第一位好友'},
 ];
 function getEarnedAchvs(){
-  try{return JSON.parse(localStorage.getItem('sjyd_achv')||'{}');}catch(e){return {};}
+  try{return JSON.parse(lsGet('sjyd_achv')||'{}');}catch(e){return {};}
 }
 function checkAchievements(){
   var earned=getEarnedAchvs();var changed=false;
@@ -4074,7 +3784,7 @@ function checkAchievements(){
   var meta=recGetMeta();var rc=Object.keys(meta).length;
   if(rc>=1)earn('rec1');if(rc>=5)earn('rec5');
   var friends=getFriends();if(friends.length>=1)earn('friend1');
-  if(changed)localStorage.setItem('sjyd_achv',JSON.stringify(earned));
+  if(changed)lsSet('sjyd_achv',JSON.stringify(earned));
   return earned;
 }
 var popupQueue=[];var popupShowing=false;
@@ -4185,13 +3895,13 @@ function delRecFromList(key){
 }
 
 // ── Social / Friends ──
-function getFriends(){try{return JSON.parse(localStorage.getItem('sjyd_friends')||'[]');}catch(e){return [];}}
-function saveFriends(f){try{localStorage.setItem('sjyd_friends',JSON.stringify(f));}catch(e){}}
-function getNickname(){return localStorage.getItem('sjyd_nickname')||'修行者';}
+function getFriends(){try{return JSON.parse(lsGet('sjyd_friends')||'[]');}catch(e){return [];}}
+function saveFriends(f){try{lsSet('sjyd_friends',JSON.stringify(f));}catch(e){}}
+function getNickname(){return lsGet('sjyd_nickname')||'修行者';}
 function saveNickname(){
   var v=document.getElementById('myNickname').value.trim();
   if(!v)return;
-  localStorage.setItem('sjyd_nickname',v);
+  lsSet('sjyd_nickname',v);
   refreshMyCode();
   var btn=document.querySelector('[onclick="saveNickname()"]');
   if(btn){var o=btn.textContent;btn.textContent='✅ 已設定';setTimeout(function(){try{btn.textContent=o;}catch(e){}},1500);}
@@ -4515,7 +4225,7 @@ function copyShareText(){
   var earned=getEarnedAchvs();
   if(!earned['share1']){
     var e=getEarnedAchvs();e['share1']=new Date().toISOString();
-    localStorage.setItem('sjyd_achv',JSON.stringify(e));
+    lsSet('sjyd_achv',JSON.stringify(e));
     showAchvPopup('share1');
   }
   safeCopy(txt,'✅ 已複製！可以貼到微信、LINE或Email分享給朋友了。');
@@ -4628,10 +4338,10 @@ var ACT_LABELS = {tf:'是非題', mcq:'問答題', sa:'簡答題', voice:'語音
 var ACT_BADGE  = {tf:'pbadge-tf', mcq:'pbadge-mcq', sa:'pbadge-sa', voice:'pbadge-voice', feynman:'pbadge-feynman', plan:'pbadge-plan', note:'pbadge-plan'};
 
 function getAllActivities(){
-  try{return JSON.parse(localStorage.getItem('sjyd_acts')||'[]');}catch(e){return [];}
+  try{return JSON.parse(lsGet('sjyd_acts')||'[]');}catch(e){return [];}
 }
 function saveAllActivities(arr){
-  try{localStorage.setItem('sjyd_acts',JSON.stringify(arr.slice(0,500)));}catch(e){}
+  try{lsSet('sjyd_acts',JSON.stringify(arr.slice(0,500)));}catch(e){}
 }
 
 // Core log function — called from every quiz/practice
@@ -4783,6 +4493,270 @@ function renderPracticeLeaderboard(){
 
 // ── Hooks moved into original functions ──
 
+
+// ══════════════════════════════════════════
+// FIREBASE + LINE AUTH & CLOUD SYNC
+// ══════════════════════════════════════════
+
+// ── Firebase init ──
+var FIREBASE_APP = null, FIREBASE_AUTH = null, FIREBASE_DB = null, FIREBASE_USER = null;
+var LINE_USER = null;
+var _cloudSyncTimer = null;
+
+(function initFirebase(){
+  try{
+    const cfg = {
+      apiKey:"AIzaSyBrJBqa-osA04qXrzOsK8BScGiToxFOGp8",
+      authDomain:"sutra-study.firebaseapp.com",
+      projectId:"sutra-study",
+      storageBucket:"sutra-study.firebasestorage.app",
+      messagingSenderId:"394146119260",
+      appId:"1:394146119260:web:95d60c174a70f4d2feb099"
+    };
+    FIREBASE_APP  = firebase.initializeApp(cfg);
+    FIREBASE_AUTH = firebase.auth();
+    FIREBASE_DB   = firebase.firestore();
+    FIREBASE_AUTH.onAuthStateChanged(function(user){
+      try{
+        FIREBASE_USER = user;
+        if(user){
+          // Firebase user wins over LINE URL params
+          loadFromFirestore(user.uid, function(){
+            updateAvatarBar();
+            try{if(typeof renderPracticePanel==='function')renderPracticePanel();}catch(e){}
+          });
+        } else {
+          updateAvatarBar();
+        }
+      }catch(e){console.warn('onAuthStateChanged:',e);}
+    });
+  }catch(e){console.warn('initFirebase:',e);}
+})();
+
+// ── Firestore key mapping ──
+var CLOUD_MAP = {
+  'sjyd_nickname':'nickname','sjyd_done':'planDone','sjyd_start':'planStart',
+  'sjyd_achv':'achievements','sjyd_notes':'notes','sjyd_acts':'activities',
+  'sjyd_friends':'friends','sjyd_recmeta':'recMeta'
+};
+
+function getActiveUID(){
+  if(FIREBASE_USER) return 'fb_'+FIREBASE_USER.uid;
+  if(LINE_USER) return 'ln_'+LINE_USER.id;
+  return null;
+}
+
+function lsPrefix(){
+  var uid = getActiveUID();
+  return uid ? uid+'_' : '';
+}
+
+// ── localStorage wrappers ──
+function lsGet(key){
+  try{
+    var pkey = lsPrefix()+key;
+    var val = localStorage.getItem(pkey);
+    if(val===null && (FIREBASE_USER||LINE_USER)){
+      val = localStorage.getItem(key);
+      if(val!==null){ localStorage.setItem(pkey,val); localStorage.removeItem(key); }
+    }
+    return val;
+  }catch(e){ return null; }
+}
+function lsSet(key,val){
+  try{ localStorage.setItem(lsPrefix()+key,val); }catch(e){}
+  if(FIREBASE_USER && CLOUD_MAP[key]) cloudSyncDebounced();
+}
+
+// ── Firestore load ──
+function loadFromFirestore(uid, cb){
+  try{
+    FIREBASE_DB.collection('users').doc(uid).get().then(function(doc){
+      try{
+        if(doc.exists){
+          var d = doc.data();
+          var pfx = 'fb_'+uid+'_';
+          if(d.nickname)       localStorage.setItem(pfx+'sjyd_nickname', d.nickname);
+          if(d.planDone)       localStorage.setItem(pfx+'sjyd_done', JSON.stringify(d.planDone));
+          if(d.planStart)      localStorage.setItem(pfx+'sjyd_start', d.planStart);
+          if(d.achievements)   localStorage.setItem(pfx+'sjyd_achv', JSON.stringify(d.achievements));
+          if(d.notes)          localStorage.setItem(pfx+'sjyd_notes', JSON.stringify(d.notes));
+          if(d.activities)     localStorage.setItem(pfx+'sjyd_acts', JSON.stringify(d.activities));
+          if(d.friends)        localStorage.setItem(pfx+'sjyd_friends', JSON.stringify(d.friends));
+          // Reload plan state from refreshed storage
+          try{ if(typeof planLoadState==='function') planLoadState(); }catch(e){}
+        }
+        if(cb) cb();
+      }catch(e){ console.warn('loadFromFirestore parse:',e); if(cb)cb(); }
+    }).catch(function(e){ console.warn('loadFromFirestore:',e); if(cb)cb(); });
+  }catch(e){ if(cb)cb(); }
+}
+
+// ── Debounced cloud sync ──
+function cloudSyncDebounced(){
+  if(_cloudSyncTimer) clearTimeout(_cloudSyncTimer);
+  _cloudSyncTimer = setTimeout(syncToFirestore, 1200);
+}
+function syncToFirestore(){
+  if(!FIREBASE_USER) return;
+  try{
+    var payload = { updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+    Object.keys(CLOUD_MAP).forEach(function(lsKey){
+      var raw = lsGet(lsKey);
+      if(raw===null) return;
+      var fsKey = CLOUD_MAP[lsKey];
+      try{ payload[fsKey] = JSON.parse(raw); }
+      catch(e){ payload[fsKey] = raw; }
+    });
+    FIREBASE_DB.collection('users').doc(FIREBASE_USER.uid).set(payload,{merge:true})
+      .catch(function(e){ console.warn('syncToFirestore:',e); });
+  }catch(e){ console.warn('syncToFirestore:',e); }
+}
+
+// ── Auth actions ──
+function loginGoogle(){
+  try{
+    var provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({prompt:'select_account'});
+    FIREBASE_AUTH.signInWithPopup(provider)
+      .then(function(){ closeLoginModal(); })
+      .catch(function(e){ showLoginError(e.message); });
+  }catch(e){ showLoginError(e.message); }
+}
+
+var _emailMode = 'signin';
+function switchEmailTab(mode){
+  _emailMode = mode;
+  document.getElementById('tabSignIn').style.background = mode==='signin' ? 'var(--pink)' : 'var(--card-bg)';
+  document.getElementById('tabSignIn').style.color = mode==='signin' ? '#fff' : 'var(--muted)';
+  document.getElementById('tabSignUp').style.background = mode==='signup' ? 'var(--pink)' : 'var(--card-bg)';
+  document.getElementById('tabSignUp').style.color = mode==='signup' ? '#fff' : 'var(--muted)';
+  document.getElementById('emailSubmitBtn').textContent = mode==='signin' ? '登入' : '建立帳號';
+}
+function loginEmail(){
+  try{
+    var email = document.getElementById('loginEmail').value.trim();
+    var pw    = document.getElementById('loginPassword').value;
+    if(!email||!pw){ showLoginError('請輸入 Email 和密碼'); return; }
+    var action = _emailMode==='signin'
+      ? FIREBASE_AUTH.signInWithEmailAndPassword(email,pw)
+      : FIREBASE_AUTH.createUserWithEmailAndPassword(email,pw);
+    action.then(function(){ closeLoginModal(); })
+          .catch(function(e){ showLoginError(e.code==='auth/user-not-found'?'帳號不存在，請先註冊':e.code==='auth/wrong-password'?'密碼錯誤':e.message); });
+  }catch(e){ showLoginError(e.message); }
+}
+function showLoginError(msg){
+  var el = document.getElementById('loginError');
+  if(el){ el.style.display='block'; el.textContent='⚠️ '+msg; }
+}
+function openLoginModal(){
+  var m=document.getElementById('loginModal');if(m)m.style.display='flex';
+  try{document.getElementById('loginError').style.display='none';}catch(e){}
+}
+function closeLoginModal(){
+  var m=document.getElementById('loginModal');if(m)m.style.display='none';
+}
+
+function logoutAll(){
+  try{
+    if(FIREBASE_AUTH) FIREBASE_AUTH.signOut();
+    LINE_USER = null;
+    FIREBASE_USER = null;
+    localStorage.removeItem('sjyd_line_session');
+    var bar=document.getElementById('userAvatarBar');if(bar)bar.style.display='none';
+    var m=document.getElementById('userMenuPopup');if(m)m.remove();
+    showToast('已登出，資料已切換為訪客模式');
+  }catch(e){}
+}
+function showToast(msg){
+  var t=document.createElement('div');
+  t.style.cssText='position:fixed;top:60px;left:50%;transform:translateX(-50%);background:var(--card-bg);border:2px solid var(--border);border-radius:10px;padding:10px 20px;font-size:.88rem;color:var(--text);z-index:5000;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.3);';
+  t.textContent=msg; document.body.appendChild(t);
+  setTimeout(function(){try{t.remove();}catch(e){}},2500);
+}
+
+// ── Avatar bar ──
+function updateAvatarBar(){
+  try{
+    var bar=document.getElementById('userAvatarBar');
+    var img=document.getElementById('userAvatarImg');
+    var name=document.getElementById('userAvatarName');
+    if(FIREBASE_USER){
+      if(bar)bar.style.display='block';
+      if(img){ img.src=FIREBASE_USER.photoURL||''; img.alt=FIREBASE_USER.displayName||'用戶'; }
+      if(name)name.textContent=(FIREBASE_USER.displayName||FIREBASE_USER.email||'用戶').split(' ')[0].substring(0,8);
+    } else if(LINE_USER){
+      if(bar)bar.style.display='block';
+      if(img){ img.src=LINE_USER.pic||''; img.alt=LINE_USER.name; }
+      if(name)name.textContent=LINE_USER.name.substring(0,8);
+    } else {
+      // Show login button
+      if(bar){
+        bar.style.display='block';
+        bar.innerHTML='<button class="user-login-btn" onclick="openLoginModal()">🔐 登入</button>';
+      }
+    }
+  }catch(e){}
+}
+
+function showUserMenu(ev){
+  try{ev.stopPropagation();}catch(e){}
+  var existing=document.getElementById('userMenuPopup');
+  if(existing){existing.remove();return;}
+  var menu=document.createElement('div');
+  menu.id='userMenuPopup';
+  menu.style.cssText='position:fixed;top:52px;right:10px;z-index:5000;background:var(--card-bg);border:2px solid var(--border);border-radius:14px;padding:12px 0;min-width:190px;box-shadow:0 8px 32px rgba(0,0,0,.4);';
+  var user = FIREBASE_USER||LINE_USER;
+  var nick = lsGet('sjyd_nickname')||(user?(FIREBASE_USER?FIREBASE_USER.displayName:LINE_USER.name):'訪客');
+  var syncStatus = FIREBASE_USER ? '☁️ 雲端同步已開啟 ✅' : LINE_USER ? '📱 LINE 本地模式' : '';
+  menu.innerHTML = '<div style="padding:10px 16px 8px;border-bottom:1px solid var(--border);">'
+    +'<div style="font-weight:800;font-size:.92rem;color:var(--text);">'+nick+'</div>'
+    +'<div style="font-size:.72rem;color:var(--muted);margin-top:2px;">'+syncStatus+'</div>'
+    +'</div>'
+    +'<button onclick="logoutAll()" style="width:100%;padding:11px 16px;background:none;border:none;text-align:left;cursor:pointer;font-size:.88rem;color:var(--text);-webkit-appearance:none;">🚪 登出</button>';
+  document.body.appendChild(menu);
+  setTimeout(function(){
+    document.addEventListener('click',function close(e){
+      if(!menu.contains(e.target)){menu.remove();document.removeEventListener('click',close);}
+    });
+  },10);
+}
+
+// ── LINE URL param handler (kept for backward compat) ──
+function parseLineURL(){
+  try{
+    var p=new URLSearchParams(window.location.search);
+    var id=p.get('line_id'), name=p.get('line_user'), pic=p.get('line_pic');
+    if(id&&name&&!FIREBASE_USER){
+      LINE_USER={id:id,name:name,pic:pic||''};
+      localStorage.setItem('sjyd_line_session',JSON.stringify(LINE_USER));
+      try{var nkey=lsPrefix()+'sjyd_nickname';if(!localStorage.getItem(nkey))localStorage.setItem(nkey,name);}catch(e){}
+      try{var add=p.get('add'),clean=window.location.pathname+(add?'?add='+encodeURIComponent(add):'');history.replaceState(null,'',clean);}catch(e){}
+      return true;
+    }
+  }catch(e){}
+  return false;
+}
+function restoreLineSession(){
+  try{
+    if(FIREBASE_USER) return false; // Firebase takes priority
+    var saved=localStorage.getItem('sjyd_line_session');
+    if(saved){LINE_USER=JSON.parse(saved);return true;}
+  }catch(e){}
+  return false;
+}
+(function initSession(){
+  // Wait briefly for Firebase auth to resolve before checking LINE
+  setTimeout(function(){
+    try{
+      if(!FIREBASE_USER){
+        if(!parseLineURL()) restoreLineSession();
+      }
+      updateAvatarBar();
+    }catch(e){}
+  }, 300);
+})();
+
 // ── Safe init IIFE ──
 (function safeInit(){
   // Sync theme buttons with saved theme
@@ -4805,6 +4779,8 @@ function renderPracticeLeaderboard(){
     }
   }catch(e){}
   try{initJournal();}catch(e){console.warn('journal:',e);}
+  // Show login button or user avatar after DOM ready
+  try{updateAvatarBar();}catch(e){}
 
   // ── Deep link: ?add=CODE → auto-fill friend code and navigate to social panel ──
   try{
@@ -4850,5 +4826,38 @@ function renderPracticeLeaderboard(){
   }catch(e){console.warn('deeplink:',e);}
 })();
 </script>
+
+<!-- Firebase Login Modal -->
+<div id="loginModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:6000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--card-bg);border:2px solid var(--border);border-radius:20px;padding:28px 24px;width:100%;max-width:340px;position:relative;box-shadow:0 16px 48px rgba(0,0,0,.6);">
+    <button onclick="closeLoginModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);-webkit-appearance:none;">✕</button>
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-size:1.8rem;margin-bottom:6px;">🙏</div>
+      <div style="font-size:1.1rem;font-weight:800;color:var(--text);">登入學習帳號</div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:4px;">登入後，進度可跨裝置同步</div>
+    </div>
+    <!-- Google -->
+    <button onclick="loginGoogle()" style="width:100%;padding:13px;margin-bottom:10px;background:#fff;color:#333;border:1.5px solid #ddd;border-radius:12px;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;-webkit-appearance:none;">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg>
+      使用 Google 帳號登入
+    </button>
+    <!-- Divider -->
+    <div style="display:flex;align-items:center;gap:10px;margin:14px 0;">
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+      <span style="font-size:.75rem;color:var(--muted);">或用 Email</span>
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+    </div>
+    <!-- Email tabs -->
+    <div style="display:flex;gap:6px;margin-bottom:12px;">
+      <button id="tabSignIn" onclick="switchEmailTab('signin')" style="flex:1;padding:7px;border:1.5px solid var(--border);border-radius:8px;background:var(--pink);color:#fff;font-size:.84rem;font-weight:700;cursor:pointer;-webkit-appearance:none;">登入</button>
+      <button id="tabSignUp" onclick="switchEmailTab('signup')" style="flex:1;padding:7px;border:1.5px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--muted);font-size:.84rem;font-weight:700;cursor:pointer;-webkit-appearance:none;">註冊</button>
+    </div>
+    <input type="email" id="loginEmail" placeholder="Email" style="width:100%;padding:11px 13px;margin-bottom:8px;background:var(--input-bg);color:var(--text);border:1.5px solid var(--border);border-radius:10px;font-size:.92rem;outline:none;-webkit-appearance:none;">
+    <input type="password" id="loginPassword" placeholder="密碼（6位以上）" style="width:100%;padding:11px 13px;margin-bottom:12px;background:var(--input-bg);color:var(--text);border:1.5px solid var(--border);border-radius:10px;font-size:.92rem;outline:none;-webkit-appearance:none;">
+    <button id="emailSubmitBtn" onclick="loginEmail()" style="width:100%;padding:13px;background:var(--pink);color:#fff;border:none;border-radius:12px;font-size:.95rem;font-weight:800;cursor:pointer;-webkit-appearance:none;">登入</button>
+    <div id="loginError" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(255,100,100,.12);border:1px solid #ff6464;border-radius:8px;font-size:.82rem;color:#ff8888;"></div>
+    <div style="text-align:center;margin-top:12px;font-size:.75rem;color:var(--muted);">📱 LINE 帳號：使用 CodeWorks App 的 LINE 登入連結</div>
+  </div>
+</div>
 </body>
 </html>
