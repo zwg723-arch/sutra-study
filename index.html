@@ -1433,15 +1433,114 @@ html[data-theme="ink"] .header-compact-title{
 @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 /* Site header — no bottom border when collapsed */
 .site-header.collapsed{border-bottom:none;}
+
+/* ── Login Modal ── */
+#loginOverlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  z-index:8000;display:flex;align-items:center;justify-content:center;padding:16px;
+}
+#loginOverlay.hidden{display:none;}
+.login-box{
+  background:var(--card-bg);border-radius:20px;padding:32px 24px;max-width:380px;width:100%;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);text-align:center;
+}
+.login-logo{font-size:44px;margin-bottom:8px;}
+.login-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
+.login-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:13px 16px;border-radius:12px;border:none;
+  font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px;
+  transition:transform .15s,box-shadow .15s;box-sizing:border-box;
+}
+.login-btn:active{transform:scale(.97);}
+.login-btn-google{background:#fff;color:#3c4043;box-shadow:0 2px 8px rgba(0,0,0,.2);border:1.5px solid #dadce0;}
+.login-btn-line{background:#06C755;color:#fff;}
+.login-btn-email{background:var(--pink);color:#fff;}
+.login-divider{display:flex;align-items:center;gap:8px;margin:8px 0 16px;color:var(--muted);font-size:12px;}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.login-email-form{text-align:left;}
+.login-email-form input{
+  width:100%;padding:11px 14px;border-radius:10px;
+  border:1.5px solid var(--border);background:var(--input-bg);
+  color:var(--text);font-size:14px;margin-bottom:10px;box-sizing:border-box;
+}
+.login-email-form input:focus{outline:none;border-color:var(--pink);}
+.login-skip{
+  margin-top:8px;font-size:12px;color:var(--muted);
+  background:none;border:none;cursor:pointer;text-decoration:underline;padding:4px;
+}
+/* ── User Avatar in Header ── */
+.header-user-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.5);
+  background:rgba(255,255,255,.2);
+  cursor:pointer;overflow:hidden;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:#fff;
+  transition:transform .15s;
+  padding:0;line-height:1;
+}
+.header-user-btn:active{transform:scale(.9);}
+.header-user-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 </style>
+<!-- Vercel Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
 <body>
 
+<!-- ══════════════════════════════════
+     LOGIN MODAL
+     ══════════════════════════════════ -->
+<div id="loginOverlay" class="hidden">
+  <div class="login-box">
+    <div class="login-logo">🌸</div>
+    <div class="login-title">歡迎來到十善業道經</div>
+    <div class="login-sub">登入後可保存學習進度與成就</div>
+
+    <button class="login-btn login-btn-google" onclick="loginWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+        <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+        <path d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" fill="#FBBC05"/>
+        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+      </svg>
+      Google 帳號登入
+    </button>
+
+    <button class="login-btn login-btn-line" onclick="loginWithLINE()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+      </svg>
+      LINE 帳號登入
+    </button>
+
+    <div class="login-divider">或</div>
+
+    <div id="emailLoginForm" style="display:none;">
+      <div class="login-email-form">
+        <input type="email" id="loginEmail" placeholder="📧 電子郵件">
+        <input type="password" id="loginPassword" placeholder="🔒 密碼（至少6位）">
+        <button class="login-btn login-btn-email" onclick="loginWithEmail()">登入 / 註冊</button>
+      </div>
+    </div>
+    <button class="login-btn login-btn-email" id="showEmailBtn" onclick="toggleEmailForm()">📧 Email 登入</button>
+
+    <br>
+    <button class="login-skip" onclick="skipLogin()">稍後再登入（不儲存進度）</button>
+  </div>
+</div>
+
 <header class="site-header" id="siteHeader">
-  <div class="header-compact" id="headerCompact" onclick="toggleHeader()">
-    <span class="header-compact-lotus">☸</span>
-    <span class="header-compact-title">佛說十善業道經</span>
-    <span class="header-compact-toggle" id="headerToggleIcon">▼</span>
+  <div class="header-compact" id="headerCompact">
+    <span class="header-compact-lotus" onclick="toggleHeader()" style="cursor:pointer;">☸</span>
+    <span class="header-compact-title" onclick="toggleHeader()" style="cursor:pointer;">佛說十善業道經</span>
+    <button class="header-user-btn" id="headerUserBtn" onclick="headerUserAction()" title="登入">👤</button>
+    <span class="header-compact-toggle" id="headerToggleIcon" onclick="toggleHeader()" style="cursor:pointer;">▼</span>
   </div>
   <div class="header-inner" id="headerFull" style="display:none;">
     <span class="header-lotus">🌸 ☸ 🌸</span>
@@ -2141,6 +2240,250 @@ var CLAUDE_ENV = (function(){
 var ANTHROPIC_API_KEY = '';
 var PROXY_URL = '/api/claude'; // Vercel proxy
 
+// ══════════════════════════════════════════════════════
+// AUTH — Firebase (Google + Email) + LINE Login
+// ══════════════════════════════════════════════════════
+
+// 【設定步驟】:
+//   1. 到 https://console.firebase.google.com 建立專案
+//   2. 啟用 Authentication → Sign-in method → Google、Email/Password
+//   3. 複製 Firebase 設定貼到下方
+//   4. LINE: 到 https://developers.line.biz 建立 LINE Login channel
+//      取得 Channel ID → 設定 Vercel 環境變數:
+//      LINE_CHANNEL_ID / LINE_CHANNEL_SECRET / LINE_REDIRECT_URI
+
+var FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyBrJBqa-osA04qXrzOsK8BScGiToxFOGp8",
+  authDomain:        "sutra-study.firebaseapp.com",
+  projectId:         "sutra-study",
+  storageBucket:     "sutra-study.firebasestorage.app",
+  messagingSenderId: "394146119260",
+  appId:             "1:394146119260:web:95d60c174a70f4d2feb099",
+  measurementId:     "G-7SPLKNLMZ2"
+};
+
+var LINE_CHANNEL_ID = "2009792377"; // LINE Login Channel ID
+
+// ── Firebase init ──
+var fbApp = null, fbAuth = null, currentUser = null;
+(function(){
+  try{
+    if(typeof firebase === 'undefined') return;
+    if(FIREBASE_CONFIG.apiKey === 'YOUR_FIREBASE_API_KEY') return; // 尚未設定
+    fbApp  = firebase.initializeApp(FIREBASE_CONFIG);
+    fbAuth = firebase.auth();
+    fbAuth.onAuthStateChanged(function(user){
+      try{
+        currentUser = user || null;
+        updateUserUI(currentUser);
+        if(currentUser) hideLoginModal();
+      }catch(e){}
+    });
+  }catch(e){console.warn('Firebase init:',e);}
+})();
+
+// ── Update header user button ──
+function updateUserUI(user){
+  try{
+    var btn = document.getElementById('headerUserBtn');
+    if(!btn) return;
+    if(user && user.photoURL){
+      btn.innerHTML = '<img src="'+user.photoURL+'" alt="" onerror="this.parentNode.textContent=\'👤\'">';
+    } else if(user && user.displayName){
+      btn.textContent = user.displayName.charAt(0).toUpperCase();
+    } else if(user && user.email){
+      btn.textContent = user.email.charAt(0).toUpperCase();
+    } else {
+      btn.textContent = '👤';
+    }
+    btn.title = user ? (user.displayName || user.email || '已登入') : '登入';
+  }catch(e){}
+}
+
+// ── Modal show / hide ──
+function showLoginModal(){
+  try{
+    var ov = document.getElementById('loginOverlay');
+    if(ov) ov.classList.remove('hidden');
+  }catch(e){}
+}
+function hideLoginModal(){
+  try{
+    var ov = document.getElementById('loginOverlay');
+    if(ov) ov.classList.add('hidden');
+  }catch(e){}
+}
+function skipLogin(){
+  try{
+    localStorage.setItem('sjyd_skip_login','1');
+    hideLoginModal();
+  }catch(e){}
+}
+function headerUserAction(){
+  try{
+    if(currentUser){ showUserMenu(); } else { showLoginModal(); }
+  }catch(e){}
+}
+function showUserMenu(){
+  try{
+    var name = (currentUser && (currentUser.displayName || currentUser.email)) || '用戶';
+    var provider = (currentUser && currentUser.provider) || 'firebase';
+    var msg = '👋 ' + name + '\n\n登出帳號？';
+    if(confirm(msg)){
+      if(fbAuth && provider !== 'line'){
+        fbAuth.signOut().catch(function(e){});
+      }
+      // 清除 LINE / localStorage 用戶
+      try{ localStorage.removeItem('sjyd_user'); }catch(err){}
+      currentUser = null;
+      updateUserUI(null);
+    }
+  }catch(e){}
+}
+
+// ── Toggle email form ──
+function toggleEmailForm(){
+  try{
+    var form = document.getElementById('emailLoginForm');
+    var btn  = document.getElementById('showEmailBtn');
+    var show = form.style.display === 'none';
+    form.style.display = show ? 'block' : 'none';
+    if(btn) btn.style.display = show ? 'none' : 'flex';
+    if(show){
+      var inp = document.getElementById('loginEmail');
+      if(inp) setTimeout(function(){ try{ inp.focus(); }catch(e){} }, 100);
+    }
+  }catch(e){}
+}
+
+// ── Google Login ──
+function loginWithGoogle(){
+  try{
+    if(!fbAuth){
+      alert('⚠️ Firebase 尚未設定。\n請在 index.html 填入 FIREBASE_CONFIG，\n並在 Firebase Console 啟用 Google 登入。');
+      return;
+    }
+    var provider = new firebase.auth.GoogleAuthProvider();
+    fbAuth.signInWithPopup(provider).then(function(){
+      hideLoginModal();
+    }).catch(function(err){
+      if(err.code !== 'auth/popup-closed-by-user'){
+        alert('Google 登入失敗：' + err.message);
+      }
+    });
+  }catch(e){ alert('錯誤：' + e.message); }
+}
+
+// ── Email Login / Register ──
+function loginWithEmail(){
+  try{
+    if(!fbAuth){
+      alert('⚠️ Firebase 尚未設定。\n請在 index.html 填入 FIREBASE_CONFIG，\n並在 Firebase Console 啟用 Email/Password 登入。');
+      return;
+    }
+    var email = document.getElementById('loginEmail').value.trim();
+    var pw    = document.getElementById('loginPassword').value;
+    if(!email || !pw){ alert('請輸入 Email 和密碼'); return; }
+    if(pw.length < 6){ alert('密碼至少需要 6 位'); return; }
+    fbAuth.signInWithEmailAndPassword(email, pw).then(function(){
+      hideLoginModal();
+    }).catch(function(err){
+      // 如果用戶不存在就自動建立帳號
+      if(err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password'){
+        return fbAuth.createUserWithEmailAndPassword(email, pw).then(function(){
+          hideLoginModal();
+        });
+      }
+      throw err;
+    }).catch(function(err){
+      alert('Email 登入失敗：' + err.message);
+    });
+  }catch(e){ alert('錯誤：' + e.message); }
+}
+
+// ── LINE Login ──
+function loginWithLINE(){
+  try{
+    if(LINE_CHANNEL_ID === 'YOUR_LINE_CHANNEL_ID'){
+      alert('⚠️ LINE Login 尚未設定。\n請到 https://developers.line.biz 建立 LINE Login channel，\n取得 Channel ID 填入 index.html 的 LINE_CHANNEL_ID，\n並在 Vercel 設定 LINE_CHANNEL_SECRET 環境變數。');
+      return;
+    }
+    var state = Math.random().toString(36).substring(2, 14);
+    try{ localStorage.setItem('sjyd_line_state', state); }catch(e){}
+    var redirectUri = encodeURIComponent(window.location.origin + '/api/line-callback');
+    var url = 'https://access.line.me/oauth2/v2.1/authorize'
+      + '?response_type=code'
+      + '&client_id=' + LINE_CHANNEL_ID
+      + '&redirect_uri=' + redirectUri
+      + '&state=' + state
+      + '&scope=profile%20openid';
+    window.location.href = url;
+  }catch(e){ alert('錯誤：' + e.message); }
+}
+
+// ── Handle LINE callback redirect params ──
+(function(){
+  try{
+    var params = new URLSearchParams(window.location.search);
+    var lineUser = params.get('line_user');
+    var linePic  = params.get('line_pic');
+    var lineId   = params.get('line_id');
+    var lineErr  = params.get('line_error');
+    if(lineErr){
+      console.warn('LINE login error:', lineErr);
+      try{ history.replaceState(null, '', window.location.pathname); }catch(e){}
+      return;
+    }
+    if(lineUser && lineId){
+      var userData = {
+        displayName: decodeURIComponent(lineUser),
+        photoURL:    linePic ? decodeURIComponent(linePic) : null,
+        uid:         decodeURIComponent(lineId),
+        email:       null,
+        provider:    'line'
+      };
+      try{ localStorage.setItem('sjyd_user', JSON.stringify(userData)); }catch(e){}
+      try{ localStorage.removeItem('sjyd_skip_login'); }catch(e){}
+      currentUser = userData;
+      updateUserUI(userData);
+      hideLoginModal();
+      try{ history.replaceState(null, '', window.location.pathname); }catch(e){}
+    }
+  }catch(e){ console.warn('LINE param parse:', e); }
+})();
+
+// ── Restore LINE user from localStorage ──
+(function(){
+  try{
+    if(currentUser) return;
+    var stored = localStorage.getItem('sjyd_user');
+    if(!stored) return;
+    var u = JSON.parse(stored);
+    if(u && u.provider === 'line' && u.uid){
+      currentUser = u;
+      setTimeout(function(){ try{ updateUserUI(currentUser); }catch(e){} }, 200);
+    }
+  }catch(e){}
+})();
+
+// ── Show login modal on first visit (after delay) ──
+(function(){
+  try{
+    var skipped = localStorage.getItem('sjyd_skip_login');
+    var hasLine = localStorage.getItem('sjyd_user');
+    if(!skipped && !hasLine){
+      // Firebase user check happens via onAuthStateChanged; show modal if still no user after 1.5s
+      setTimeout(function(){
+        try{
+          if(!currentUser && !localStorage.getItem('sjyd_skip_login')){
+            showLoginModal();
+          }
+        }catch(e){}
+      }, 1500);
+    }
+  }catch(e){}
+})();
+
 async function callAnthropicAPI(reqBody){
   var url, headers;
   if(typeof PROXY_URL !== 'undefined' && PROXY_URL){
@@ -2168,7 +2511,7 @@ async function callAnthropicAPI(reqBody){
   }
   var d;
   try{ d = await r.json(); }catch(e){ throw new Error('parse'); }
-  if(!r.ok){ throw new Error(d&&d.error?d.error.message:'HTTP '+r.status); }
+  if(!r.ok){ throw new Error((d&&d.error?d.error.message:'HTTP ')+r.status); }
   if(!d||!d.content){ throw new Error('no content'); }
   return d.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');
 }
@@ -2213,13 +2556,13 @@ function showSection(id,idx){
     document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.remove('active');});
     var el=document.getElementById(id);
     if(el)el.classList.add('active');
-    // Find the tab that calls showSection with this id
     document.querySelectorAll('.nav-tab').forEach(function(t){
       if(t.getAttribute('onclick')&&t.getAttribute('onclick').indexOf("'"+id+"'")>=0){
         t.classList.add('active');
       }
     });
     window.scrollTo({top:0,behavior:'smooth'});
+    try{if(window.va)window.va('event',{name:'section_view',section:id});}catch(e){}
   }catch(e){console.warn('showSection:',e);}
 }
 
@@ -2635,6 +2978,7 @@ function speakAvatar(text,onEnd){
 }
 function setVS(msg){document.getElementById('voiceStatus').textContent=msg;}
 function startVoiceSession(){
+  try{if(window.va)window.va('event',{name:'voice_qa_start'});}catch(e){}
   vSession.active=true;vSession.qIdx=0;vSession.history=[];
   vSession.pool=pickRandom(vqPool,6);
   document.getElementById('startBtn').style.display='none';
@@ -2901,7 +3245,16 @@ async function generateOpener(){
     });
     res.textContent=txt;res.classList.remove('loading');document.getElementById('openerBtnRow').style.display='flex';
   }catch(e){
-    res.textContent='⚠️ AI功能目前不可用。此功能需在 Claude.ai 或已設定 API Key 的環境中使用。';
+    var msg=e&&e.message?e.message:'unknown';
+    if(msg==='network'){
+      res.textContent='⚠️ 網路錯誤：無法連線到 AI 伺服器。請確認網路連線後重試。';
+    } else if(msg.indexOf('401')>=0||msg.indexOf('403')>=0||msg.indexOf('API key')>=0){
+      res.textContent='⚠️ API Key 錯誤：請到 Vercel → Settings → Environment Variables 確認 ANTHROPIC_API_KEY 已正確設定，並重新部署。';
+    } else if(msg.indexOf('500')>=0||msg.indexOf('502')>=0){
+      res.textContent='⚠️ 伺服器錯誤 ('+msg+')：Vercel API 端點有問題，請確認 api/claude.js 已正確部署。';
+    } else {
+      res.textContent='⚠️ AI 暫時無法使用 ('+msg+')。請稍後再試，或到 Vercel 確認 ANTHROPIC_API_KEY 環境變數已設定。';
+    }
     res.classList.remove('loading');
     document.getElementById('openerBtnRow').style.display='flex';
   }
@@ -3250,7 +3603,7 @@ function planMarkDone(){
   document.getElementById('planDoneBtn').style.display='none';
   document.getElementById('planDoneTag').style.display='inline-flex';
   updatePlanProg();renderPlanCal();
-  try{var d=P[planCurDay-1];logActivity('plan',{q:'第'+planCurDay+'天：'+(d?d.title:'')});}catch(e){}
+  try{var d=P[planCurDay-1];logActivity('plan',{q:'第'+planCurDay+'天：'+(d?d.title:'')});if(window.va)window.va('event',{name:'plan_day_done',day:planCurDay});}catch(e){}
 }
 function updatePlanProg(){
   var pct=Math.round(planDone.length/30*100);
