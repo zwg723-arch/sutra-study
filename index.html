@@ -4649,6 +4649,19 @@ function showLoginError(msg){
   var el = document.getElementById('loginError');
   if(el){ el.style.display='block'; el.textContent='⚠️ '+msg; }
 }
+function loginLINE(){
+  var clientId = '2009792377';
+  var redirectUri = encodeURIComponent('https://sutra-study.vercel.app/api/line-callback');
+  var state = Math.random().toString(36).substring(2,10);
+  var scope = encodeURIComponent('profile');
+  var lineUrl = 'https://access.line.me/oauth2/v2.1/authorize'
+    + '?response_type=code'
+    + '&client_id=' + clientId
+    + '&redirect_uri=' + redirectUri
+    + '&state=' + state
+    + '&scope=' + scope;
+  window.location.href = lineUrl;
+}
 function openLoginModal(){
   var m=document.getElementById('loginModal');if(m)m.style.display='flex';
   try{document.getElementById('loginError').style.display='none';}catch(e){}
@@ -4841,6 +4854,11 @@ function restoreLineSession(){
       <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/><path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/><path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/></svg>
       使用 Google 帳號登入
     </button>
+    <!-- LINE -->
+    <button onclick="loginLINE()" style="width:100%;padding:13px;margin-bottom:10px;background:#06C755;color:#fff;border:none;border-radius:12px;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;-webkit-appearance:none;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.070 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+      使用 LINE 帳號登入
+    </button>
     <!-- Divider -->
     <div style="display:flex;align-items:center;gap:10px;margin:14px 0;">
       <div style="flex:1;height:1px;background:var(--border);"></div>
@@ -4856,7 +4874,7 @@ function restoreLineSession(){
     <input type="password" id="loginPassword" placeholder="密碼（6位以上）" style="width:100%;padding:11px 13px;margin-bottom:12px;background:var(--input-bg);color:var(--text);border:1.5px solid var(--border);border-radius:10px;font-size:.92rem;outline:none;-webkit-appearance:none;">
     <button id="emailSubmitBtn" onclick="loginEmail()" style="width:100%;padding:13px;background:var(--pink);color:#fff;border:none;border-radius:12px;font-size:.95rem;font-weight:800;cursor:pointer;-webkit-appearance:none;">登入</button>
     <div id="loginError" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(255,100,100,.12);border:1px solid #ff6464;border-radius:8px;font-size:.82rem;color:#ff8888;"></div>
-    <div style="text-align:center;margin-top:12px;font-size:.75rem;color:var(--muted);">📱 LINE 帳號：使用 CodeWorks App 的 LINE 登入連結</div>
+    <div style="text-align:center;margin-top:12px;font-size:.75rem;color:var(--muted);">LINE 登入後資料儲存於裝置，Google/Email 登入可跨裝置同步 ☁️</div>
   </div>
 </div>
 </body>
