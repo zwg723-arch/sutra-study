@@ -1481,6 +1481,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 </head>
 <body>
 
@@ -3658,15 +3659,82 @@ function recStop(cb){
 }
 function recPlay(key){
   idbGet(key,function(rec){
-    if(!rec){alert('找不到錄音');return;}
-    var audio=new Audio(rec.data);audio.play();
+    if(rec){
+      var audio=new Audio(rec.data);audio.play();
+    } else {
+      // Not in IDB — try loading from Firebase Storage
+      var meta = recGetMeta();
+      if(meta[key] && meta[key].storagePath){
+        loadRecFromStorage(key, meta[key].storagePath, function(dataUrl){
+          if(dataUrl){ new Audio(dataUrl).play(); }
+          else { showToast('⚠️ 找不到錄音，可能已刪除。'); }
+        });
+      } else {
+        showToast('⚠️ 找不到錄音，請重新錄製。');
+      }
+    }
   });
 }
 function recDelete(key,cb){
+  // Delete from Storage first
+  try{
+    var meta = recGetMeta();
+    if(meta[key] && meta[key].storagePath){
+      deleteRecFromStorage(key, meta[key].storagePath);
+    }
+  }catch(e){}
   idbDel(key,function(){
     var meta=recGetMeta();delete meta[key];recSaveMeta(meta);
+    cloudSyncDebounced(); // sync updated meta
     if(cb)cb();
   });
+}
+
+// ── Cloud Recording Sync ──
+function uploadRecToStorage(key, blob, meta, onDone){
+  if(!FIREBASE_USER || !FIREBASE_STORAGE){ if(onDone)onDone(); return; }
+  try{
+    var uid = FIREBASE_USER.uid;
+    var ext = blob.type.includes('mp4') ? 'mp4' : 'webm';
+    var storageKey = 'recordings/'+uid+'/'+key+'.'+ext;
+    var ref = FIREBASE_STORAGE.ref(storageKey);
+    ref.put(blob, {contentType: blob.type, customMetadata: {
+      label: meta.label, date: meta.date, recKey: key
+    }}).then(function(){
+      // Save storage path to Firestore recMeta
+      var m = recGetMeta();
+      m[key].storagePath = storageKey;
+      recSaveMeta(m);
+      // Update Firestore recMeta
+      cloudSyncDebounced();
+      if(onDone) onDone();
+    }).catch(function(e){ console.warn('uploadRec:', e); if(onDone)onDone(); });
+  }catch(e){ console.warn('uploadRec:', e); if(onDone)onDone(); }
+}
+
+function loadRecFromStorage(key, storagePath, onDone){
+  if(!FIREBASE_STORAGE){ if(onDone)onDone(null); return; }
+  try{
+    FIREBASE_STORAGE.ref(storagePath).getDownloadURL().then(function(url){
+      // Fetch and store locally in IndexedDB for offline use
+      fetch(url).then(function(r){ return r.blob(); }).then(function(blob){
+        var reader = new FileReader();
+        reader.onloadend = function(){
+          var meta = recGetMeta();
+          var type = meta[key] ? meta[key].type : blob.type;
+          idbSet(key, {data: reader.result, type: type, date: (meta[key]||{}).date||new Date().toISOString()}, function(){
+            if(onDone) onDone(reader.result);
+          });
+        };
+        reader.readAsDataURL(blob);
+      }).catch(function(){ if(onDone)onDone(null); });
+    }).catch(function(e){ console.warn('loadRec:', e); if(onDone)onDone(null); });
+  }catch(e){ if(onDone)onDone(null); }
+}
+
+function deleteRecFromStorage(key, storagePath){
+  if(!FIREBASE_STORAGE || !storagePath) return;
+  try{ FIREBASE_STORAGE.ref(storagePath).delete().catch(function(e){console.warn('deleteRec:',e);}); }catch(e){}
 }
 
 // ── Recording button HTML ──
@@ -3690,6 +3758,8 @@ function uiRecToggle(key,label,btn){
           meta[key]={label:label,date:now,type:blob.type};recSaveMeta(meta);
           updateRecCtrl(safeId,key,label);
           checkAchievements();
+          // Upload to Firebase Storage if logged in
+          try{ uploadRecToStorage(key, blob, meta[key], null); }catch(e){}
         });
       };
       reader.readAsDataURL(blob);
@@ -4570,7 +4640,7 @@ function renderPracticeLeaderboard(){
 // ══════════════════════════════════════════
 
 // ── Firebase init ──
-var FIREBASE_APP = null, FIREBASE_AUTH = null, FIREBASE_DB = null, FIREBASE_USER = null;
+var FIREBASE_APP = null, FIREBASE_AUTH = null, FIREBASE_DB = null, FIREBASE_STORAGE = null, FIREBASE_USER = null;
 var LINE_USER = null;
 var _cloudSyncTimer = null;
 
@@ -4584,9 +4654,10 @@ var _cloudSyncTimer = null;
       messagingSenderId:"394146119260",
       appId:"1:394146119260:web:95d60c174a70f4d2feb099"
     };
-    FIREBASE_APP  = firebase.initializeApp(cfg);
-    FIREBASE_AUTH = firebase.auth();
-    FIREBASE_DB   = firebase.firestore();
+    FIREBASE_APP     = firebase.initializeApp(cfg);
+    FIREBASE_AUTH    = firebase.auth();
+    FIREBASE_DB      = firebase.firestore();
+    FIREBASE_STORAGE = firebase.storage();
     FIREBASE_AUTH.onAuthStateChanged(function(user){
       try{
         var isNewLogin = !FIREBASE_USER && !!user; // true only on actual login, not page refresh
@@ -4662,6 +4733,19 @@ function loadFromFirestore(uid, cb){
           if(d.notes)        localStorage.setItem(pfx+'sjyd_notes', JSON.stringify(d.notes));
           if(d.activities)   localStorage.setItem(pfx+'sjyd_acts', JSON.stringify(d.activities));
           if(d.friends)      localStorage.setItem(pfx+'sjyd_friends', JSON.stringify(d.friends));
+          // Sync recordings from Storage for any keys not in local IDB
+          try{
+            var rMeta = d.recMeta || {};
+            Object.keys(rMeta).forEach(function(key){
+              if(!rMeta[key].storagePath) return;
+              idbGet(key, function(existing){
+                if(!existing && rMeta[key].storagePath){
+                  // Download from Storage to local IDB (background, no await)
+                  loadRecFromStorage(key, rMeta[key].storagePath, null);
+                }
+              });
+            });
+          }catch(e){}
           if(cb) cb(true); // hadCloudData = true
         } else {
           // ── Cloud is empty (first login) ──
