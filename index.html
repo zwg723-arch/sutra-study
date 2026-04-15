@@ -351,7 +351,12 @@ html[data-theme="classic"] .plan-cal-week{background:#1a0d00;border-color:#5a402
 html[data-theme="classic"] .plan-cal-dot{background:#1e1000;border-color:#5a4020;color:#b09060;}
 html[data-theme="classic"] .plan-notes{background:#150a00;color:#f0e0c0;}
 html[data-theme="classic"] .achv-card{background:#1a0d00;border-color:#5a4020;}
-html[data-theme="classic"] .lb-item{background:#1a0d00;border-color:#5a4020;}
+html[data-theme="classic"] .lb-item{background:#1a0d00;border-color:#5a4020;color:#f0e0c0;}
+  html[data-theme="classic"] .lb-name{color:#f0e0c0 !important;}
+  html[data-theme="classic"] .lb-stats{color:#b09060 !important;}
+  html[data-theme="classic"] .lb-score{color:#d4a017 !important;}
+  html[data-theme="classic"] .lb-prog{color:#3a9060 !important;}
+  html[data-theme="classic"] .lb-me{border-color:#d4a017;background:#1e1000;}
 html[data-theme="classic"] .passage-zh{color:#f0e0c0;}
 html[data-theme="classic"] .passage-en{color:#b09060;}
 html[data-theme="classic"] .fz-btn{background:rgba(255,255,255,.05);}
@@ -426,7 +431,12 @@ html[data-theme="ink"] .plan-cal-week{background:#0d1a2e;border-color:#1a3a5c;}
 html[data-theme="ink"] .plan-cal-dot{background:#121f30;border-color:#1a3a5c;color:#7890a8;}
 html[data-theme="ink"] .plan-notes{background:#07101e;color:#d8e8f0;}
 html[data-theme="ink"] .achv-card{background:#0d1a2e;border-color:#1a3a5c;}
-html[data-theme="ink"] .lb-item{background:#0d1a2e;border-color:#1a3a5c;}
+html[data-theme="ink"] .lb-item{background:#0d1a2e;border-color:#1a3a5c;color:#d8e8f0;}
+  html[data-theme="ink"] .lb-name{color:#d8e8f0 !important;}
+  html[data-theme="ink"] .lb-stats{color:#7890a8 !important;}
+  html[data-theme="ink"] .lb-score{color:#7ba4ff !important;}
+  html[data-theme="ink"] .lb-prog{color:#3dddd4 !important;}
+  html[data-theme="ink"] .lb-me{border-color:#7ba4ff;background:#0a1520;}
 html[data-theme="ink"] .passage-zh{color:#d8e8f0;}
 html[data-theme="ink"] .passage-en{color:#7890a8;}
 html[data-theme="ink"] .fz-btn{background:rgba(255,255,255,.05);}
@@ -1481,8 +1491,8 @@ html[data-theme="ink"] .header-compact-title{
 
 /* ── TTS Voice Gender Toggle ── */
 .voice-gender-bar{display:flex;align-items:center;justify-content:center;gap:6px;margin:0;padding:4px 12px;flex-wrap:wrap;}
-.voice-gender-label{font-size:.78rem;color:var(--muted);font-weight:700;margin-right:2px;}
-.voice-gender-btn{padding:4px 14px;border:2px solid var(--border);border-radius:20px;background:var(--card-bg);color:var(--muted);font-size:.78rem;font-weight:700;cursor:pointer;-webkit-appearance:none;transition:all .15s;}
+.voice-gender-label{font-size:.78rem;color:var(--muted);font-weight:700;margin-right:2px;line-height:1.4;}
+.voice-gender-btn{padding:5px 14px;border:2px solid var(--border);border-radius:20px;background:var(--card-bg);color:var(--muted);font-size:.78rem;font-weight:700;cursor:pointer;-webkit-appearance:none;transition:all .15s;display:inline-flex;align-items:center;gap:4px;line-height:1.4;}
 .voice-gender-btn.active{background:var(--mint,#3dddd4);color:#fff;border-color:var(--mint,#3dddd4);}
 
 /* ── Bilingual Language Toggle ── */
@@ -1551,8 +1561,8 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 
 <div class="voice-gender-bar" id="voiceGenderBar">
   <span class="voice-gender-label">🔊 聲音：</span>
-  <button class="voice-gender-btn active" data-voice="female" onclick="setTtsVoice('female')">♀ 女聲 Sulafat</button>
-  <button class="voice-gender-btn" data-voice="male" onclick="setTtsVoice('male')">♂ 男聲 Enceladus</button>
+  <button class="voice-gender-btn active" data-voice="female" onclick="setTtsVoice('female')"><span style="font-size:.9em;vertical-align:middle;line-height:1;">♀</span> 女聲 Sulafat</button>
+  <button class="voice-gender-btn" data-voice="male" onclick="setTtsVoice('male')"><span style="font-size:.9em;vertical-align:middle;line-height:1;">♂</span> 男聲 Enceladus</button>
 </div>
 
 <nav class="nav-tabs">
