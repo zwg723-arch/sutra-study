@@ -236,6 +236,9 @@ html[data-theme="kawaii"] .nav-tab:hover{background:#2A1A38;color:#FF6BAD;}
 html[data-theme="kawaii"] .nav-tab.active{background:#FF6BAD;color:#fff;border-color:#0A0514;box-shadow:3px 4px 0 #0A0514;}
 html[data-theme="kawaii"] .section-title{color:#FF6BAD;}
 html[data-theme="kawaii"] .sutra-passage,html[data-theme="kawaii"] .kp-card,html[data-theme="kawaii"] .quiz-card,html[data-theme="kawaii"] .outline-card,html[data-theme="kawaii"] .story-body,html[data-theme="kawaii"] .voice-history,html[data-theme="kawaii"] .user-bubble,html[data-theme="kawaii"] .mindmap-wrap,html[data-theme="kawaii"] .j-note-card,html[data-theme="kawaii"] .social-mycard,html[data-theme="kawaii"] .social-add-friend,html[data-theme="kawaii"] .lb-item,html[data-theme="kawaii"] .img-card{background:#1E1228;border-color:#5A3070;color:#F5E8FF;}
+html[data-theme="kawaii"] .social-code-box{background:#150a20;border-color:#5A3070;}
+html[data-theme="kawaii"] .social-label{color:#C9A8FF;}
+html[data-theme="kawaii"] .social-mycard-top input{background:#1E1228;color:#F5E8FF;border-color:#5A3070;}
 html[data-theme="kawaii"] .passage-header{background:linear-gradient(90deg,#2A0A3E,#1A0A30);border-color:#0A0514;}
 html[data-theme="kawaii"] .passage-num{background:var(--yellow);color:#0F0A14;border-color:#CCA800;}
 html[data-theme="kawaii"] .story-hero{background:linear-gradient(135deg,#2A0A3E,#1A0830);}
@@ -339,6 +342,10 @@ html[data-theme="classic"] .fc-back .fc-en,.html[data-theme="classic"] .fc-back 
 html[data-theme="classic"] .hist-q{color:#d4a017;}
 html[data-theme="classic"] .hist-a{color:#f0e0c0;}
 html[data-theme="classic"] .j-note-card,.html[data-theme="classic"] .social-mycard{background:#1a0d00;border-color:#5a4020;}
+  html[data-theme="classic"] .social-add-friend{background:#1a0d00;border-color:#5a4020;}
+  html[data-theme="classic"] .social-code-box{background:#0f0700;border-color:#5a4020;}
+  html[data-theme="classic"] .social-label{color:#b09060;}
+  html[data-theme="classic"] .social-mycard-top input{background:#1a0d00;color:#f0e0c0;border-color:#5a4020;}
 html[data-theme="classic"] .plan-col{background:#1a0d00;border-color:#5a4020;}
 html[data-theme="classic"] .plan-cal-week{background:#1a0d00;border-color:#5a4020;}
 html[data-theme="classic"] .plan-cal-dot{background:#1e1000;border-color:#5a4020;color:#b09060;}
@@ -410,6 +417,10 @@ html[data-theme="ink"] .fc-back .fc-desc{color:#7890a8;}
 html[data-theme="ink"] .hist-q{color:#c4a870;}
 html[data-theme="ink"] .hist-a{color:#d8e8f0;}
 html[data-theme="ink"] .j-note-card,.html[data-theme="ink"] .social-mycard{background:#0d1a2e;border-color:#1a3a5c;}
+  html[data-theme="ink"] .social-add-friend{background:#0d1a2e;border-color:#1a3a5c;}
+  html[data-theme="ink"] .social-code-box{background:#07101e;border-color:#1a3a5c;}
+  html[data-theme="ink"] .social-label{color:#7890a8;}
+  html[data-theme="ink"] .social-mycard-top input{background:#0d1a2e;color:#d8e8f0;border-color:#1a3a5c;}
 html[data-theme="ink"] .plan-col{background:#0d1a2e;border-color:#1a3a5c;}
 html[data-theme="ink"] .plan-cal-week{background:#0d1a2e;border-color:#1a3a5c;}
 html[data-theme="ink"] .plan-cal-dot{background:#121f30;border-color:#1a3a5c;color:#7890a8;}
@@ -900,8 +911,9 @@ body{
 .plan-jump-hint{text-align:center;color:var(--muted);font-size:.76rem;margin-top:7px;font-style:italic;}
 /* ── Journal ── */
 .j-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
-.j-tab{padding:8px 16px;border:1.5px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--text);cursor:pointer;font-family:'M PLUS Rounded 1c',sans-serif;font-size:.88rem;transition:all .2s;-webkit-appearance:none;}
-.j-tab.active{background:var(--red);color:#fff;border-color:var(--red-light);}
+.j-tab{padding:9px 16px;border:1.5px solid var(--border);border-radius:24px;background:var(--card-bg);color:var(--text);cursor:pointer;font-family:'cwTeXKai','M PLUS Rounded 1c',sans-serif;font-size:.88rem;font-weight:700;transition:all .18s;-webkit-appearance:none;box-shadow:2px 3px 0 var(--border);}
+.j-tab:hover{transform:translateY(-1px);}
+.j-tab.active{background:var(--red);color:#fff;border-color:var(--red-light);box-shadow:2px 3px 0 rgba(0,0,0,.15);}
 .j-panel{display:none;animation:fadeIn .3s ease;}
 .j-panel.active{display:block;padding-bottom:20px;}
 .j-note-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px;}
@@ -1067,8 +1079,8 @@ body{
 .img-icon{font-size:2.2rem;display:block;margin:6px 0;animation:bounce 3s ease-in-out infinite;}
 
 /* Journal section */
-.j-tab{padding:8px 16px;border:2.5px solid var(--outline);border-radius:20px;background:#fff;color:var(--text);cursor:pointer;font-family:'M PLUS Rounded 1c',sans-serif;font-size:.88rem;font-weight:800;transition:all .18s;-webkit-appearance:none;box-shadow:2px 3px 0 var(--outline);}
-.j-tab:hover{transform:translateY(-2px);box-shadow:3px 5px 0 var(--outline);}
+.j-tab{padding:9px 18px;border:2.5px solid var(--outline);border-radius:24px;background:#fff;color:var(--text);cursor:pointer;font-family:'M PLUS Rounded 1c',sans-serif;font-size:.88rem;font-weight:800;transition:all .18s;-webkit-appearance:none;box-shadow:3px 4px 0 var(--outline);}
+.j-tab:hover{transform:translateY(-2px);box-shadow:4px 6px 0 var(--outline);}
 .j-tab.active{background:var(--pink);color:#fff;border-color:var(--outline);box-shadow:3px 4px 0 var(--outline);}
 .j-note-card{background:#fff;border:2.5px solid var(--outline);border-radius:14px;padding:16px;position:relative;box-shadow:3px 4px 0 var(--outline);margin-bottom:12px;}
 .j-note-day{font-size:.75rem;color:var(--pink);font-weight:800;margin-bottom:2px;}
@@ -1851,7 +1863,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
         <span>意持三慧</span>業道成，三業清淨見本性。
       </div>
       <div class="mnemonic-note">「身守三門」= 不殺、不盜、不邪淫 ｜ 「口言四德」= 不妄、不兩、不惡、不綺 ｜「意持三慧」= 不貪、不瞋、不邪見</div>
-      <button class="btn btn-gold" style="margin-top:16px;" onclick="speakText('身守三門心清淨，口言四德世人敬，意持三慧業道成，三業清淨見本性。','zh-TW')">🔊 朗讀口訣</button>
+      <button class="btn btn-gold" style="margin-top:16px;" data-tts-text="身守三門心清淨，口言四德世人敬，意持三慧業道成，三業清淨見本性。" data-tts-lang="zh-TW" onclick="speakText(this.dataset.ttsText,this.dataset.ttsLang,this)">🔊 朗讀口訣</button>
     </div>
     <div class="kp-grid">
       <div class="kp-card"><h3><span>✋</span>手指記憶法</h3><p>伸出雙手：<strong>左手三指</strong>代表身業（殺、盜、淫），<strong>右手四指</strong>代表口業（妄、兩、惡、綺），<strong>再伸三指</strong>代表意業（貪、瞋、邪）。合掌即「十善圓滿」。</p><span class="kp-tag">身體記憶</span></div>
@@ -1932,8 +1944,8 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <!-- Start screen -->
   <div class="plan-start" id="planStartScreen">
     <span style="font-size:3.5rem;display:block;margin-bottom:14px;">🪷</span>
-    <h2>開始您的30天學習之旅</h2>
-    <p>每天只需10–25分鐘，30天後您將能流暢地向他人分享《佛說十善業道經》的精髓。<br>每天打開即顯示當日經文、閃卡與練習，無需跳轉。進度自動儲存於您的裝置。</p>
+    <h2 style="color:var(--gold,#d4a017);text-shadow:0 2px 8px rgba(0,0,0,.4);">開始您的30天學習之旅</h2>
+    <p style="color:var(--sub-text,rgba(255,255,255,.75));line-height:1.8;">每天只需10–25分鐘，30天後您將能流暢地向他人分享《佛說十善業道經》的精髓。<br>每天打開即顯示當日經文、閃卡與練習，無需跳轉。進度自動儲存於您的裝置。</p>
     <button class="btn btn-red" style="font-size:1.05rem;padding:13px 34px;" onclick="planStart()">🙏 今天開始第1天</button>
   </div>
 
@@ -2342,9 +2354,10 @@ async function speakText(text,lang,btn){
     };
     audio.play();
   }catch(e){
-    console.warn('speakText:',e);
+    console.warn('speakText error:',e.message||e);
     // Fallback to browser TTS
     if(btn){btn.classList.remove('playing');btn.textContent=btn.dataset.orig||btn.textContent;currentTtsBtn=null;}
+    showToast('⚠️ 朗讀載入失敗，使用系統語音。請確認網路連線。');
     try{
       window.speechSynthesis.cancel();
       var u=new SpeechSynthesisUtterance(text);
