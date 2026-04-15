@@ -2288,31 +2288,67 @@ function showMemPanel(id,btn){
 }
 
 // ══ TTS Helper ══
-let currentTtsBtn=null;
-function speakText(text,lang,btn){
-  // If clicking the same button that's already playing → stop
-  if(btn && btn===currentTtsBtn){
-    window.speechSynthesis.cancel();
-    btn.classList.remove('playing');
-    btn.textContent=btn.dataset.orig||btn.textContent;
-    currentTtsBtn=null;
-    return;
-  }
-  // Stop any currently playing button
-  window.speechSynthesis.cancel();
+// ── Google Cloud TTS ──
+var currentTtsBtn=null;
+var currentTtsAudio=null;
+var TTS_PROXY='/api/tts';
+
+function stopCurrentTts(){
+  try{
+    if(currentTtsAudio){
+      currentTtsAudio.pause();
+      currentTtsAudio.src='';
+      currentTtsAudio=null;
+    }
+  }catch(e){}
   if(currentTtsBtn){
     currentTtsBtn.classList.remove('playing');
     currentTtsBtn.textContent=currentTtsBtn.dataset.orig||currentTtsBtn.textContent;
     currentTtsBtn=null;
   }
-  if(btn){currentTtsBtn=btn;btn.dataset.orig=btn.textContent;btn.classList.add('playing');btn.textContent='⏹ 停止';}
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang=lang||'zh-TW';u.rate=0.85;
-  const vs=window.speechSynthesis.getVoices();
-  const v=vs.find(x=>x.lang.startsWith(lang==='en-US'?'en':'zh'));
-  if(v)u.voice=v;
-  u.onend=u.onerror=()=>{if(btn){btn.classList.remove('playing');btn.textContent=btn.dataset.orig;}currentTtsBtn=null;};
-  window.speechSynthesis.speak(u);
+}
+
+async function speakText(text,lang,btn){
+  // Toggle off if same button
+  if(btn && btn===currentTtsBtn){ stopCurrentTts(); return; }
+  stopCurrentTts();
+
+  if(btn){
+    currentTtsBtn=btn;
+    btn.dataset.orig=btn.textContent;
+    btn.classList.add('playing');
+    btn.textContent='⏳ 載入中…';
+  }
+
+  try{
+    var r=await fetch(TTS_PROXY,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:text,lang:lang||'zh-TW'})
+    });
+    var d=await r.json();
+    if(!d.audioContent) throw new Error(d.error||'no audio');
+
+    var audio=new Audio('data:audio/mp3;base64,'+d.audioContent);
+    currentTtsAudio=audio;
+    if(btn) btn.textContent='⏹ 停止';
+
+    audio.onended=audio.onerror=function(){
+      if(btn){btn.classList.remove('playing');btn.textContent=btn.dataset.orig||btn.textContent;}
+      if(currentTtsAudio===audio){currentTtsAudio=null;currentTtsBtn=null;}
+    };
+    audio.play();
+  }catch(e){
+    console.warn('speakText:',e);
+    // Fallback to browser TTS
+    if(btn){btn.classList.remove('playing');btn.textContent=btn.dataset.orig||btn.textContent;currentTtsBtn=null;}
+    try{
+      window.speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(text);
+      u.lang=lang||'zh-TW';u.rate=0.85;
+      window.speechSynthesis.speak(u);
+    }catch(e2){}
+  }
 }
 
 // ══ Sutra Passages Data (Complete) ══
@@ -2681,13 +2717,32 @@ const vqPool=[
    ref:'三業清淨指身業（行為）、口業（語言）、意業（心念）全部合乎十善業道。日常實踐：身業清淨——不傷害任何生命，對人誠信；口業清淨——說話真實、和諧、有益、有意義；意業清淨——每天反思起心動念，不起貪念、不發怒、保持正確的因果觀。三業配合，就是真正的修行。'},
 ];
 let vSession={active:false,qIdx:0,pool:[],history:[],recognition:null,currentQ:''};
-function speakAvatar(text,onEnd){
-  window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);u.lang='zh-TW';u.rate=0.87;
-  const vs=window.speechSynthesis.getVoices(),v=vs.find(x=>x.lang.startsWith('zh'));if(v)u.voice=v;
-  const ai=document.getElementById('avatarIcon');ai.classList.add('speaking');
-  u.onend=u.onerror=()=>{ai.classList.remove('speaking');if(onEnd)onEnd();};
-  window.speechSynthesis.speak(u);document.getElementById('voiceBubble').textContent=text;document.getElementById('voiceBubble').classList.remove('thinking');
+async function speakAvatar(text,onEnd){
+  var ai=document.getElementById('avatarIcon');
+  if(ai) ai.classList.add('speaking');
+  var bubble=document.getElementById('voiceBubble');
+  if(bubble){bubble.textContent=text;bubble.classList.remove('thinking');}
+
+  try{
+    var r=await fetch(TTS_PROXY,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:text,lang:'zh-TW'})
+    });
+    var d=await r.json();
+    if(!d.audioContent) throw new Error('no audio');
+    var audio=new Audio('data:audio/mp3;base64,'+d.audioContent);
+    audio.onended=audio.onerror=function(){
+      if(ai)ai.classList.remove('speaking');
+      if(onEnd)onEnd();
+    };
+    audio.play();
+  }catch(e){
+    // Fallback
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(text);u.lang='zh-TW';u.rate=0.87;
+    u.onend=u.onerror=function(){if(ai)ai.classList.remove('speaking');if(onEnd)onEnd();};
+    window.speechSynthesis.speak(u);
+  }
 }
 function setVS(msg){document.getElementById('voiceStatus').textContent=msg;}
 function startVoiceSession(){
@@ -3290,6 +3345,8 @@ function planCalcDay(){
 function planStart(){
   planStartDate=new Date();planStartDate.setHours(0,0,0,0);
   planDone=[];planSaveState();planCurDay=1;
+  // Immediately sync to cloud
+  try{if(FIREBASE_USER) syncToFirestore();}catch(e){}
   document.getElementById('planStartScreen').style.display='none';
   document.getElementById('planMain').style.display='block';
   document.getElementById('planTopbar').style.display='flex';
@@ -3298,7 +3355,16 @@ function planStart(){
 function planReset(){
   if(!confirm('確定要重新開始嗎？所有記錄將清除。'))return;
   planStartDate=null;planDone=[];
-  try{localStorage.removeItem('sjyd_start');localStorage.removeItem('sjyd_done');}catch(e){}
+  try{
+    // Clear with correct prefix (user-namespaced)
+    lsSet('sjyd_start','');
+    lsSet('sjyd_done','[]');
+    // Also clear legacy unprefixed keys
+    localStorage.removeItem('sjyd_start');
+    localStorage.removeItem('sjyd_done');
+    // Sync reset to cloud immediately
+    if(FIREBASE_USER) syncToFirestore();
+  }catch(e){}
   document.getElementById('planStartScreen').style.display='block';
   document.getElementById('planMain').style.display='none';
   document.getElementById('planTopbar').style.display='none';
@@ -3317,6 +3383,8 @@ function planMarkDone(){
   document.getElementById('planDoneTag').style.display='inline-flex';
   updatePlanProg();renderPlanCal();
   try{var d=P[planCurDay-1];logActivity('plan',{q:'第'+planCurDay+'天：'+(d?d.title:'')});if(window.va)window.va('event',{name:'plan_day_done',day:planCurDay});}catch(e){}
+  // Force immediate cloud sync (don't wait for debounce)
+  try{if(FIREBASE_USER) syncToFirestore();}catch(e){}
 }
 function updatePlanProg(){
   var pct=Math.round(planDone.length/30*100);

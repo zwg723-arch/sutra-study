@@ -1,16 +1,18 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/claude.js",         "use": "@vercel/node" },
-    { "src": "api/github-push.js",    "use": "@vercel/node" },
-    { "src": "api/line-callback.js",  "use": "@vercel/node" },
-    { "src": "*.html",                "use": "@vercel/static" }
+    { "src": "api/claude.js", "use": "@vercel/node" },
+    { "src": "api/github-push.js", "use": "@vercel/node" },
+    { "src": "api/tts.js", "use": "@vercel/node" },
+    { "src": "api/line-callback.js", "use": "@vercel/node" },
+    { "src": "*.html", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/api/claude",           "dest": "/api/claude.js" },
-    { "src": "/api/github-push",      "dest": "/api/github-push.js" },
-    { "src": "/api/line-callback",    "dest": "/api/line-callback.js" },
-    { "src": "/updater",              "dest": "/updater.html" },
-    { "src": "/",                     "dest": "/index.html" }
+    { "src": "/api/claude", "dest": "/api/claude.js" },
+    { "src": "/api/github-push", "dest": "/api/github-push.js" },
+    { "src": "/api/tts", "dest": "/api/tts.js" },
+    { "src": "/api/line-callback", "dest": "/api/line-callback.js" },
+    { "src": "/updater", "dest": "/updater.html" },
+    { "src": "/", "dest": "/index.html" }
   ]
 }
