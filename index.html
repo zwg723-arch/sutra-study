@@ -1257,7 +1257,7 @@ html[data-theme="kawaii"] .nav-group .nav-tab{
   html[data-theme="classic"] .story-body p{color:#f0e0c0;}
   html[data-theme="classic"] .story-connect{color:#f0e0c0 !important;}
   html[data-theme="classic"] .story-connect strong{color:#e8c060;}
-  html[data-theme="classic"] .deed-tag{color:#f0a080;border-color:#f0a080;}
+  html[data-theme="classic"] .deed-tag{color:#f0a080;border-color:#c06040;background:rgba(139,60,30,.3);}
   html[data-theme="classic"] .kp-card p{color:#d4b890;}
   html[data-theme="classic"] .kp-tag{background:#2a1800;color:#d4a017;border-color:#5a4020;}
   html[data-theme="classic"] .prac-item-card{background:#1a0d00;border-color:#5a4020;color:#f0e0c0;}
@@ -1345,7 +1345,7 @@ html[data-theme="kawaii"] .nav-group .nav-tab{
   html[data-theme="kawaii"] [data-pf]{background:#1E1228 !important;color:#C9A8FF !important;border-color:#5A3070 !important;}
   html[data-theme="ink"] .story-body p{color:#d8e8f0;}
   html[data-theme="ink"] .story-connect{color:#d8e8f0 !important;}
-  html[data-theme="ink"] .deed-tag{color:#a0c8e0;border-color:#a0c8e0;}
+  html[data-theme="ink"] .deed-tag{color:#a0c8e0;border-color:#3a6a9c;background:rgba(26,58,92,.4);}
   html[data-theme="ink"] .kp-card p{color:#b0c8d8;}
   html[data-theme="ink"] .kp-tag{background:#0a1400;color:#7ba4ff;border-color:#1a3a5c;}
   html[data-theme="ink"] .prac-item-card{background:#0d1a2e;border-color:#1a3a5c;color:#d8e8f0;}
@@ -3740,28 +3740,52 @@ function deleteRecFromStorage(key, storagePath){
 }
 
 // ── Recording button HTML ──
-function recBtnHtml(key,label){
-  return '<div class="rec-ctrl" id="rctrl_'+key.replace(/[^a-z0-9]/gi,'_')+'">'
-    +'<span style="font-size:.75rem;color:var(--muted);">🎙 背誦練習：</span>'
-    +'<button class="rec-btn rec-start" data-reckey="'+key+'" data-reclabel="'+label+'" onclick="uiRecToggle(this.dataset.reckey,this.dataset.reclabel,this)">● 開始錄音</button>'
-    +'</div>';
+// ── Multi-take recording helpers ──
+// Keys: baseKey__1, baseKey__2 ... (double underscore)
+function recGetTakes(baseKey){
+  var meta=recGetMeta();
+  return Object.keys(meta)
+    .filter(function(k){ return k===baseKey||k.indexOf(baseKey+'__')===0; })
+    .sort(function(a,b){ return new Date(meta[a].date)-new Date(meta[b].date); });
 }
-function uiRecToggle(key,label,btn){
-  if(recState.active&&recState.key===key){
-    // stop
+function recNextKey(baseKey){
+  var meta=recGetMeta();
+  // Legacy: if plain baseKey exists, it counts as take 1
+  var idx=1;
+  while(meta[baseKey+'__'+idx]) idx++;
+  // If legacy key exists and no numbered keys yet, new take = baseKey__2
+  if(meta[baseKey] && idx===1) return baseKey+'__2';
+  if(!meta[baseKey] && idx===1) return baseKey; // first take ever = plain key (backward compat)
+  return baseKey+'__'+idx;
+}
+function recTakeNum(baseKey,key){
+  if(key===baseKey) return 1;
+  var m=key.match(/__(\d+)$/);
+  return m?parseInt(m[1]):1;
+}
+
+function recBtnHtml(key,label){
+  return '<div class="rec-ctrl" id="rctrl_'+key.replace(/[^a-z0-9]/gi,'_')+'"></div>';
+}
+
+function uiRecToggle(actualKey,label,btn){
+  // actualKey is the specific subkey being recorded/stopped
+  var baseKey=actualKey.replace(/__\d+$/,'');
+  var safeId='rctrl_'+baseKey.replace(/[^a-z0-9]/gi,'_');
+  if(recState.active&&recState.key===actualKey){
+    // ── STOP ──
     btn.textContent='儲存中…';btn.disabled=true;
-    var safeId='rctrl_'+key.replace(/[^a-z0-9]/gi,'_');
     recState.recorder.onstop=function(){
       var blob=new Blob(recState.chunks,{type:recState.recorder.mimeType||'audio/webm'});
       var reader=new FileReader();
       reader.onloadend=function(){
         var meta=recGetMeta();var now=new Date().toISOString();
-        idbSet(key,{data:reader.result,type:blob.type,date:now},function(){
-          meta[key]={label:label,date:now,type:blob.type};recSaveMeta(meta);
-          updateRecCtrl(safeId,key,label);
+        idbSet(actualKey,{data:reader.result,type:blob.type,date:now},function(){
+          meta[actualKey]={label:label,date:now,type:blob.type,baseKey:baseKey};
+          recSaveMeta(meta);
+          updateRecCtrl(safeId,baseKey,label);
           checkAchievements();
-          // Upload to Firebase Storage if logged in
-          try{ uploadRecToStorage(key, blob, meta[key], null); }catch(e){}
+          try{ uploadRecToStorage(actualKey,blob,meta[actualKey],null); }catch(e){}
         });
       };
       reader.readAsDataURL(blob);
@@ -3772,56 +3796,79 @@ function uiRecToggle(key,label,btn){
   } else if(recState.active){
     alert('請先停止目前的錄音');
   } else {
-    // start
+    // ── START (actualKey = new take key) ──
     if(!navigator.mediaDevices){alert('您的瀏覽器不支援錄音功能');return;}
-    var safeId='rctrl_'+key.replace(/[^a-z0-9]/gi,'_');
-    // Request permission explicitly first
     navigator.mediaDevices.getUserMedia({audio:true,video:false}).then(function(stream){
-      recState.active=true;recState.key=key;recState.chunks=[];recState.stream=stream;
+      recState.active=true;recState.key=actualKey;recState.chunks=[];recState.stream=stream;
       var mimeType=MediaRecorder.isTypeSupported('audio/mp4')?'audio/mp4':
                    MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'';
       try{recState.recorder=new MediaRecorder(stream,mimeType?{mimeType:mimeType}:{});}
       catch(e){recState.recorder=new MediaRecorder(stream);}
       recState.recorder.ondataavailable=function(e){if(e.data&&e.data.size>0)recState.chunks.push(e.data);};
-      // show stop button
       var ctrl=document.getElementById(safeId);
       if(ctrl)ctrl.innerHTML='<span style="font-size:.75rem;color:var(--muted);">🔴 錄音中：</span>'
-        +'<button class="rec-btn rec-stop" data-reckey="'+key+'" data-reclabel="'+label+'" onclick="uiRecToggle(this.dataset.reckey,this.dataset.reclabel,this)">⏹ 停止錄音</button>';
+        +'<button class="rec-btn rec-stop" data-reckey="'+actualKey+'" data-reclabel="'+label
+        +'" onclick="uiRecToggle(this.dataset.reckey,this.dataset.reclabel,this)">⏹ 停止錄音</button>';
       recState.recorder.start();
     }).catch(function(e){alert('無法獲取麥克風：'+e.message);});
   }
 }
-function updateRecCtrl(safeId,key,label){
+
+function updateRecCtrl(safeId,baseKey,label){
   try{
     var ctrl=document.getElementById(safeId);
     if(!ctrl)return;
+    var takes=recGetTakes(baseKey);
     var meta=recGetMeta();
-    var hasMeta=meta[key];
-    var inner='<span style="font-size:.75rem;color:var(--muted);">🎙 背誦練習：</span>';
-    if(hasMeta&&hasMeta.date){
-      var dt=new Date(hasMeta.date);
-      var hh=dt.getHours()<10?'0'+dt.getHours():''+dt.getHours();
-      var mm=dt.getMinutes()<10?'0'+dt.getMinutes():''+dt.getMinutes();
-      var ds=(dt.getMonth()+1)+'/'+(dt.getDate())+' '+hh+':'+mm;
-      inner+='<button class="rec-btn rec-play" data-reckey="'+key+'" onclick="recPlay(this.dataset.reckey)">▶ 播放 ('+ds+')</button>'
-        +'<button class="rec-btn rec-re" data-reckey="'+key+'" data-reclabel="'+label+'" onclick="uiRecToggle(this.dataset.reckey,this.dataset.reclabel,this)">● 重錄</button>';
+    var inner='<span style="font-size:.75rem;color:var(--muted);">🎙 背誦練習</span>';
+
+    if(takes.length>0){
+      // List all takes
+      inner+='<div style="display:flex;flex-direction:column;gap:4px;margin-top:4px;">';
+      takes.forEach(function(k){
+        var m=meta[k];
+        var num=recTakeNum(baseKey,k);
+        var dt=new Date(m.date);
+        var ds=(dt.getMonth()+1)+'/'+dt.getDate()+' '
+          +String(dt.getHours()).padStart(2,'0')+':'+String(dt.getMinutes()).padStart(2,'0');
+        inner+='<div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">'
+          +'<span style="font-size:.72rem;color:var(--muted);min-width:32px;">第'+num+'次</span>'
+          +'<button class="rec-btn rec-play" data-reckey="'+k+'" onclick="recPlay(this.dataset.reckey)">▶ 播放 ('+ds+')</button>'
+          +'<button class="rec-btn rec-del" data-reckey="'+k+'" data-baseid="'+safeId+'" data-baselabel="'+label
+          +'" data-basekey="'+baseKey+'" onclick="recDeleteTake(this.dataset.reckey,this.dataset.basekey,this.dataset.baseid,this.dataset.baselabel)" style="padding:4px 8px;font-size:.72rem;color:var(--muted);background:none;border:1px solid var(--border);">🗑</button>'
+          +'</div>';
+      });
+      inner+='</div>';
+      // "再錄一次" button
+      var nextKey=recNextKey(baseKey);
+      inner+='<button class="rec-btn rec-re" style="margin-top:5px;" data-reckey="'+nextKey
+        +'" data-reclabel="'+label+'" onclick="uiRecToggle(this.dataset.reckey,this.dataset.reclabel,this)">● 再錄一次</button>';
     } else {
-      inner+='<button class="rec-btn rec-start" data-reckey="'+key+'" data-reclabel="'+label+'" onclick="uiRecToggle(this.dataset.reckey,this.dataset.reclabel,this)">● 開始錄音</button>';
+      inner+='：<button class="rec-btn rec-start" data-reckey="'+baseKey+'" data-reclabel="'+label
+        +'" onclick="uiRecToggle(this.dataset.reckey,this.dataset.reclabel,this)">● 開始錄音</button>';
     }
     ctrl.innerHTML=inner;
   }catch(e){console.warn('updateRecCtrl:',e);}
 }
+
+function recDeleteTake(key,baseKey,safeId,label){
+  if(!confirm('確定刪除第'+recTakeNum(baseKey,key)+'次錄音？'))return;
+  recDelete(key,function(){ updateRecCtrl(safeId,baseKey,label); renderRecsList(); });
+}
+
 function initRecCtrls(){
   try{
     var meta=recGetMeta();
-    var keys=Object.keys(meta);
-    for(var i=0;i<keys.length;i++){
-      try{
-        var key=keys[i];
-        var safeId='rctrl_'+key.replace(/[^a-z0-9]/gi,'_');
-        if(meta[key]&&meta[key].label) updateRecCtrl(safeId,key,meta[key].label);
-      }catch(e){console.warn('initRecCtrl item:',e);}
-    }
+    // Collect unique baseKeys
+    var baseKeys={};
+    Object.keys(meta).forEach(function(k){
+      var bk=meta[k].baseKey||k.replace(/__\d+$/,'');
+      if(!baseKeys[bk]) baseKeys[bk]=meta[k].label||k;
+    });
+    Object.keys(baseKeys).forEach(function(bk){
+      var safeId='rctrl_'+bk.replace(/[^a-z0-9]/gi,'_');
+      updateRecCtrl(safeId,bk,baseKeys[bk]);
+    });
   }catch(e){console.warn('initRecCtrls:',e);}
 }
 
@@ -4020,15 +4067,36 @@ function renderRecsList(){
   if(!keys.length){
     con.innerHTML='<p style="color:var(--muted);font-size:.86rem;font-style:italic;">還沒有錄音。在「經文」頁或「30天計劃」中使用錄音按鈕，錄製您的背誦成果。</p>';return;
   }
-  keys.sort(function(a,b){return new Date(meta[b].date)-new Date(meta[a].date);});
-  con.innerHTML=keys.map(function(key){
-    var m=meta[key];
-    var dt=new Date(m.date);
-    var ds=(dt.getMonth()+1)+'/'+dt.getDate()+' '+String(dt.getHours()).padStart(2,'0')+':'+String(dt.getMinutes()).padStart(2,'0');
-    return '<div class="rec-item">'
-      +'<div class="rec-info"><div class="rec-label">'+m.label+'</div><div class="rec-date">'+ds+'</div></div>'
-      +'<button class="rec-play-btn" data-reckey="'+key+'" onclick="recPlay(this.dataset.reckey)">▶ 播放</button>'
-      +'<button class="rec-del-btn" data-reckey="'+key+'" onclick="delRecFromList(this.dataset.reckey)">🗑</button>'
+  // Group by baseKey
+  var groups={};
+  keys.forEach(function(k){
+    var bk=meta[k].baseKey||k.replace(/__\d+$/, '');
+    if(!groups[bk]) groups[bk]=[];
+    groups[bk].push(k);
+  });
+  // Sort groups by latest recording date desc
+  var groupKeys=Object.keys(groups).sort(function(a,b){
+    var aMax=Math.max.apply(null,groups[a].map(function(k){return new Date(meta[k].date).getTime();}));
+    var bMax=Math.max.apply(null,groups[b].map(function(k){return new Date(meta[k].date).getTime();}));
+    return bMax-aMax;
+  });
+  con.innerHTML=groupKeys.map(function(bk){
+    var takes=groups[bk].sort(function(a,b){return new Date(meta[a].date)-new Date(meta[b].date);});
+    var label=meta[takes[0]].label||bk;
+    var takesHtml=takes.map(function(k,i){
+      var m=meta[k];
+      var dt=new Date(m.date);
+      var ds=(dt.getMonth()+1)+'/'+dt.getDate()+' '+String(dt.getHours()).padStart(2,'0')+':'+String(dt.getMinutes()).padStart(2,'0');
+      return '<div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-top:'+(i>0?'1px solid var(--border)':'none')+'">'
+        +'<span style="font-size:.72rem;color:var(--muted);min-width:32px;">第'+(i+1)+'次</span>'
+        +'<span style="font-size:.75rem;color:var(--muted);flex:1;">'+ds+'</span>'
+        +'<button class="rec-play-btn" data-reckey="'+k+'" onclick="recPlay(this.dataset.reckey)">▶ 播放</button>'
+        +'<button class="rec-del-btn" data-reckey="'+k+'" onclick="delRecFromList(this.dataset.reckey)">🗑</button>'
+        +'</div>';
+    }).join('');
+    return '<div class="rec-item" style="flex-direction:column;align-items:flex-start;gap:0;">'
+      +'<div class="rec-label" style="margin-bottom:4px;">'+label+'（共'+takes.length+'次）</div>'
+      +takesHtml
       +'</div>';
   }).join('');
 }
