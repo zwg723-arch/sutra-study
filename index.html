@@ -236,7 +236,11 @@ html[data-theme="kawaii"] .nav-tab:hover{background:#2A1A38;color:#FF6BAD;}
 html[data-theme="kawaii"] .nav-tab.active{background:#FF6BAD;color:#fff;border-color:#0A0514;box-shadow:3px 4px 0 #0A0514;}
 html[data-theme="kawaii"] .section-title{color:#FF6BAD;}
 html[data-theme="kawaii"] .sutra-passage,html[data-theme="kawaii"] .kp-card,html[data-theme="kawaii"] .quiz-card,html[data-theme="kawaii"] .outline-card,html[data-theme="kawaii"] .story-body,html[data-theme="kawaii"] .voice-history,html[data-theme="kawaii"] .user-bubble,html[data-theme="kawaii"] .mindmap-wrap,html[data-theme="kawaii"] .j-note-card,html[data-theme="kawaii"] .social-mycard,html[data-theme="kawaii"] .social-add-friend,html[data-theme="kawaii"] .lb-item,html[data-theme="kawaii"] .img-card{background:#1E1228;border-color:#5A3070;color:#F5E8FF;}
+html[data-theme="kawaii"] .phrase-zh{color:#F5E8FF !important;}
+html[data-theme="kawaii"] .phrase-card{background:#1E1228 !important;border-color:#5A3070 !important;}
 html[data-theme="kawaii"] .social-code-box{background:#150a20;border-color:#5A3070;}
+html[data-theme="kawaii"] .social-mycard,html[data-theme="kawaii"] .social-add-friend{background:#1E1228 !important;border-color:#5A3070 !important;}
+html[data-theme="kawaii"] .j-note-card{background:#1E1228 !important;border-color:#5A3070 !important;}
 html[data-theme="kawaii"] .social-label{color:#C9A8FF;}
 html[data-theme="kawaii"] .social-mycard-top input{background:#1E1228;color:#F5E8FF;border-color:#5A3070;}
 html[data-theme="kawaii"] .passage-header{background:linear-gradient(90deg,#2A0A3E,#1A0A30);border-color:#0A0514;}
@@ -357,6 +361,14 @@ html[data-theme="classic"] .lb-item{background:#1a0d00;border-color:#5a4020;colo
   html[data-theme="classic"] .lb-score{color:#d4a017 !important;}
   html[data-theme="classic"] .lb-prog{color:#3a9060 !important;}
   html[data-theme="classic"] .lb-me{border-color:#d4a017;background:#1e1000;}
+  html[data-theme="classic"] .phrase-zh{color:#f0e0c0 !important;}
+  html[data-theme="classic"] .phrase-en{color:#c0a070 !important;}
+  html[data-theme="classic"] .phrase-card{background:#1e1000 !important;border-color:#5a4020 !important;}
+  html[data-theme="classic"] .img-card{background:#1e1000 !important;border-color:#5a4020 !important;color:#f0e0c0 !important;}
+  html[data-theme="classic"] .img-card .img-word{color:#f0e0c0 !important;}
+  html[data-theme="classic"] .img-card .img-scene{color:#b09060 !important;}
+  html[data-theme="classic"] .jp-friends,.jp-notes,.j-note-card{background:#1a0d00 !important;border-color:#5a4020 !important;color:#f0e0c0 !important;}
+  html[data-theme="classic"] .social-mycard,.social-add-friend{background:#1a0d00 !important;border-color:#5a4020 !important;}
 html[data-theme="classic"] .passage-zh{color:#f0e0c0;}
 html[data-theme="classic"] .passage-en{color:#b09060;}
 html[data-theme="classic"] .fz-btn{background:rgba(255,255,255,.05);}
@@ -437,6 +449,14 @@ html[data-theme="ink"] .lb-item{background:#0d1a2e;border-color:#1a3a5c;color:#d
   html[data-theme="ink"] .lb-score{color:#7ba4ff !important;}
   html[data-theme="ink"] .lb-prog{color:#3dddd4 !important;}
   html[data-theme="ink"] .lb-me{border-color:#7ba4ff;background:#0a1520;}
+  html[data-theme="ink"] .phrase-zh{color:#d8e8f0 !important;}
+  html[data-theme="ink"] .phrase-en{color:#7890a8 !important;}
+  html[data-theme="ink"] .phrase-card{background:#0d1a2e !important;border-color:#1a3a5c !important;}
+  html[data-theme="ink"] .img-card{background:#0d1a2e !important;border-color:#1a3a5c !important;color:#d8e8f0 !important;}
+  html[data-theme="ink"] .img-card .img-word{color:#d8e8f0 !important;}
+  html[data-theme="ink"] .img-card .img-scene{color:#7890a8 !important;}
+  html[data-theme="ink"] .jp-friends,.jp-notes,.j-note-card{background:#0d1a2e !important;border-color:#1a3a5c !important;color:#d8e8f0 !important;}
+  html[data-theme="ink"] .social-mycard,.social-add-friend{background:#0d1a2e !important;border-color:#1a3a5c !important;}
 html[data-theme="ink"] .passage-zh{color:#d8e8f0;}
 html[data-theme="ink"] .passage-en{color:#7890a8;}
 html[data-theme="ink"] .fz-btn{background:rgba(255,255,255,.05);}
@@ -1605,7 +1625,14 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <h2>🐉 漁夫林大海的故事</h2>
     <p>透過現代白話故事感受十善業道的真實力量，再進入經文深度學習。</p>
   </div>
-  <div class="story-body">
+  <div class="lang-toggle-bar" style="margin-bottom:12px;">
+    <button class="lang-toggle-btn active" id="storyLangZh" onclick="showStoryLang('zh',this)">中文故事</button>
+    <button class="lang-toggle-btn" id="storyLangEn" onclick="showStoryLang('en',this)">English Story</button>
+    <button class="btn btn-sm btn-jade" style="padding:4px 12px;font-size:.78rem;" onclick="readStory()">🔊 朗讀</button>
+  </div>
+  <div id="storyZh" class="story-body">
+    <div style="text-align:right;margin-bottom:10px;"><button class="btn btn-secondary" style="font-size:.78rem;padding:4px 12px;" onclick="speakStory()">🔊 朗讀故事</button></div>
+    <div id="storyZhVersion">
     <h3>🌅 第一章：海邊的漁夫</h3>
     <p>在南方一個小漁港，住著一個叫林大海的漁夫。他從小跟著父親出海，但也養成了許多壞習慣：捕魚時不分大小通吃<span class="deed-tag">殺生</span>，見到別人的浮標也順手拿走<span class="deed-tag">偷盜</span>，跟人爭執時口出惡言<span class="deed-tag">惡口</span>，喝了酒更是亂說謊話<span class="deed-tag">妄語</span>。鄰里之間沒有人不怕他，連碼頭老闆也不願借錢給他。</p>
     <p>有一年冬天，大海的老婆生了重病，孩子沒有錢讀書，家裡的債越欠越多。大海站在海邊，望著無邊的大海，心裡充滿了憤恨：「難道我這輩子就這樣了嗎？」</p>
@@ -1620,6 +1647,20 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <div class="story-connect">☸ <strong>故事與經典的連結：</strong>林大海的故事，正是《佛說十善業道經》的現代版示範。十善業道不只是宗教戒律，更是人生轉化的實用法則。<br><br>👉 點選「📜 經文」進入原典的中英文學習。</div>
   </div>
 </div>
+    <div id="storyEnVersion" style="display:none;">
+      <h3>🌅 Chapter 1: The Fisherman by the Sea</h3>
+      <p>In a small fishing port in the south lived a fisherman named Lin Dahai. From childhood he followed his father to sea but developed many bad habits: catching fish recklessly <span class="deed-tag">killing</span>, taking others' buoys <span class="deed-tag">stealing</span>, shouting insults during disputes <span class="deed-tag">harsh speech</span>, and lying when drunk <span class="deed-tag">false speech</span>. Everyone feared him and the dock owner refused loans.</p>
+      <p>That winter his wife fell gravely ill. His children could not afford school. Debts mounted. Dahai stood at the water's edge, feeling utterly lost.</p>
+      <h3>🪷 Chapter 2: A Monk Arrives at the Port</h3>
+      <p>One day an old monk arrived at the port. He walked calmly and said to Dahai: <span class="key-line">"Because the minds of beings differ, their actions differ, and thus they transmigrate through various realms."</span></p>
+      <p>The monk taught: "Your life today is shaped by your own mind. The Buddha taught ten ways to transform your karma — the Ten Wholesome Courses of Action."</p>
+      <h3>💡 Chapter 3: The Power of the Ten Wholesome Deeds</h3>
+      <p>Week by week, the monk guided Dahai: first, stop harsh speech. Next, stop taking what is not his — he found a wallet at the dock and returned it. Third, stop lying. Changes came. His wife recovered slowly. Neighbors stopped avoiding him. The dock owner began to greet him. Dahai realized: <span class="key-line">"The ten wholesome deeds are the root of all good dharmas."</span></p>
+      <h3>🌈 Chapter 4: Three Years Later</h3>
+      <p>Three years passed and Dahai's life had completely transformed — not because fate was kind, but because he changed his mind. His mind changed his actions, his actions changed his relationships, and his relationships changed his life. He often told his children: "Day and night, constantly cultivate wholesome dharmas, growing moment by moment. That one sentence changed my life."</p>
+      <p style="text-align:center;margin-top:20px;font-style:italic;color:var(--text-muted);">🌸 May all beings walk the path of ten wholesome deeds 🙏</p>
+    </div>
+  </div>
 
 <!-- ═══════ 1. 經文 (with TTS) ═══════ -->
 <div class="section" id="text">
@@ -1670,6 +1711,21 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <div class="kp-card"><h3><span>🔗</span>與五戒的關係</h3><p>身業3種（不殺、不盜、不邪淫）+ 不妄語，與五戒前四戒相同；十善更多了口業三種及意業三種。</p><span class="kp-tag">戒律關係</span></div>
     <div class="kp-card"><h3><span>🌕</span>迴向菩提</h3><p>若能將十善業道<strong>迴向阿耨多羅三藐三菩提</strong>（無上正等正覺），即能速成佛道，獲得圓滿佛果。</p><span class="kp-tag">發菩提心</span></div>
   </div>
+  </div><!-- /kpZh -->
+
+  <div id="kpEn" style="display:none;">
+  <div class="highlight-box"><strong>Ten Wholesome Courses of Action</strong> (Skt: daśa-kuśala-karmapatha):<br>① <strong>Bodily</strong> ×3: Non-killing, Non-stealing, No sexual misconduct<br>② <strong>Verbal</strong> ×4: Non-false speech, Non-divisive speech, Non-harsh speech, No idle chatter<br>③ <strong>Mental</strong> ×3: Non-greed, Non-hatred, Non-wrong-view</div>
+  <div class="kp-grid">
+    <div class="kp-card"><h3><span>🧠</span>Memory Tip: 3-4-3</h3><p>Bodily (3) + Verbal (4) + Mental (3) = Ten wholesome deeds. Guard three bodily gates, speak four verbal virtues, hold three mental wisdoms.</p><span class="kp-tag">Core Structure</span></div>
+    <div class="kp-card"><h3><span>🏛</span>Historical Background</h3><p>Delivered by the Buddha at Sāgara Dragon King Palace. Translated by Master Śikṣānanda (652-710 CE) of Khotan during the Tang Dynasty. Contains 17 sections.</p><span class="kp-tag">History</span></div>
+    <div class="kp-card"><h3><span>💡</span>Core Teaching</h3><p>"Because minds differ, karma differs; thus beings transmigrate." All goodness — from everyday ethics to full buddhahood — is rooted in the ten wholesome deeds.</p><span class="kp-tag">Central Principle</span></div>
+    <div class="kp-card"><h3><span>🌱</span>Three Bodily Deeds</h3><p><strong>Non-killing</strong>: 10 benefits incl. long life<br><strong>Non-stealing</strong>: 10 trustworthy qualities<br><strong>No sexual misconduct</strong>: 4 wisdom-praised virtues</p><span class="kp-tag">Bodily</span></div>
+    <div class="kp-card"><h3><span>💬</span>Four Verbal Deeds</h3><p><strong>Non-false speech</strong>: 8 virtues, pure mouth<br><strong>Non-divisive</strong>: 5 indestructible qualities<br><strong>Non-harsh</strong>: 8 pure deeds<br><strong>No idle chatter</strong>: 3 firm qualities</p><span class="kp-tag">Verbal</span></div>
+    <div class="kp-card"><h3><span>🧘</span>Three Mental Deeds</h3><p><strong>Non-greed</strong>: contentment; <strong>Non-hatred</strong>: patience — yields Buddha vocal sound; <strong>Non-wrong-view</strong>: trust cause and effect — 10 virtuous qualities</p><span class="kp-tag">Mental</span></div>
+    <div class="kp-card"><h3><span>🌍</span>Modern Life</h3><p>Non-killing = protect life daily; non-divisive speech = no gossip in chats; no idle chatter = less mindless scrolling. Ancient wisdom for modern living.</p><span class="kp-tag">Daily Practice</span></div>
+    <div class="kp-card"><h3><span>🙏</span>Dedication to Enlightenment</h3><p>Dedicate these deeds to unsurpassed bodhi for all beings. This transforms ordinary virtue into the Mahayana path to buddhahood.</p><span class="kp-tag">Aspiration</span></div>
+  </div>
+  </div><!-- /kpEn -->
 </div>
 
 <!-- ═══════ 3. 思維導圖 ═══════ -->
@@ -1832,6 +1888,8 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <div class="speech-timer">
     <div style="color:rgba(255,255,255,.6);font-size:.88rem;margin-bottom:8px;">演講計時器 · Speech Timer</div>
     <div class="timer-select">
+      <button class="timer-mode-btn" onclick="setTimerMode(60,this)">1 分鐘版</button>
+      <button class="timer-mode-btn" onclick="setTimerMode(60,this)">60 秒版</button>
       <button class="timer-mode-btn active" onclick="setTimerMode(180,this)">3 分鐘版</button>
       <button class="timer-mode-btn" onclick="setTimerMode(300,this)">5 分鐘版</button>
     </div>
@@ -1841,11 +1899,16 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
       <button class="btn btn-jade" onclick="startTimer()">▶ 開始</button>
       <button class="btn btn-secondary" onclick="stopTimer()">⏸ 暫停</button>
       <button class="btn btn-secondary" onclick="resetTimer()">⏹ 重設</button>
+      <button class="btn" style="background:var(--red);color:#fff;margin-left:4px;" id="timerRecBtn" onclick="toggleSpeechRec(this)" data-recording="0">🎙 錄音</button>
     </div>
   </div>
 
   <!-- 3 min outline -->
-  <h3 style="color:var(--red);font-size:1.2rem;margin:24px 0 12px;">📋 3分鐘演講大綱</h3>
+  <div class="lang-toggle-bar" style="margin-bottom:10px;">
+        <button class="lang-toggle-btn active" data-lang="zh" onclick="setLangMode('zh')">中文大綱</button>
+        <button class="lang-toggle-btn" data-lang="en" onclick="setLangMode('en')">English Outline</button>
+      </div>
+      <h3 style="color:var(--red);font-size:1.2rem;margin:12px 0 12px;">📋 3分鐘演講大綱</h3>
   <div id="outline3"></div>
 
   <!-- 5 min outline -->
@@ -1855,6 +1918,25 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <!-- Key phrases -->
   <h3 style="color:var(--red);font-size:1.2rem;margin:24px 0 12px;">💎 核心金句（必背 6 句）</h3>
   <div class="phrase-grid" id="phraseGrid"></div>
+  </div><!-- /storyZh -->
+
+  <div id="storyEn" class="story-body" style="display:none;">
+    <h3>🌅 Chapter 1: The Fisherman by the Sea</h3>
+    <p>In a small fishing port in the south lived a fisherman named Lin Dahai. Growing up fishing with his father, he also developed many bad habits: catching fish of all sizes indiscriminately<span class="deed-tag">Killing</span>, pocketing others' buoys<span class="deed-tag">Stealing</span>, shouting insults during disputes<span class="deed-tag">Harsh speech</span>, and lying under the influence of alcohol<span class="deed-tag">False speech</span>. Nobody in the neighborhood wanted anything to do with him, and even the dock manager refused to lend him money.</p>
+    <p>One winter, Dahai's wife fell gravely ill. His children had no money for school. The family debt kept mounting. Dahai stood at the sea's edge, staring into the boundless waves, not knowing which way to turn.</p>
+
+    <h3>🌊 Chapter 2: The Voice from the Waves</h3>
+    <p>One stormy night, an old monk sought shelter at his home. The old monk spoke gently: "Friend, have you heard of the <strong>Ten Wholesome Courses of Action</strong>? They can change a person's destiny." Dahai scoffed: "I'm just a poor fisherman — what do wholesome deeds have to do with me?" The old monk smiled: "Even more so for a fisherman. Because every cast of the net, every word spoken, and every thought you have — all of these are creating your future."</p>
+    <p>That night, the old monk told him: "The Buddha taught in the Dragon King's palace: <em>Because minds differ, karma differs; thus beings transmigrate through various realms.</em> Your life is shaped by your mind and your actions. Start with just one thing — stop killing carelessly."</p>
+
+    <h3>🌿 Chapter 3: One Step at a Time</h3>
+    <p>Dahai began. The first month, he stopped taking small fish and threw them back. The second month, he stopped taking others' buoys. The third month, he began speaking gently to his wife and children. Slowly, something strange happened — his neighbors began to greet him, the dock manager lent him money again, and his wife's health gradually improved.</p>
+    <p>One year later, Dahai sat on the dock watching the sunset. His neighbor Old Chen walked over: "Dahai, you've really changed." Dahai smiled: "I learned that my life is built from my thoughts and actions. If I want a different life, I have to start by changing myself."</p>
+
+    <h3>✨ Epilogue: The Seed of Dharma</h3>
+    <p>This story illustrates the core teaching of the <strong>Sūtra on the Ten Wholesome Courses of Action</strong>: <em>Because minds differ, karma differs.</em> Change does not need to happen all at once — begin with a single wholesome deed, persist sincerely, and life will gradually transform. The ten wholesome courses are not distant Buddhist theory; they are a practical guide for daily living.</p>
+    <button class="btn btn-jade btn-sm" onclick="readStory()" style="margin-top:12px;">🔊 Read Aloud</button>
+  </div>
 
   <!-- AI opener -->
   <div class="ai-speech-box">
@@ -1873,21 +1955,27 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     </div>
     <button class="btn btn-gold" onclick="generateOpener()" style="margin-top:8px;">✨ 生成演講稿</button>
     <div class="ai-result" id="aiOpenerResult" style="display:none;"></div>
-    <div class="btn-row" id="openerBtnRow" style="display:none;margin-top:10px;">
+    <div class="btn-row" id="openerBtnRow" style="display:none;margin-top:10px;flex-wrap:wrap;gap:8px;">
       <button class="btn btn-jade" onclick="speakText(document.getElementById('aiOpenerResult').textContent, speechLang==='en' ? 'en-US' : 'zh-TW', this)">🔊 朗讀演講稿</button>
       <button class="btn btn-secondary" onclick="copyOpener()">📋 複製</button>
+      <button class="btn btn-rec" id="speechRecBtn" onclick="toggleSpeechRec(this)" style="background:#c0392b;color:#fff;border-color:#922b21;">🎙 錄音練習</button>
     </div>
+    <div id="speechRecStatus" style="display:none;font-size:.82rem;color:var(--muted);margin-top:6px;text-align:center;">⏺ 錄音中... <span id="speechRecTime">0:00</span></div>
   </div>
 
   <!-- Sharing tips -->
-  <h3 style="color:var(--red);font-size:1.2rem;margin:24px 0 12px;">💬 日常交談分享技巧</h3>
+  <div class="lang-toggle-bar" style="margin-top:20px;margin-bottom:8px;">
+    <button class="lang-toggle-btn active" data-lang="zh" onclick="setMemLang('zh',this)">中文版</button>
+    <button class="lang-toggle-btn" data-lang="en" onclick="setMemLang('en',this)">English</button>
+  </div>
+  <h3 style="color:var(--red);font-size:1.2rem;margin:8px 0 12px;">💬 <span class="mem-label-zh">日常交談分享技巧</span><span class="mem-label-en" style="display:none;">Conversation &amp; Sharing Tips</span></h3>
   <div class="kp-grid">
-    <div class="kp-card"><h3><span>🪝</span>一句話鉤子</h3><p>開口第一句用問題吸引注意：「你知道古代佛陀曾在海龍王宮殿裡說了一個讓人生徹底改變的秘密嗎？」</p><span class="kp-tag">開場技巧</span></div>
-    <div class="kp-card"><h3><span>📦</span>三的法則</h3><p>每次分享只說三個重點：①心決定業、②十善分三業、③善有善報可至佛果。三點讓人記得住。</p><span class="kp-tag">結構技巧</span></div>
-    <div class="kp-card"><h3><span>🎭</span>故事化</h3><p>先講林大海的故事，再說「這其實就是佛陀說的十善業道」，把道理包在故事裡，聽眾更容易感動。</p><span class="kp-tag">敘事技巧</span></div>
-    <div class="kp-card"><h3><span>🔁</span>重複核心詞</h3><p>演講中重複說「身業、口業、意業」和「十善業道是一切善法的根本」，讓聽眾自然記住關鍵詞。</p><span class="kp-tag">記憶技巧</span></div>
-    <div class="kp-card"><h3><span>🎯</span>給聽眾行動</h3><p>結尾給一個具體行動：「今天就從『不惡口』開始，說話前想三秒鐘，這就是十善業道的第一步。」</p><span class="kp-tag">呼籲行動</span></div>
-    <div class="kp-card"><h3><span>🌟</span>與生活相連</h3><p>把每個善業連到現代生活：不兩舌=不在群組轉發是非、不綺語=少刷短影片。讓聽眾感到切身相關。</p><span class="kp-tag">現代轉化</span></div>
+    <div class="kp-card"><h3><span>🪝</span><span class="mem-label-zh">一句話鉤子</span><span class="mem-label-en" style="display:none;">The One-Sentence Hook</span></h3><p class="mem-label-zh">開口第一句用問題吸引注意：「你知道古代佛陀曾在海龍王宮殿裡說了一個讓人生徹底改變的秘密嗎？」</p><p class="mem-label-en" style="display:none;">Open with a question: "Did you know that 1,400 years ago, the Buddha revealed a life-changing secret in an underwater palace?"</p><span class="kp-tag mem-label-zh">開場技巧</span><span class="kp-tag mem-label-en" style="display:none;">Opening Technique</span></div>
+    <div class="kp-card"><h3><span>📦</span><span class="mem-label-zh">三的法則</span><span class="mem-label-en" style="display:none;">The Rule of Three</span></h3><p class="mem-label-zh">每次分享只說三個重點：①心決定業、②十善分三業、③善有善報可至佛果。三點讓人記得住。</p><p class="mem-label-en" style="display:none;">Share just three points: ①Mind shapes karma ②Ten deeds in three categories ③Wholesome deeds lead to buddhahood. Three points are memorable.</p><span class="kp-tag mem-label-zh">結構技巧</span><span class="kp-tag mem-label-en" style="display:none;">Structure Technique</span></div>
+    <div class="kp-card"><h3><span>🎭</span><span class="mem-label-zh">故事化</span><span class="mem-label-en" style="display:none;">Storytelling</span></h3><p class="mem-label-zh">先講林大海的故事，再說「這其實就是佛陀說的十善業道」，把道理包在故事裡，聽眾更容易感動。</p><p class="mem-label-en" style="display:none;">First tell the fisherman Lin Dahai story, then say "This is exactly what the Buddha called the Ten Wholesome Deeds." Wrapping teaching in story moves audiences more deeply.</p><span class="kp-tag mem-label-zh">敘事技巧</span><span class="kp-tag mem-label-en" style="display:none;">Narrative Technique</span></div>
+    <div class="kp-card"><h3><span>🔁</span><span class="mem-label-zh">重複核心詞</span><span class="mem-label-en" style="display:none;">Repeat Key Words</span></h3><p class="mem-label-zh">演講中重複說「身業、口業、意業」和「十善業道是一切善法的根本」，讓聽眾自然記住關鍵詞。</p><p class="mem-label-en" style="display:none;">Repeat "bodily karma, verbal karma, mental karma" and "the ten wholesome deeds are the root of all good dharmas" so the audience naturally retains these key concepts.</p><span class="kp-tag mem-label-zh">記憶技巧</span><span class="kp-tag mem-label-en" style="display:none;">Memory Technique</span></div>
+    <div class="kp-card"><h3><span>🎯</span><span class="mem-label-zh">給聽眾行動</span><span class="mem-label-en" style="display:none;">Give Them One Action</span></h3><p class="mem-label-zh">結尾給一個具體行動：「今天就從『不惡口』開始，說話前想三秒鐘，這就是十善業道的第一步。」</p><p class="mem-label-en" style="display:none;">Close with one action: "Starting today, practice non-harsh speech — pause three seconds before you speak in anger. That is your first step."</p><span class="kp-tag mem-label-zh">呼籲行動</span><span class="kp-tag mem-label-en" style="display:none;">Call to Action</span></div>
+    <div class="kp-card"><h3><span>🌟</span><span class="mem-label-zh">與生活相連</span><span class="mem-label-en" style="display:none;">Connect to Real Life</span></h3><p class="mem-label-zh">把每個善業連到現代生活：不兩舌=不在群組轉發是非、不綺語=少刷短影片。讓聽眾感到切身相關。</p><p class="mem-label-en" style="display:none;">Connect each deed to modern life: non-divisive speech = avoid forwarding gossip; no idle chatter = spend less time on meaningless content. Make it personally relevant.</p><span class="kp-tag mem-label-zh">現代轉化</span><span class="kp-tag mem-label-en" style="display:none;">Modern Application</span></div>
   </div>
 </div>
 
@@ -1897,24 +1985,38 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <div class="section-title-en">Memory Enhancement Techniques</div>
   <div class="ornament">❧ 卍 ❧</div>
 
+  <div class="lang-toggle-bar" style="margin-bottom:10px;">
+    <button class="lang-toggle-btn active" id="memLangZh" onclick="setMemLang('zh',this)">中文</button>
+    <button class="lang-toggle-btn" id="memLangEn" onclick="setMemLang('en',this)">English</button>
+  </div>
   <div class="memory-tab-row">
-    <button class="mem-tab active" onclick="showMemPanel('mnemonic',this)">📿 口訣記憶</button>
-    <button class="mem-tab" onclick="showMemPanel('image',this)">🖼 圖像聯想</button>
-    <button class="mem-tab" onclick="showMemPanel('chain',this)">🔗 故事串連</button>
-    <button class="mem-tab" onclick="showMemPanel('feynman',this)">🎓 費曼學習法</button>
-    <button class="mem-tab" onclick="showMemPanel('spaced',this)">📅 間隔重複</button>
+    <button class="mem-tab active" onclick="showMemPanel('mnemonic',this)">📿 <span class="mem-label-zh">口訣記憶</span><span class="mem-label-en" style="display:none;">Mnemonics</span></button>
+    <button class="mem-tab" onclick="showMemPanel('image',this)">🖼 <span class="mem-label-zh">圖像聯想</span><span class="mem-label-en" style="display:none;">Visualization</span></button>
+    <button class="mem-tab" onclick="showMemPanel('chain',this)">🔗 <span class="mem-label-zh">故事串連</span><span class="mem-label-en" style="display:none;">Story Chain</span></button>
+    <button class="mem-tab" onclick="showMemPanel('feynman',this)">🎓 <span class="mem-label-zh">費曼學習法</span><span class="mem-label-en" style="display:none;">Feynman Technique</span></button>
+    <button class="mem-tab" onclick="showMemPanel('spaced',this)">📅 <span class="mem-label-zh">間隔重複</span><span class="mem-label-en" style="display:none;">Spaced Repetition</span></button>
   </div>
 
   <!-- 口訣 -->
   <div class="mem-panel active" id="panel-mnemonic">
     <div class="mnemonic-box">
-      <div class="mnemonic-title">十善業道記憶歌訣（原創）</div>
-      <div class="mnemonic-verse">
+      <div class="mnemonic-title">
+        <span class="mem-label-zh">十善業道記憶歌訣（原創）</span>
+        <span class="mem-label-en" style="display:none;">Mnemonic Verse — Ten Wholesome Deeds</span>
+      </div>
+      <div class="mnemonic-verse mem-label-zh">
         <span>身守三門</span>心清淨，<span>口言四德</span>世人敬，<br>
         <span>意持三慧</span>業道成，三業清淨見本性。
       </div>
-      <div class="mnemonic-note">「身守三門」= 不殺、不盜、不邪淫 ｜ 「口言四德」= 不妄、不兩、不惡、不綺 ｜「意持三慧」= 不貪、不瞋、不邪見</div>
-      <button class="btn btn-gold" style="margin-top:16px;" data-tts-text="身守三門心清淨，口言四德世人敬，意持三慧業道成，三業清淨見本性。" data-tts-lang="zh-TW" onclick="speakText(this.dataset.ttsText,this.dataset.ttsLang,this)">🔊 朗讀口訣</button>
+      <div class="mnemonic-verse mem-label-en" style="display:none;">
+        <span>Body guards three gates</span>, mind stays pure,<br>
+        <span>Speech holds four virtues</span>, the world gives respect,<br>
+        <span>Mind keeps three wisdoms</span>, the karma-path complete —<br>
+        Three karmas cleansed, true nature is revealed.
+      </div>
+      <div class="mnemonic-note mem-label-zh">「身守三門」= 不殺、不盜、不邪淫 ｜ 「口言四德」= 不妄、不兩、不惡、不綺 ｜「意持三慧」= 不貪、不瞋、不邪見</div>
+      <div class="mnemonic-note mem-label-en" style="display:none;">"Body guards three gates" = non-killing, non-stealing, no sexual misconduct ｜ "Speech holds four virtues" = non-false, non-divisive, non-harsh, no idle chatter ｜ "Mind keeps three wisdoms" = non-greed, non-hatred, non-wrong-view</div>
+      <button class="btn btn-gold" style="margin-top:16px;" onclick="speakMnemonic(this)">🔊 <span class="mem-label-zh">朗讀口訣</span><span class="mem-label-en" style="display:none;">Read Verse</span></button>
     </div>
     <div class="kp-grid">
       <div class="kp-card"><h3><span>✋</span>手指記憶法</h3><p>伸出雙手：<strong>左手三指</strong>代表身業（殺、盜、淫），<strong>右手四指</strong>代表口業（妄、兩、惡、綺），<strong>再伸三指</strong>代表意業（貪、瞋、邪）。合掌即「十善圓滿」。</p><span class="kp-tag">身體記憶</span></div>
@@ -1933,8 +2035,10 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <!-- 故事串連 -->
   <div class="mem-panel" id="panel-chain">
     <div class="story-chain-box">
-      <h3>🔗 十善業道故事串連法</h3>
-      <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:14px;text-indent:0;">將10個善業按順序串成一個故事，閉上眼睛想像這個場景，就能依序記住全部十種。</p>
+      <h3 class="mem-label-zh">🔗 十善業道故事串連法</h3>
+      <h3 class="mem-label-en" style="display:none;">🔗 Story Chain Method for the Ten Wholesome Deeds</h3>
+      <p class="mem-label-zh" style="color:var(--text-muted);font-size:.88rem;margin-bottom:14px;text-indent:0;">將10個善業按順序串成一個故事，閉上眼睛想像這個場景，就能依序記住全部十種。</p>
+      <p class="mem-label-en" style="color:var(--text-muted);font-size:.88rem;margin-bottom:14px;display:none;">Link all 10 wholesome deeds into a story in order. Close your eyes and visualize the scene — you will naturally remember all ten in sequence.</p>
       <p>漁夫阿明，一天放生了一隻被困在漁網裡的小鳥 <span class="chain-tag">①不殺生</span>，小鳥感謝他，叼來了一顆他遺失已久的珍珠，不多拿也不少放 <span class="chain-tag">②不偷盜</span>。珍珠發出白蓮花一樣的光芒 <span class="chain-tag">③不邪淫</span>，光芒中浮現一朵金口蓮花，吐出真實的話語 <span class="chain-tag">④不妄語</span>。</p>
       <p>蓮花說：「我只說一句話，不說左也不說右」 <span class="chain-tag">⑤不兩舌</span>，聲音如春風拂面，柔和不傷人 <span class="chain-tag">⑥不惡口</span>，每個字都是精金，不說廢話 <span class="chain-tag">⑦不綺語</span>。阿明聽完，雙手打開，不去抓住那顆珍珠 <span class="chain-tag">⑧不貪欲</span>，心如湖水平靜，沒有一絲波浪 <span class="chain-tag">⑨不瞋恚</span>，眼前道路一片光明，看清因果的方向 <span class="chain-tag">⑩不邪見</span>。</p>
       <div style="margin-top:16px;text-align:center;">
@@ -1956,7 +2060,8 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 
   <!-- 間隔重複 -->
   <div class="mem-panel" id="panel-spaced">
-    <div class="highlight-box">📅 <strong>間隔重複法（Spaced Repetition）：</strong>心理學研究證明，在「即將遺忘前」複習效果最佳。按照以下計畫，可將十善業道的記憶保持長達數年。</div>
+    <div class="highlight-box mem-label-zh">📅 <strong>間隔重複法（Spaced Repetition）：</strong>心理學研究證明，在「即將遺忘前」複習效果最佳。按照以下計畫，可將十善業道的記憶保持長達數年。</div>
+    <div class="highlight-box mem-label-en" style="display:none;">📅 <strong>Spaced Repetition:</strong> Psychology research proves that reviewing material "just before forgetting" is most effective. Following this schedule can maintain your memory of the ten wholesome deeds for years.</div>
     <table class="spaced-table">
       <thead><tr><th>時間</th><th>學習內容</th><th>方式</th><th>目標</th></tr></thead>
       <tbody>
@@ -2346,6 +2451,17 @@ function showSection(id,idx){
 }
 
 // ══ Memory Panel Nav ══
+var memLang='zh';
+function setMemLang(lang, btn){
+  memLang=lang;
+  document.querySelectorAll('.mem-label-zh').forEach(function(el){el.style.display=lang==='zh'?'inline':'none';});
+  document.querySelectorAll('.mem-label-en').forEach(function(el){el.style.display=lang==='en'?'inline':'none';});
+  document.querySelectorAll('#memLangZh,#memLangEn').forEach(function(b){b.classList.remove('active');});
+  if(btn) btn.classList.add('active');
+  // Rebuild panels that need English
+  try{buildImgGrid();}catch(e){}
+  try{buildMnemonicEn();}catch(e){}
+}
 function showMemPanel(id,btn){
   document.querySelectorAll('.mem-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.mem-tab').forEach(t=>t.classList.remove('active'));
@@ -2369,6 +2485,26 @@ function setLangMode(mode){
   try{buildSA();}catch(e){}
   // Flash card
   try{updateCard();}catch(e){}
+  // Outlines
+  try{buildOutlines();}catch(e){}
+  // Story
+  try{updateStoryLang();}catch(e){}
+  // Img grid
+  try{buildImgGrid();}catch(e){}
+  // Sync memLang with global LANG_MODE
+  try{
+    var mlz=document.getElementById('memLangZh');
+    var mle=document.getElementById('memLangEn');
+    if(LANG_MODE==='en'){
+      if(mlz) mlz.classList.remove('active');
+      if(mle) mle.classList.add('active');
+      if(typeof setMemLang==='function') setMemLang('en',mle);
+    } else {
+      if(mlz) mlz.classList.add('active');
+      if(mle) mle.classList.remove('active');
+      if(typeof setMemLang==='function') setMemLang('zh',mlz);
+    }
+  }catch(e){}
 }
 (function loadLangPref(){
   try{
@@ -2395,6 +2531,117 @@ try{
   var _vp=localStorage.getItem('sjyd_tts_voice');
   if(_vp==='male'||_vp==='female') TTS_VOICE=_vp;
 }catch(e){}
+
+// ── Speech Recording for practice ──
+var speechRecStream=null,speechRecorder=null,speechRecChunks=[],speechRecTimer=null,speechRecSec=0;
+function toggleSpeechRec(btn){
+  if(speechRecorder&&speechRecorder.state==='recording'){
+    speechRecorder.stop();
+    btn.textContent='🎙 錄音練習';
+    clearInterval(speechRecTimer);
+    document.getElementById('speechRecStatus')&&(document.getElementById('speechRecStatus').style.display='none');
+    // sync all rec buttons
+    document.querySelectorAll('.btn-rec').forEach(function(b){b.textContent='🎙 錄音';});
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    speechRecStream=stream;
+    speechRecChunks=[];speechRecSec=0;
+    speechRecorder=new MediaRecorder(stream);
+    speechRecorder.ondataavailable=function(e){if(e.data.size>0)speechRecChunks.push(e.data);};
+    speechRecorder.onstop=function(){
+      var blob=new Blob(speechRecChunks,{type:'audio/webm'});
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement('a');
+      a.href=url;a.download='speech-practice-'+new Date().toISOString().slice(0,19).replace(/:/g,'-')+'.webm';
+      a.click();
+      URL.revokeObjectURL(url);
+      speechRecStream&&speechRecStream.getTracks().forEach(function(t){t.stop();});
+    };
+    speechRecorder.start();
+    btn.textContent='⏹ 停止錄音';
+    document.querySelectorAll('.btn-rec').forEach(function(b){b.textContent='⏹ 停止錄音';});
+    var statusEl=document.getElementById('speechRecStatus');
+    if(statusEl) statusEl.style.display='block';
+    speechRecTimer=setInterval(function(){
+      speechRecSec++;
+      var m=Math.floor(speechRecSec/60),s=speechRecSec%60;
+      var timeEl=document.getElementById('speechRecTime');
+      if(timeEl) timeEl.textContent=m+':'+(s<10?'0':'')+s;
+    },1000);
+  }).catch(function(e){showToast('無法取得麥克風：'+e.message);});
+}
+
+// ── Story TTS ──
+function speakMnemonic(btn){
+  var isEn=LANG_MODE==='en';
+  var text=isEn
+    ? 'Body guards three gates, mind stays pure. Speech holds four virtues, the world gives respect. Mind keeps three wisdoms, the karma-path complete. Three karmas cleansed, true nature is revealed.'
+    : '身守三門心清淨，口言四德世人敬，意持三慧業道成，三業清淨見本性。';
+  var lang=isEn?'en-US':'zh-TW';
+  speakText(text,lang,btn);
+}
+function speakStory(){
+  var isEn = LANG_MODE === 'en';
+  var el = isEn ? document.getElementById('storyEnVersion') : document.getElementById('storyZhVersion');
+  if(!el) return;
+  var text = el.innerText || el.textContent || '';
+  text = text.replace(/\s+/g, ' ').trim().substring(0, 2000);
+  var lang = isEn ? 'en-US' : 'zh-TW';
+  speakText(text, lang, null);
+}
+
+// Update story display when lang changes
+function updateStoryLang(){
+  var isEn = LANG_MODE === 'en';
+  var zhEl = document.getElementById('storyZhVersion');
+  var enEl = document.getElementById('storyEnVersion');
+  if(zhEl) zhEl.style.display = isEn ? 'none' : 'block';
+  if(enEl) enEl.style.display = isEn ? 'block' : 'none';
+  var titleEl = document.getElementById('storyTitle');
+  if(titleEl) titleEl.textContent = isEn ? '🐉 The Story of Lin Dahai the Fisherman' : '🐉 漁夫林大海的故事';
+  var subEl = document.getElementById('storySubtitle');
+  if(subEl) subEl.textContent = isEn ? 'Experience the power of the ten wholesome deeds through a modern parable.' : '透過現代白話故事感受十善業道的真實力量，再進入經文深度學習。';
+}
+
+// ── Speech Practice Recording ──
+var speechRecorder=null,speechRecChunks=[];
+function toggleSpeechRec(btn){
+  try{
+    if(btn.getAttribute('data-recording')==='1'){
+      // Stop recording
+      if(speechRecorder&&speechRecorder.state!=='inactive') speechRecorder.stop();
+      btn.setAttribute('data-recording','0');
+      btn.textContent='🎙 錄音練習';
+      btn.style.background='var(--red)';
+      var st=document.getElementById('speechRecStatus');
+      if(st) st.style.display='none';
+    } else {
+      // Start recording
+      navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+        speechRecChunks=[];
+        speechRecorder=new MediaRecorder(stream);
+        speechRecorder.ondataavailable=function(e){if(e.data.size>0)speechRecChunks.push(e.data);};
+        speechRecorder.onstop=function(){
+          var blob=new Blob(speechRecChunks,{type:'audio/webm'});
+          var url=URL.createObjectURL(blob);
+          var a=document.createElement('a');
+          a.href=url;a.download='speech-practice-'+Date.now()+'.webm';
+          document.body.appendChild(a);a.click();document.body.removeChild(a);
+          setTimeout(function(){URL.revokeObjectURL(url);},5000);
+          stream.getTracks().forEach(function(t){t.stop();});
+          showToast('✅ 錄音已儲存！· Recording saved!');
+        };
+        speechRecorder.start();
+        btn.setAttribute('data-recording','1');
+        btn.textContent='⏹ 停止錄音';
+        btn.style.background='#555';
+        var st=document.getElementById('speechRecStatus');
+        if(st){st.style.display='block';}
+      }).catch(function(e){showToast('麥克風授權失敗 · Mic permission denied');});
+    }
+  }catch(e){showToast('錄音功能不支援 · Recording not supported');}
+}
 
 function stopCurrentTts(){
   try{
@@ -3134,36 +3381,39 @@ function updateTimerDisplay(){
 
 // ══ Speech Outlines ══
 const outline3=[
-  {time:'0:00–0:20',label:'開場白',content:'<p>用一個問題引入：<br><span class="key-line">「各位好，請問您覺得什麼樣的人，才算真正的好人？」</span><br>停頓3秒，讓聽眾思考，然後說：「今天我來分享一部1400年前的智慧——《佛說十善業道經》，佛陀給出的答案，簡單卻深刻。」</p>'},
-  {time:'0:20–0:50',label:'什麼是十善業道？',content:'<p>「佛陀在海龍王的宮殿裡，告訴龍王一個道理：<br><span class="key-line">一切眾生，心想異故，造業亦異，由是故有諸趣輪迴。</span><br>意思是：我們今天的命運，是由我們的心念和行為造成的。佛陀因此教導了『十善業道』，分為<strong>身業3種、口業4種、意業3種</strong>，合計10種。」</p>'},
-  {time:'0:50–1:20',label:'身業三善',content:'<p>「身體行為有三種善：<br>① <strong>不殺生</strong>——尊重一切生命<br>② <strong>不偷盜</strong>——廉潔不取非分之財<br>③ <strong>不邪淫</strong>——守護清淨的人際關係<br><span class="key-line">記憶口訣：『身守三門心清淨』</span></p>'},
-  {time:'1:20–2:00',label:'口業四善',content:'<p>「語言行為有四種善：<br>① <strong>不妄語</strong>——誠實，得人信任（口如蓮花香）<br>② <strong>不兩舌</strong>——不搬是非，讓人和諧<br>③ <strong>不惡口</strong>——說柔和愛語<br>④ <strong>不綺語</strong>——說有意義的話<br><span class="key-line">記憶口訣：『口言四德世人敬』</span></p>'},
-  {time:'2:00–2:30',label:'意業三善',content:'<p>「心念行為有三種善：<br>① <strong>不貪欲</strong>——知足不貪，心地清淨<br>② <strong>不瞋恚</strong>——忍辱不怒，心如湖水<br>③ <strong>不邪見</strong>——相信因果，正見人生<br><span class="key-line">記憶口訣：『意持三慧業道成』</span></p>'},
-  {time:'2:30–3:00',label:'結語與呼籲',content:'<p>「佛陀說，十善業道是一切善法的根本——不管是世間的幸福，還是出世間的覺悟，都從這裡出發。<br><span class="key-line">今天就從一個善業開始：說話前，想三秒鐘，是否有必要？這就是『不綺語』，就是十善業道的第一步。阿彌陀佛！🙏</span></p>'},
+  {time:'0:00–0:20',label:'開場白',labelEn:'Opening',content:'<p>用一個問題引入：<br><span class="key-line">「各位好，請問您覺得什麼樣的人，才算真正的好人？」</span><br>停頓3秒，讓聽眾思考，然後說：「今天我來分享一部1400年前的智慧——《佛說十善業道經》，佛陀給出的答案，簡單卻深刻。」</p>',contentEn:'<p>Open with a question: <br><span class="key-line">"Friends, what does it truly mean to be a good person?"</span><br>Pause 3 seconds, then say: "Today I want to share 1,400-year-old wisdom from a sutra — the Buddha gave an answer that is simple yet profound."</p>'},
+  {time:'0:20–0:50',label:'什麼是十善業道？',labelEn:'What are the Ten Wholesome Deeds?',content:'<p>「佛陀在海龍王的宮殿裡，告訴龍王一個道理：<br><span class="key-line">一切眾生，心想異故，造業亦異，由是故有諸趣輪迴。</span><br>意思是：我們今天的命運，是由我們的心念和行為造成的。佛陀因此教導了『十善業道』，分為<strong>身業3種、口業4種、意業3種</strong>，合計10種。」</p>'},
+  {time:'0:50–1:20',label:'身業三善',labelEn:'Three Bodily Deeds',content:'<p>「身體行為有三種善：<br>① <strong>不殺生</strong>——尊重一切生命<br>② <strong>不偷盜</strong>——廉潔不取非分之財<br>③ <strong>不邪淫</strong>——守護清淨的人際關係<br><span class="key-line">記憶口訣：『身守三門心清淨』</span></p>',contentEn:'<p>"The Buddha taught in the Dragon King\'s palace: <br><span class="key-line">Because minds differ, karma differs; thus beings cycle through realms.</span><br>Our fate is shaped by our thoughts and actions. He taught the Ten Wholesome Deeds — <strong>3 bodily, 4 verbal, 3 mental</strong>."</p>'},
+  {time:'1:20–2:00',label:'口業四善',labelEn:'Four Verbal Deeds',content:'<p>「語言行為有四種善：<br>① <strong>不妄語</strong>——誠實，得人信任（口如蓮花香）<br>② <strong>不兩舌</strong>——不搬是非，讓人和諧<br>③ <strong>不惡口</strong>——說柔和愛語<br>④ <strong>不綺語</strong>——說有意義的話<br><span class="key-line">記憶口訣：『口言四德世人敬』</span></p>',contentEn:'<p>"The 3 bodily deeds: <strong>Non-killing, Non-stealing, No sexual misconduct</strong>.<br>Modern application: Non-killing = care for life; Non-stealing = respect others\' time and property; No misconduct = integrity in relationships.</p>'},
+  {time:'2:00–2:30',label:'意業三善',labelEn:'Three Mental Deeds',content:'<p>「心念行為有三種善：<br>① <strong>不貪欲</strong>——知足不貪，心地清淨<br>② <strong>不瞋恚</strong>——忍辱不怒，心如湖水<br>③ <strong>不邪見</strong>——相信因果，正見人生<br><span class="key-line">記憶口訣：『意持三慧業道成』</span></p>',contentEn:'<p>"The 4 verbal deeds: <strong>Non-false speech, Non-divisive speech, Non-harsh speech, No idle chatter</strong>.<br>Think before speaking: Does this help anyone? Is it true? Is it kind? If not, stay silent.</p>'},
+  {time:'2:30–3:00',label:'結語與呼籲',labelEn:'Closing & Call to Action',content:'<p>「佛陀說，十善業道是一切善法的根本——不管是世間的幸福，還是出世間的覺悟，都從這裡出發。<br><span class="key-line">今天就從一個善業開始：說話前，想三秒鐘，是否有必要？這就是『不綺語』，就是十善業道的第一步。阿彌陀佛！🙏</span></p>',contentEn:'<p>"The 3 mental deeds: <strong>Non-greed, Non-hatred, Non-wrong-view</strong>.<br>Greed = constant wanting more; Hatred = anger and resentment; Wrong-view = ignoring cause and effect. Observe your thoughts daily.</p>'},
 ];
 const outline5=[
-  {time:'0:00–0:40',label:'開場故事',content:'<p>「讓我先說一個故事。一個漁夫，因為養成了說謊、偷東西、口出惡言的習慣，家庭破碎，事業失敗。直到有一天，他聽到一句話改變了他的人生：<span class="key-line">一切眾生，心想異故，造業亦異，由是故有諸趣輪迴。</span>這句話來自《佛說十善業道經》，是佛陀1400年前說的話。今天我就來分享這部經典裡的智慧。」</p>'},
-  {time:'0:40–1:10',label:'背景介紹',content:'<p>「這部經典是唐代的于闐法師實叉難陀翻譯的。說法地點特別：不是在寺廟，而是在<strong>海龍王的宮殿</strong>——象徵佛法普及六道所有眾生。佛對龍王說：你看海中萬千眾生，形色各異，都是因為心念和業力各異而產生的。」</p>'},
-  {time:'1:10–2:00',label:'身業三善（詳）',content:'<p>「身體行為有三善，記住『<strong>殺盜淫</strong>』三字：<br>① <strong>不殺生</strong>：佛說離殺生可得十種功德，包括身體健康、長壽、死後生天。<br>② <strong>不偷盜</strong>：廉潔不取非分財物，感召豐足財富與社會信任。<br>③ <strong>不邪淫</strong>：守護清淨，家庭穩固，福德增長。<br><span class="key-line">這三善，就是我們常說『做人的底線』。</span></p>'},
-  {time:'2:00–3:00',label:'口業四善（詳）',content:'<p>「語言行為有四善，記住『<strong>妄兩惡綺</strong>』四字：<br>① <strong>不妄語</strong>：誠實得八種功德，口常清淨如蓮花香，言出必行。<br>② <strong>不兩舌</strong>：不搬是非，不在這邊說那邊壞話——在社交媒體時代最難做到。<br>③ <strong>不惡口</strong>：說柔和愛語——一句暖話三冬暖，一句冷言六月寒。<br>④ <strong>不綺語</strong>：不說無意義的話——少刷無聊短影片，也是一種修行。</p>'},
-  {time:'3:00–3:50',label:'意業三善（詳）',content:'<p>「心念行為有三善，記住『<strong>貪瞋邪</strong>』三字：<br>① <strong>不貪欲</strong>：不嫉妒他人，知足常樂——知足者常富。<br>② <strong>不瞋恚</strong>：不起怒氣怨恨——佛說一念瞋心起，百萬障門開。<br>③ <strong>不邪見</strong>：相信因果，正見人生——善有善報，惡有惡報，不是不報，時候未到。<br><span class="key-line">意業最重要，因為心念決定一切行為。</span></p>'},
-  {time:'3:50–4:30',label:'功德與現代意義',content:'<p>「佛說十善業道是一切善法的根本——不只讓人生過得好，更是成就佛果的基礎。現代研究也發現：誠實的人更受信任，友善的人社交關係更好，知足的人幸福感更高。這些不正是十善業道的應驗嗎？」</p>'},
-  {time:'4:30–5:00',label:'結語',content:'<p>「回到那個漁夫的故事——他三年後的生活徹底改變。改變的原因很簡單：他把壞事停下來，把好事做起來。<span class="key-line">今天，我們每個人都可以從一條開始：選一條您覺得最需要改善的，從今天起實踐。這就是《佛說十善業道經》給我們的禮物。阿彌陀佛！🙏</span></p>'},
+  {time:'0:00–0:40',label:'開場故事',labelEn:'Opening Story',content:'<p>「讓我先說一個故事。一個漁夫，因為養成了說謊、偷東西、口出惡言的習慣，家庭破碎，事業失敗。直到有一天，他聽到一句話改變了他的人生：<span class="key-line">一切眾生，心想異故，造業亦異，由是故有諸趣輪迴。</span>這句話來自《佛說十善業道經》，是佛陀1400年前說的話。今天我就來分享這部經典裡的智慧。」</p>',contentEn:'<p>"The Buddha said: all good dharmas have the Ten Wholesome Deeds as their root.<br><span class="key-line">Start today with just one: when you want to speak harshly — pause 3 seconds. That\'s your first step on the wholesome path.</span>"</p>'},
+  {time:'0:40–1:10',label:'背景介紹',labelEn:'Background',content:'<p>「這部經典是唐代的于闐法師實叉難陀翻譯的。說法地點特別：不是在寺廟，而是在<strong>海龍王的宮殿</strong>——象徵佛法普及六道所有眾生。佛對龍王說：你看海中萬千眾生，形色各異，都是因為心念和業力各異而產生的。」</p>',contentEn:'<p>"Let me tell you a story. A fisherman named Lin Dahai had bad habits — killing carelessly, stealing, harsh words, lying. His family fell apart. Then one day he heard: <span class="key-line">Because minds differ, karma differs; thus beings transmigrate. </span>This changed everything. Today I share this wisdom from the Sutra on the Ten Wholesome Courses of Action."</p>'},
+  {time:'1:10–2:00',label:'身業三善（詳）',labelEn:'Three Bodily Deeds (Detail)',content:'<p>「身體行為有三善，記住『<strong>殺盜淫</strong>』三字：<br>① <strong>不殺生</strong>：佛說離殺生可得十種功德，包括身體健康、長壽、死後生天。<br>② <strong>不偷盜</strong>：廉潔不取非分財物，感召豐足財富與社會信任。<br>③ <strong>不邪淫</strong>：守護清淨，家庭穩固，福德增長。<br><span class="key-line">這三善，就是我們常說『做人的底線』。</span></p>',contentEn:'<p>"This sutra was taught by the Buddha 2,500 years ago in the Dragon King\'s underwater palace. Translated into Chinese during the Tang Dynasty by Master Śikṣānanda from Khotan. It contains 17 sections revealing how body, speech, and mind create our destiny."</p>'},
+  {time:'2:00–3:00',label:'口業四善（詳）',labelEn:'Four Verbal Deeds (Detail)',content:'<p>「語言行為有四善，記住『<strong>妄兩惡綺</strong>』四字：<br>① <strong>不妄語</strong>：誠實得八種功德，口常清淨如蓮花香，言出必行。<br>② <strong>不兩舌</strong>：不搬是非，不在這邊說那邊壞話——在社交媒體時代最難做到。<br>③ <strong>不惡口</strong>：說柔和愛語——一句暖話三冬暖，一句冷言六月寒。<br>④ <strong>不綺語</strong>：不說無意義的話——少刷無聊短影片，也是一種修行。</p>'},
+  {time:'3:00–3:50',label:'意業三善（詳）',labelEn:'Three Mental Deeds (Detail)',content:'<p>「心念行為有三善，記住『<strong>貪瞋邪</strong>』三字：<br>① <strong>不貪欲</strong>：不嫉妒他人，知足常樂——知足者常富。<br>② <strong>不瞋恚</strong>：不起怒氣怨恨——佛說一念瞋心起，百萬障門開。<br>③ <strong>不邪見</strong>：相信因果，正見人生——善有善報，惡有惡報，不是不報，時候未到。<br><span class="key-line">意業最重要，因為心念決定一切行為。</span></p>'},
+  {time:'3:50–4:30',label:'功德與現代意義',labelEn:'Merit & Modern Significance',content:'<p>「佛說十善業道是一切善法的根本——不只讓人生過得好，更是成就佛果的基礎。現代研究也發現：誠實的人更受信任，友善的人社交關係更好，知足的人幸福感更高。這些不正是十善業道的應驗嗎？」</p>',contentEn:'The Buddha taught: all wholesome dharmas rest on the Ten Wholesome Deeds. Modern research confirms: honest people earn trust, kind people build better relationships, content people find greater happiness.'},
+  {time:'4:30–5:00',label:'結語',labelEn:'Closing',content:'<p>「回到那個漁夫的故事——他三年後的生活徹底改變。改變的原因很簡單：他把壞事停下來，把好事做起來。<span class="key-line">今天，我們每個人都可以從一條開始：選一條您覺得最需要改善的，從今天起實踐。這就是《佛說十善業道經》給我們的禮物。阿彌陀佛！🙏</span></p>',contentEn:'<p>"<span class="key-line">Throughout day and night, constantly cultivate wholesome dharmas, growing moment by moment, not allowing a fraction of unwholesomeness to mix in.</span><br>Start where you are. Choose one deed. Practice it today, tomorrow, every day.<br>The fisherman Lin Dahai transformed his life — so can you. The path of ten wholesome deeds begins with a single step. Take it now."</p>'},
 ];
 function buildOutlines(){
+  var isEn=LANG_MODE==='en';
   ['3','5'].forEach(v=>{
     const data=v==='3'?outline3:outline5;
-    const con=document.getElementById(`outline${v}`);
+    const con=document.getElementById('outline'+v);
+    if(!con)return;
+    con.innerHTML='';
     data.forEach((item,idx)=>{
+      var label=isEn&&item.labelEn?item.labelEn:item.label;
+      var body=isEn&&item.contentEn?item.contentEn:item.content;
       const d=document.createElement('div');d.className='outline-card';
-      d.innerHTML=`<div class="outline-header" onclick="toggleOutline(this)">
-        <span class="outline-time">${item.time}</span>
-        <span class="outline-label">${item.label}</span>
-        <span class="outline-arrow">▼</span>
-      </div>
-      <div class="outline-body">
-        <div class="outline-content">${item.content}</div>
-      </div>`;
+      d.innerHTML='<div class="outline-header" onclick="toggleOutline(this)">'+
+        '<span class="outline-time">'+item.time+'</span>'+
+        '<span class="outline-label">'+label+'</span>'+
+        '<span class="outline-arrow">▼</span>'+
+        '</div>'+
+        '<div class="outline-body"><div class="outline-content">'+body+'</div></div>';
       con.appendChild(d);
     });
   });
@@ -3191,9 +3441,31 @@ function buildPhrases(){
     con.appendChild(d);
   });
 }
+function showKpLang(lang, btn){
+  document.getElementById('kpZh').style.display=lang==='zh'?'block':'none';
+  document.getElementById('kpEn').style.display=lang==='en'?'block':'none';
+  document.querySelectorAll('#kpLangZh,#kpLangEn').forEach(function(b){b.classList.remove('active');});
+  if(btn) btn.classList.add('active');
+}
+function showStoryLang(lang, btn){
+  document.getElementById('storyZh').style.display=lang==='zh'?'block':'none';
+  document.getElementById('storyEn').style.display=lang==='en'?'block':'none';
+  document.querySelectorAll('#storyLangZh,#storyLangEn').forEach(function(b){b.classList.remove('active');});
+  if(btn) btn.classList.add('active');
+}
+function readStory(){
+  var isEn=document.getElementById('storyEn')&&document.getElementById('storyEn').style.display!=='none';
+  var el=document.getElementById(isEn?'storyEn':'storyZh');
+  if(!el)return;
+  speakText(el.innerText||el.textContent,'zh-TW',null);
+}
 function phraseSpeak(btn){
   var idx=parseInt(btn.getAttribute('data-idx'));
-  if(keyPhrases[idx])speakText(keyPhrases[idx].zh,'zh-TW',btn);
+  if(!keyPhrases[idx])return;
+  var isEn=LANG_MODE==='en';
+  var text=isEn?keyPhrases[idx].en:keyPhrases[idx].zh;
+  var lang=isEn?'en-US':'zh-TW';
+  speakText(text,lang,btn);
 }
 
 // AI Opener
@@ -3263,22 +3535,27 @@ async function generateOpener(){
 
 // ══ Image Associations ══
 const imgData=[
-  {num:'❶',deed:'不殺生',icon:'🕊️',assoc:'雙手輕捧一隻小鳥，慢慢打開手掌讓牠飛翔。生命得到自由的瞬間，就是慈悲。'},
-  {num:'❷',deed:'不偷盜',icon:'🤲',assoc:'雙手張開、手心向上——空手坦蕩蕩，沒有抓住不屬於自己的東西。廉潔就是這樣的雙手。'},
-  {num:'❸',deed:'不邪淫',icon:'🪷',assoc:'一朵白蓮花從淤泥中升起，潔白無瑕，不被污染。清淨的心靈如同蓮花出水。'},
-  {num:'❹',deed:'不妄語',icon:'🌸',assoc:'嘴巴裡飄出蓮花的香氣——因為說的每句話都是真實的，所以口常清淨如優缽羅香。'},
-  {num:'❺',deed:'不兩舌',icon:'🌉',assoc:'一座橋梁連接兩岸——不是撬棍把兩邊分開。你的話語是連接人心的橋，而非製造裂痕的利器。'},
-  {num:'❻',deed:'不惡口',icon:'🍃',assoc:'春風輕輕拂過臉頰，溫柔而不傷人。說話如春風，讓人感到舒適愉悅。'},
-  {num:'❼',deed:'不綺語',icon:'🪙',assoc:'每一個字都是一枚金幣——珍貴到不能浪費。說之前先問：這句話值得這枚金幣嗎？'},
-  {num:'❽',deed:'不貪欲',icon:'🖐️',assoc:'雙手完全張開，手指舒展——不握拳抓取，讓一切如流水自然流過。知足是最大的財富。'},
-  {num:'❾',deed:'不瞋恚',icon:'🏞️',assoc:'山中湖面，一片風平浪靜，倒映著藍天白雲。心如此湖——不被憤怒掀起波瀾。'},
-  {num:'❿',deed:'不邪見',icon:'🕯️',assoc:'黑暗中一盞油燈，照亮了腳下的路——讓你看清因果的方向，不迷失在虛假的信念中。'},
+  {num:'❶',deed:'不殺生',deedEn:'Non-killing',icon:'🕊️',assoc:'雙手輕捧一隻小鳥，慢慢打開手掌讓牠飛翔。生命得到自由的瞬間，就是慈悲。',assocEn:'Gently hold a small bird in cupped hands, then slowly open your palms and let it fly free. The moment life regains its freedom — that is compassion.'},
+  {num:'❷',deed:'不偷盜',deedEn:'Non-stealing',icon:'🤲',assoc:'雙手張開、手心向上——空手坦蕩蕩，沒有抓住不屬於自己的東西。廉潔就是這樣的雙手。',assocEn:'Open palms facing upward — empty hands, taking nothing that does not belong to you. Integrity looks exactly like these open hands.'},
+  {num:'❸',deed:'不邪淫',deedEn:'No sexual misconduct',icon:'🪷',assoc:'一朵白蓮花從淤泥中升起，潔白無瑕，不被污染。清淨的心靈如同蓮花出水。',assocEn:'A white lotus rises from muddy water — pure and unstained. A pure mind is like the lotus emerging from the mud, untouched by what surrounds it.'},
+  {num:'❹',deed:'不妄語',deedEn:'Non-false speech',icon:'🌸',assoc:'嘴巴裡飄出蓮花的香氣——因為說的每句話都是真實的，所以口常清淨如優缽羅香。',assocEn:'From your mouth drifts lotus fragrance — because every word you speak is true, your mouth is always pure as the utpala lotus perfume.'},
+  {num:'❺',deed:'不兩舌',deedEn:'Non-divisive speech',icon:'🌉',assoc:'一座橋梁連接兩岸——不是撬棍把兩邊分開。你的話語是連接人心的橋，而非製造裂痕的利器。',assocEn:'A bridge connecting two shores — not a wedge splitting them apart. Your words are a bridge linking hearts, not a tool to create rifts.'},
+  {num:'❻',deed:'不惡口',deedEn:'Non-harsh speech',icon:'🍃',assoc:'春風輕輕拂過臉頰，溫柔而不傷人。說話如春風，讓人感到舒適愉悅。',assocEn:'A gentle spring breeze lightly brushing your cheek — warm without harming. Speak like the spring breeze, making people feel comfortable and at ease.'},
+  {num:'❼',deed:'不綺語',deedEn:'No idle chatter',icon:'🪙',assoc:'每一個字都是一枚金幣——珍貴到不能浪費。說之前先問：這句話值得這枚金幣嗎？',assocEn:'Every word is a gold coin — too precious to waste. Before you speak, ask: "Is this sentence worth this coin?"'},
+  {num:'❽',deed:'不貪欲',deedEn:'Non-greed',icon:'🖐️',assoc:'雙手完全張開，手指舒展——不握拳抓取，讓一切如流水自然流過。知足是最大的財富。',assocEn:'Fully open hands, fingers relaxed — no grasping, no seizing, letting everything flow through like water. Contentment is the greatest wealth.'},
+  {num:'❾',deed:'不瞋恚',deedEn:'Non-hatred',icon:'🏞️',assoc:'山中湖面，一片風平浪靜，倒映著藍天白雲。心如此湖——不被憤怒掀起波瀾。',assocEn:'A mountain lake, perfectly still, mirroring blue sky and white clouds. Let your mind be like this lake — undisturbed by waves of anger.'},
+  {num:'❿',deed:'不邪見',deedEn:'Non-wrong-view',icon:'🕯️',assoc:'黑暗中一盞油燈，照亮了腳下的路——讓你看清因果的方向，不迷失在虛假的信念中。',assocEn:'An oil lamp in the darkness illuminating the path ahead — helping you see the direction of cause and effect, never lost in false beliefs.'},
 ];
 function buildImgGrid(){
+  var isEn=LANG_MODE==='en';
   const con=document.getElementById('imgGrid');
+  if(!con)return;
+  con.innerHTML='';
   imgData.forEach(item=>{
+    var deed=isEn&&item.deedEn?item.deedEn:item.deed;
+    var assoc=isEn&&item.assocEn?item.assocEn:item.assoc;
     const d=document.createElement('div');d.className='img-card';
-    d.innerHTML=`<div class="img-num">${item.num}</div><span class="img-icon">${item.icon}</span><div class="img-deed">${item.deed}</div><div class="img-assoc">${item.assoc}</div>`;
+    d.innerHTML='<div class="img-num">'+item.num+'</div><span class="img-icon">'+item.icon+'</span><div class="img-deed">'+deed+'</div><div class="img-assoc">'+assoc+'</div>';
     con.appendChild(d);
   });
 }
@@ -4339,6 +4616,14 @@ function delRecFromList(key){
 // ── Social / Friends ──
 function getFriends(){try{return JSON.parse(lsGet('sjyd_friends')||'[]');}catch(e){return [];}}
 function saveFriends(f){try{lsSet('sjyd_friends',JSON.stringify(f));}catch(e){}}
+function deleteFriend(nickname){
+  if(!confirm('確定要刪除好友「'+nickname+'」？')) return;
+  var friends=getFriends().filter(function(f){return f.nickname!==nickname;});
+  saveFriends(friends);
+  renderLeaderboard();
+  syncToFirestore();
+  showToast('已刪除好友「'+nickname+'」');
+}
 function getNickname(){return lsGet('sjyd_nickname')||'修行者';}
 function saveNickname(){
   var v=document.getElementById('myNickname').value.trim();
@@ -4450,6 +4735,7 @@ function renderLeaderboard(){
       +'<div class="lb-stats">✅ 完成'+done+'天 · 📝 筆記'+(f.notes_count||0)+'則 · 🏅 成就'+achvCount+'個</div>'
       +'</div>'
       +'<div class="lb-prog">'+pct+'%</div>'
+      +(f.isMe?'':'<button class="lb-del-btn" onclick="deleteFriend(\'' + f.nickname.replace(/'/g,"\\'")+'\')" title="刪除好友" style="background:none;border:none;color:#e74c3c;cursor:pointer;font-size:1rem;padding:2px 6px;opacity:.7;">✕</button>')
       +'</div>';
   }).join('');
 }
@@ -5016,6 +5302,7 @@ function renderPracticeLeaderboard(){
         +'<div class="plb-detail">共'+f.practiceTotal+'題'+(f.practiceAcc?' · 正確率'+f.practiceAcc+'%':'')+'</div>'
         +'</div>'
         +'<div class="plb-score">'+f.practicePoints+'分</div>'
+        +(f.isMe?'':'<button onclick="deleteFriend(\"'+f.nickname+'\")" style="background:none;border:none;color:#e74c3c;cursor:pointer;padding:2px 6px;opacity:.7;" title="刪除好友">✕</button>')
         +'</div>';
     }).join('');
 }
