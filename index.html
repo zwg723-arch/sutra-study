@@ -1561,8 +1561,8 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 
 <div class="voice-gender-bar" id="voiceGenderBar">
   <span class="voice-gender-label">🔊 聲音：</span>
-  <button class="voice-gender-btn active" data-voice="female" onclick="setTtsVoice('female')"><span style="font-size:.9em;vertical-align:middle;line-height:1;">♀</span> 女聲 Sulafat</button>
-  <button class="voice-gender-btn" data-voice="male" onclick="setTtsVoice('male')"><span style="font-size:.9em;vertical-align:middle;line-height:1;">♂</span> 男聲 Enceladus</button>
+  <button class="voice-gender-btn active" data-voice="female" onclick="setTtsVoice('female')">女聲 Sulafat</button>
+  <button class="voice-gender-btn" data-voice="male" onclick="setTtsVoice('male')">男聲 Enceladus</button>
 </div>
 
 <nav class="nav-tabs">
@@ -2390,12 +2390,11 @@ function setTtsVoice(v){
     b.classList.toggle('active', b.getAttribute('data-voice')===v);
   });
 }
-(function loadTtsVoicePref(){
-  try{
-    var s=localStorage.getItem('sjyd_tts_voice');
-    if(s==='male'||s==='female') TTS_VOICE=s;
-  }catch(e){}
-})();
+// Load voice pref immediately (just the variable)
+try{
+  var _vp=localStorage.getItem('sjyd_tts_voice');
+  if(_vp==='male'||_vp==='female') TTS_VOICE=_vp;
+}catch(e){}
 
 function stopCurrentTts(){
   try{
@@ -2413,6 +2412,8 @@ function stopCurrentTts(){
 }
 
 async function speakText(text,lang,btn){
+  // Snapshot voice at call time to prevent any race conditions
+  var voiceNow = TTS_VOICE || 'female';
   // Toggle off if same button
   if(btn && btn===currentTtsBtn){ stopCurrentTts(); return; }
   stopCurrentTts();
@@ -2428,7 +2429,7 @@ async function speakText(text,lang,btn){
     var r=await fetch(TTS_PROXY,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({text:text,lang:lang||'zh-TW',voice:TTS_VOICE||'female'})
+      body:JSON.stringify({text:text,lang:lang||'zh-TW',voice:voiceNow})
     });
     var d=await r.json();
     if(!d.audioContent) throw new Error(d.error||'no audio');
@@ -2702,18 +2703,36 @@ function buildTF(){
   tfCurrent.forEach((item,idx)=>{
     var qText = (isEn && item.qEn) ? item.qEn : item.q;
     const div=document.createElement('div');div.className='quiz-card';
-    div.innerHTML=`<div class="quiz-q"><strong>第${idx+1}題．</strong>${item.q}</div>
-    <div class="tf-opts"><button class="tf-btn" onclick="checkTF(${idx},true,this)">○ 是（True）</button><button class="tf-btn" onclick="checkTF(${idx},false,this)">✕ 非（False）</button></div>
+    var tfQLabel = isEn ? `Q${idx+1}.` : `第${idx+1}題．`;
+    var tfTrue  = isEn ? '○ True' : '○ 是（True）';
+    var tfFalse = isEn ? '✕ False' : '✕ 非（False）';
+    div.innerHTML=`<div class="quiz-q"><strong>${tfQLabel}</strong>${qText}</div>
+    <div class="tf-opts"><button class="tf-btn" onclick="checkTF(${idx},true,this)">${tfTrue}</button><button class="tf-btn" onclick="checkTF(${idx},false,this)">${tfFalse}</button></div>
     <div class="quiz-feedback" id="tf-fb-${idx}"></div>`;
     con.appendChild(div);
   });
 }
 function checkTF(idx,val,btn){
+  var isEnTF=LANG_MODE==='en';
   const item=tfCurrent[idx];btn.parentElement.querySelectorAll('.tf-btn').forEach(b=>b.classList.add('disabled'));
   const fb=document.getElementById(`tf-fb-${idx}`);tfAnswered++;
   var correct=(val===item.ans);
-  if(correct){btn.classList.add('correct');fb.textContent='✅ 正確！'+(isEn && item.expEn ? item.expEn : item.exp);fb.className='quiz-feedback show feedback-correct';tfCorrect++;}
-  else{btn.classList.add('wrong');btn.parentElement.querySelectorAll('.tf-btn').forEach(b=>{if((b.textContent.includes('是')&&item.ans)||(b.textContent.includes('非')&&!item.ans))b.classList.add('correct');});fb.textContent='❌ 不正確。'+(isEn && item.expEn ? item.expEn : item.exp);fb.className='quiz-feedback show feedback-wrong';}
+  var expText=(isEnTF&&item.expEn)?item.expEn:item.exp;
+  if(correct){
+    btn.classList.add('correct');
+    fb.textContent=(isEnTF?'✅ Correct! ':'✅ 正確！')+expText;
+    fb.className='quiz-feedback show feedback-correct';tfCorrect++;
+  } else {
+    btn.classList.add('wrong');
+    // Highlight correct button
+    btn.parentElement.querySelectorAll('.tf-btn').forEach(b=>{
+      var bText=b.textContent;
+      if((bText.includes('True')||bText.includes('是'))&&item.ans) b.classList.add('correct');
+      if((bText.includes('False')||bText.includes('非'))&&!item.ans) b.classList.add('correct');
+    });
+    fb.textContent=(isEnTF?'❌ Incorrect. ':'❌ 不正確。')+expText;
+    fb.className='quiz-feedback show feedback-wrong';
+  }
   updateTFScore();
   try{logActivity('tf',{q:item.q,a:val?'是 (True)':'否 (False)',correct:correct});}catch(e){}
 }
@@ -2723,6 +2742,7 @@ function updateTFScore(){document.getElementById('tfScore').textContent=`${tfCor
 let mcqAnswered=0,mcqCorrect=0,mcqCurrent=[];
 function buildMCQ(){
   mcqCurrent=pickRandom(mcqBank,12);
+  var isEn=LANG_MODE==='en';
   const con=document.getElementById('mcqContainer');con.innerHTML='';mcqAnswered=0;mcqCorrect=0;updateMCQScore();
   mcqCurrent.forEach((item,idx)=>{
     var qText = (isEn && item.qEn) ? item.qEn : item.q;
@@ -3048,14 +3068,18 @@ async function submitTextAnswer(){
     setVS('AI評估中...');
   }catch(e){console.warn('submitTextAnswer setup:',e);}
   var refAns=vSession.currentRef||'';
-  var sysPrompt='你是海靜法師，一位慈悲嚴謹的佛法導師。請評估學生對《佛說十善業道經》問題的回答。'+
-    '評估格式必須按照以下結構（用繁體中文，語氣溫和鼓勵）：'+
-    '【評分】⭐⭐⭐⭐⭐（用1-5顆星，根據回答完整度和正確性）'+
-    '【亮點】指出回答中說得好的地方（1-2句，具體指出）'+
-    '【補充】列出重要的漏掉的知識點，用「參考答案補充：」引導（2-3句，具體內容）'+
-    '【鼓勵】一句正向鼓勵，以「隨喜讚嘆！🙏」結尾'+
-    '總字數120-160字。若學生說不知道，仍要給出完整參考答案作為補充。';
-  var userMsg='問題：'+vSession.currentQ+'\n\n參考答案要點：'+refAns+'\n\n學生的回答：'+text;
+  var isEnVQ = LANG_MODE==='en';
+  var sysPrompt = isEnVQ
+    ? 'You are Master Haijing, a compassionate Buddhist teacher. Evaluate the student answer about the Sutra on the Ten Wholesome Courses of Action. Give feedback in natural English in 2-3 flowing sentences: first note what was good, then gently add any key points they missed, end with brief encouragement. Do NOT use section headers like [Score] or [Highlights]. Do NOT mention any star ratings. Keep it conversational, warm, and under 80 words.'
+    : '你是海靜法師，一位慈悲嚴謹的佛法導師。請評估學生對《佛說十善業道經》問題的回答。'+
+      '評估格式必須按照以下結構（用繁體中文，語氣溫和鼓勵）：'+
+      '【亮點】指出回答中說得好的地方（1-2句，具體指出）'+
+      '【補充】列出重要的漏掉的知識點，用「參考答案補充：」引導（2-3句，具體內容）'+
+      '【鼓勵】一句正向鼓勵，以「隨喜讚嘆！🙏」結尾'+
+      '總字數80-120字。若學生說不知道，仍要給出完整參考答案作為補充。';
+  var userMsg = isEnVQ
+    ? 'Question: '+vSession.currentQ+'\n\nReference answer: '+refAns+'\n\nStudent answer: '+text
+    : '問題：'+vSession.currentQ+'\n\n參考答案要點：'+refAns+'\n\n學生的回答：'+text;
   try{
     var ev=await callAnthropicAPI({
       model:'claude-sonnet-4-20250514',max_tokens:600,
@@ -3063,7 +3087,14 @@ async function submitTextAnswer(){
       messages:[{role:'user',content:userMsg}]
     });
     try{addVH(vSession.currentQ,text,ev,refAns);}catch(e){}
-    try{speakAvatar(ev,function(){setTimeout(function(){try{nextVoiceQuestion();}catch(e){}},2500);});}catch(e){}
+    try{
+      var evLang = isEnVQ ? 'en-US' : 'zh-TW';
+      // For English: speak only a brief spoken version, not the full text
+      var spokenEv = isEnVQ
+        ? ev.replace(/[\[\]【】⭐★]/g,'').replace(/\s+/g,' ').trim().substring(0,150)
+        : ev.replace(/【評分】[^\r\n]*/,'').trim()
+      speakAvatar(spokenEv,function(){setTimeout(function(){try{nextVoiceQuestion();}catch(e){}},2500);},evLang);
+    }catch(e){}
   }catch(e){
     // Offline fallback: show reference answer
     var fb='感謝您的回答！🙏 參考答案要點：'+refAns.substring(0,100)+'...';
@@ -3193,19 +3224,23 @@ async function generateOpener(){
   res.textContent='AI 正在生成'+durLabel+'演講稿…';
 
   var structureGuide='';
+  var structureGuideEn='';
   if(speechDurSec===60){
     structureGuide='結構：①問題或故事開頭（30字）②點出十善業道主題（60字）③一個核心亮點（60字）④讓聽眾想繼續聽的結尾（30字）。';
+    structureGuideEn='Structure: ①Opening question or story (30 words) ②Introduce the ten wholesome deeds (60 words) ③One key insight with example (60 words) ④Closing that makes them want to learn more (30 words). ';
   } else if(speechDurSec===180){
     structureGuide='結構：①開場問題或故事（80字）②介紹十善業道是什麼（100字）③身口意三業各舉一例說明（150字）④十善如何改變人生（100字）⑤呼籲行動的結尾（80字）。';
+    structureGuideEn='Structure: ①Opening story or question (80 words) ②What the ten wholesome deeds are (100 words) ③One example each from body, speech, mind karma (150 words) ④How the ten wholesome deeds transform life (100 words) ⑤Call-to-action closing (80 words). ';
   } else {
     structureGuide='結構：①引人入勝的開場故事（150字）②十善業道背景與意義（150字）③身業三種詳解與現代應用（150字）④口業四種詳解與現代應用（150字）⑤意業三種詳解（100字）⑥迴向菩提與人生改變（100字）⑦有力的結語與行動呼籲（80字）。';
+    structureGuideEn='Structure: ①Engaging opening story (150 words) ②Background and meaning of the ten wholesome deeds (150 words) ③Three bodily deeds explained with modern applications (150 words) ④Four verbal deeds with modern examples (150 words) ⑤Three mental deeds explained (100 words) ⑥Dedicating to bodhi and transforming your life (100 words) ⑦Powerful closing with call to action (80 words). ';
   }
 
   try{
     var txt=await callAnthropicAPI({
       model:'claude-sonnet-4-20250514',max_tokens:1500,
       system:speechLang==='en'
-        ? 'You are a speech coach specializing in Buddhist dharma outreach. Generate a speech on the Ten Wholesome Courses of Action from the Sūtra of the Ten Wholesome Courses of Action. Requirements: ①appropriate for the specified audience ②natural spoken language ③concrete examples ④'+structureGuide+'Output in English. Output the speech content directly, no title or explanatory text.'
+        ? 'You are a speech coach specializing in Buddhist dharma outreach. Generate a speech on the Ten Wholesome Courses of Action from the Sūtra of the Ten Wholesome Courses of Action. Requirements: ①appropriate for the specified audience ②natural spoken language ③concrete examples ④'+structureGuideEn+'Output in English. Output the speech content directly, no title or explanatory text.'
         : '你是一位演講教練，專精佛學推廣。請生成一篇關於《佛說十善業道經》十善業道的演講稿。要求：①適合指定聽眾 ②流暢自然如口語 ③有具體例子 ④'+structureGuide+'用繁體中文，直接輸出演講稿內容，不要標題或說明文字。',
       messages:[{role:'user',content:(speechLang==='en'?'Audience: ':'聽眾：')+audience+'\n'+(speechLang==='en'?'Speech length: ':'演講時長：')+durLabel+'\n'+(speechLang==='en'?'Please generate a complete speech.':'請生成完整演講稿')}]
     });
@@ -3608,6 +3643,7 @@ function renderMiniPassage(idx){
 function mpTTS(btn){
   var idx=parseInt(btn.getAttribute('data-idx'));
   var lang=btn.getAttribute('data-lang');
+  btn.title = TTS_VOICE==='male' ? '男聲 Enceladus' : '女聲 Sulafat';
   speakText(lang==='zh'?sutraData[idx].zh:sutraData[idx].en,lang==='zh'?'zh-TW':'en-US',btn);
 }
 function mpToggleEn(btn){
@@ -4776,6 +4812,11 @@ function readPassage(idx,lang,btn){
   try{
     var t=lang==='zh'?sutraData[idx].zh:sutraData[idx].en;
     var l=lang==='zh'?'zh-TW':'en-US';
+    // Store orig with voice indicator so user can verify which voice will be used
+    if(btn && !btn.classList.contains('playing')){
+      var voiceLabel = TTS_VOICE==='male' ? '♂' : '♀';
+      btn.title = (TTS_VOICE==='male' ? '男聲 Enceladus' : '女聲 Sulafat');
+    }
     speakText(t,l,btn);
   }catch(e){console.warn('readPassage:',e);}
 }
@@ -5076,6 +5117,8 @@ function loadFromFirestore(uid, cb){
           if(d.nickname)     localStorage.setItem(pfx+'sjyd_nickname', d.nickname);
           if(d.planDone)     localStorage.setItem(pfx+'sjyd_done', JSON.stringify(d.planDone));
           if(d.planStart)    localStorage.setItem(pfx+'sjyd_start', d.planStart);
+          // Immediately reload plan state into memory so UI can render
+          try{if(typeof planLoadState==='function')planLoadState();}catch(e){}
           if(d.achievements) localStorage.setItem(pfx+'sjyd_achv', JSON.stringify(d.achievements));
           if(d.notes)        localStorage.setItem(pfx+'sjyd_notes', JSON.stringify(d.notes));
           if(d.activities)   localStorage.setItem(pfx+'sjyd_acts', JSON.stringify(d.activities));
@@ -5131,7 +5174,16 @@ function refreshAppState(){
       var panelId = activePanel ? activePanel.id.replace('jp-','') : 'notes';
       if(typeof showJPanel==='function') showJPanel(panelId, null);
     }
+    // Always re-render plan after cloud load (even if not active)
+    try{
+      if(planStartDate){
+        document.getElementById('planStartScreen').style.display='none';
+        document.getElementById('planMain').style.display='block';
+        document.getElementById('planTopbar').style.display='flex';
+      }
+    }catch(e){}
     if(activeId==='plan'){
+      try{if(typeof renderPlanDay==='function')renderPlanDay(planCurDay||1);}catch(e){}
       try{if(typeof renderPlanCal==='function')renderPlanCal();}catch(e){}
       try{if(typeof updatePlanProg==='function')updatePlanProg();}catch(e){}
     }
@@ -5350,11 +5402,18 @@ function restoreLineSession(){
   try{initJournal();}catch(e){console.warn('journal:',e);}
   // Show login button or user avatar after DOM ready
   try{updateAvatarBar();}catch(e){}
-  // Sync voice gender buttons
+  // Sync voice gender buttons to match loaded preference
   try{
     document.querySelectorAll('.voice-gender-btn').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-voice')===TTS_VOICE);
     });
+  }catch(e){}
+  // Also set the HTML active attr on the correct button
+  try{
+    var vbActive = document.querySelector('.voice-gender-btn[data-voice="'+TTS_VOICE+'"]');
+    if(vbActive) vbActive.classList.add('active');
+    var vbOther = document.querySelector('.voice-gender-btn[data-voice="'+(TTS_VOICE==='male'?'female':'male')+'"]');
+    if(vbOther) vbOther.classList.remove('active');
   }catch(e){}
 
   // ── Deep link: ?add=CODE → auto-fill friend code and navigate to social panel ──
