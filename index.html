@@ -1478,6 +1478,20 @@ html[data-theme="ink"] .header-compact-title{
 /* Site header — no bottom border when collapsed */
 .site-header.collapsed{border-bottom:none;}
 
+/* ── TTS Voice Gender Toggle ── */
+.voice-gender-bar{display:flex;align-items:center;justify-content:center;gap:6px;margin:0 0 10px;}
+.voice-gender-label{font-size:.78rem;color:var(--muted);font-weight:700;margin-right:2px;}
+.voice-gender-btn{padding:4px 14px;border:2px solid var(--border);border-radius:20px;background:var(--card-bg);color:var(--muted);font-size:.78rem;font-weight:700;cursor:pointer;-webkit-appearance:none;transition:all .15s;}
+.voice-gender-btn.active{background:var(--mint,#3dddd4);color:#fff;border-color:var(--mint,#3dddd4);}
+
+/* ── Bilingual Language Toggle ── */
+.lang-toggle-bar{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 10px;padding:6px 0;}
+.lang-toggle-btn{padding:5px 18px;border:2px solid var(--border);border-radius:20px;background:var(--card-bg);color:var(--muted);font-size:.82rem;font-weight:700;cursor:pointer;-webkit-appearance:none;transition:all .15s;letter-spacing:.04em;}
+.lang-toggle-btn.active{background:var(--red);color:#fff;border-color:var(--red);}
+html[data-theme="kawaii"] .lang-toggle-btn.active{background:var(--pink);border-color:var(--pink);}
+html[data-theme="ink"] .lang-toggle-btn.active{background:#1a3a5c;border-color:#7ba4ff;color:#d8e8f0;}
+.bilingual-tag{font-size:.72rem;background:rgba(61,221,212,.15);color:#3dddd4;border:1px solid #3dddd4;border-radius:10px;padding:1px 8px;font-weight:700;margin-left:4px;}
+
 /* ── LINE User Avatar ── */
 .user-avatar-wrap{display:flex;align-items:center;gap:7px;flex-shrink:0;margin-left:4px;cursor:pointer;}
 .user-avatar-img{width:30px;height:30px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;flex-shrink:0;}
@@ -1532,6 +1546,12 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <button class="fz-btn" onclick="setFont('small',this)">小</button>
   <button class="fz-btn active" onclick="setFont('medium',this)">中</button>
   <button class="fz-btn" onclick="setFont('large',this)">大</button>
+</div>
+
+<div class="voice-gender-bar" id="voiceGenderBar">
+  <span class="voice-gender-label">🔊 聲音：</span>
+  <button class="voice-gender-btn active" data-voice="female" onclick="setTtsVoice('female')">♀ 女聲 Sulafat</button>
+  <button class="voice-gender-btn" data-voice="male" onclick="setTtsVoice('male')">♂ 男聲 Enceladus</button>
 </div>
 
 <nav class="nav-tabs">
@@ -1718,7 +1738,11 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 <div class="section" id="truefalse">
   <div class="section-title">是非題</div><div class="section-title-en">True / False</div><div class="ornament">❧ 卍 ❧</div>
   <div class="score-board"><div class="score-num" id="tfScore">0 / 0</div><div class="score-label">成績 · Score</div></div>
-  <div id="tfContainer"></div>
+  <div class="lang-toggle-bar">
+        <button class="lang-toggle-btn active" data-lang="zh" onclick="setLangMode('zh')">中文</button>
+        <button class="lang-toggle-btn" data-lang="en" onclick="setLangMode('en')">English</button>
+      </div>
+      <div id="tfContainer"></div>
   <div class="btn-row mt20"><button class="btn btn-gold" onclick="buildTF()">🔀 換一批題目</button><button class="btn btn-secondary" onclick="buildTF()">🔄 重新作答</button></div>
 </div>
 
@@ -1726,7 +1750,11 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 <div class="section" id="mcq">
   <div class="section-title">問答選擇題</div><div class="section-title-en">Multiple Choice</div><div class="ornament">❧ 卍 ❧</div>
   <div class="score-board"><div class="score-num" id="mcqScore">0 / 0</div><div class="score-label">成績 · Score</div></div>
-  <div id="mcqContainer"></div>
+  <div class="lang-toggle-bar">
+        <button class="lang-toggle-btn active" data-lang="zh" onclick="setLangMode('zh')">中文</button>
+        <button class="lang-toggle-btn" data-lang="en" onclick="setLangMode('en')">English</button>
+      </div>
+      <div id="mcqContainer"></div>
   <div class="btn-row mt20"><button class="btn btn-gold" onclick="buildMCQ()">🔀 換一批題目</button><button class="btn btn-secondary" onclick="buildMCQ()">🔄 重新作答</button></div>
 </div>
 
@@ -1734,7 +1762,11 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 <div class="section" id="shortans">
   <div class="section-title">簡答題</div><div class="section-title-en">Short Answer</div><div class="ornament">❧ 卍 ❧</div>
   <p style="text-align:center;color:var(--text-muted);margin-bottom:20px;font-size:.92rem;">先自行作答，再點擊查看參考答案</p>
-  <div id="saContainer"></div>
+  <div class="lang-toggle-bar">
+        <button class="lang-toggle-btn active" data-lang="zh" onclick="setLangMode('zh')">中文</button>
+        <button class="lang-toggle-btn" data-lang="en" onclick="setLangMode('en')">English</button>
+      </div>
+      <div id="saContainer"></div>
   <div class="btn-row mt20"><button class="btn btn-gold" onclick="buildSA()">🔀 換一批題目</button></div>
 </div>
 
@@ -1749,6 +1781,10 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
       <div class="voice-bubble" id="voiceBubble">阿彌陀佛！歡迎學習《佛說十善業道經》。點擊「開始問答」，我將以語音向您提問，您可語音或文字回答。🙏</div>
     </div>
     <div class="voice-status" id="voiceStatus">點擊「開始問答」啟動練習</div>
+    <div class="lang-toggle-bar" style="margin:8px 0 12px;">
+      <button class="lang-toggle-btn active" data-lang="zh" onclick="setLangMode('zh')">中文問答</button>
+      <button class="lang-toggle-btn" data-lang="en" onclick="setLangMode('en')">English Q&amp;A</button>
+    </div>
     <div class="voice-controls">
       <button class="btn btn-jade" id="startBtn" onclick="startVoiceSession()">▶ 開始問答</button>
       <button class="voice-record-btn" id="recordBtn" onclick="toggleRecord()" style="display:none;">🎤</button>
@@ -1814,7 +1850,11 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <h3>🤖 AI 個性化演講稿生成</h3>
     <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:14px;">告訴 AI 您的聽眾是誰，選擇演講時長，AI 為您生成完整演講稿。</p>
     <textarea class="sa-textarea" id="audienceInput" placeholder="例如：我的聽眾是老年社區的長輩，大約 20 人，大多數沒有接觸過佛法。" style="min-height:65px;"></textarea>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px;">
+    <div class="lang-toggle-bar" style="margin-bottom:10px;">
+        <button class="lang-toggle-btn speech-lang-btn active" data-slang="zh" onclick="setSpeechLang('zh',this)">🀄 中文演講</button>
+        <button class="lang-toggle-btn speech-lang-btn" data-slang="en" onclick="setSpeechLang('en',this)">🔤 English Speech</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px;">
       <span style="font-size:.85rem;color:var(--text-muted);font-weight:700;align-self:center;">演講時長：</span>
       <button class="speech-dur-btn active" data-dur="60" onclick="setSpeechDur(this)">⏱ 60秒</button>
       <button class="speech-dur-btn" data-dur="180" onclick="setSpeechDur(this)">⏱ 3分鐘</button>
@@ -1823,7 +1863,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <button class="btn btn-gold" onclick="generateOpener()" style="margin-top:8px;">✨ 生成演講稿</button>
     <div class="ai-result" id="aiOpenerResult" style="display:none;"></div>
     <div class="btn-row" id="openerBtnRow" style="display:none;margin-top:10px;">
-      <button class="btn btn-jade" onclick="speakText(document.getElementById('aiOpenerResult').textContent,'zh-TW')">🔊 朗讀演講稿</button>
+      <button class="btn btn-jade" onclick="speakText(document.getElementById('aiOpenerResult').textContent, speechLang==='en' ? 'en-US' : 'zh-TW', this)">🔊 朗讀演講稿</button>
       <button class="btn btn-secondary" onclick="copyOpener()">📋 複製</button>
     </div>
   </div>
@@ -2303,10 +2343,48 @@ function showMemPanel(id,btn){
 }
 
 // ══ TTS Helper ══
+// ── Global Language Mode ──
+var LANG_MODE = 'zh'; // 'zh' | 'en'
+function setLangMode(mode){
+  LANG_MODE = mode;
+  localStorage.setItem('sjyd_lang', mode);
+  // Update all toggle buttons
+  document.querySelectorAll('.lang-toggle-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-lang') === mode);
+  });
+  // Rebuild active practice section
+  try{buildTF();}catch(e){}
+  try{buildMCQ();}catch(e){}
+  try{buildSA();}catch(e){}
+  // Flash card
+  try{updateCard();}catch(e){}
+}
+(function loadLangPref(){
+  try{
+    var saved = localStorage.getItem('sjyd_lang');
+    if(saved === 'en') LANG_MODE = 'en';
+  }catch(e){}
+})();
+
 // ── Google Cloud TTS ──
 var currentTtsBtn=null;
 var currentTtsAudio=null;
 var TTS_PROXY='/api/tts';
+var TTS_VOICE='female'; // 'female' | 'male'
+
+function setTtsVoice(v){
+  TTS_VOICE=v;
+  try{localStorage.setItem('sjyd_tts_voice',v);}catch(e){}
+  document.querySelectorAll('.voice-gender-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-voice')===v);
+  });
+}
+(function loadTtsVoicePref(){
+  try{
+    var s=localStorage.getItem('sjyd_tts_voice');
+    if(s==='male'||s==='female') TTS_VOICE=s;
+  }catch(e){}
+})();
 
 function stopCurrentTts(){
   try{
@@ -2339,7 +2417,7 @@ async function speakText(text,lang,btn){
     var r=await fetch(TTS_PROXY,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({text:text,lang:lang||'zh-TW'})
+      body:JSON.stringify({text:text,lang:lang||'zh-TW',voice:TTS_VOICE||'female'})
     });
     var d=await r.json();
     if(!d.audioContent) throw new Error(d.error||'no audio');
@@ -2477,12 +2555,22 @@ const fcCards=[
 ];
 let fcIdx=0,fcOrder=[...Array(10).keys()],isFlipped=false;
 function updateCard(){
-  const c=fcCards[fcOrder[fcIdx]];
-  document.getElementById('fcZh').textContent=c.zh;
-  document.getElementById('fcEn').textContent=c.en;
-  document.getElementById('fcDesc').textContent=c.desc;
-  document.getElementById('fcNum').textContent=fcIdx+1;
-  document.getElementById('fcProgress').textContent=`卡片 ${fcIdx+1} / 10`;
+  var card=fcCards[fcOrder[fcIdx]];
+  var isEn = LANG_MODE==='en';
+  // Front: show EN term if in English mode
+  var zhEl=document.getElementById('fcZh');
+  var enEl=document.getElementById('fcEn');
+  var descEl=document.getElementById('fcDesc');
+  if(zhEl) zhEl.textContent = isEn ? card.en : card.zh;
+  if(enEl) enEl.textContent = isEn ? card.zh : card.en;
+  if(descEl) descEl.textContent = card.desc;
+  // Update hint text
+  var hint=document.querySelector('.fc-hint');
+  if(hint) hint.textContent = isEn ? 'Tap to flip' : '點擊翻轉';
+  var prog=document.getElementById('fcProgress');
+  if(prog) prog.textContent = isEn ? `Card ${fcIdx+1} / 10` : `卡片 ${fcIdx+1} / 10`;
+  var num=document.getElementById('fcNum');
+  if(num) num.textContent=fcIdx+1;
   document.getElementById('fcCard').classList.remove('flipped');
   isFlipped=false;
 }
@@ -2493,116 +2581,115 @@ function shuffleCards(){for(let i=fcOrder.length-1;i>0;i--){const j=Math.floor(M
 
 // ══ Question Banks ══
 const tfBank=[
-  {q:'《佛說十善業道經》的說法地點是在靈鷲山。',ans:false,exp:'說法地點是娑竭羅龍宮（海龍王宮殿），非靈鷲山。'},
-  {q:'十善業道分身業3種、口業4種、意業3種，合計10種。',ans:true,exp:'正確！三業各3、4、3種，合計10種。'},
-  {q:'不殺生是口業的第一種善業。',ans:false,exp:'不殺生是「身業」第一種，口業第一是不妄語。'},
-  {q:'離妄語可得「口常清淨，如優缽羅香」的功德。',ans:true,exp:'正確！離妄語八種天所讚法之首。'},
-  {q:'十善業道只是世間人天善道的根本，與出世間菩提無關。',ans:false,exp:'經文明言十善業道亦是出世間聲聞、獨覺、無上菩提之根本。'},
-  {q:'本經譯者實叉難陀是唐代于闐國（今新疆）的三藏法師。',ans:true,exp:'正確！實叉難陀（Śikṣānanda, 652–710），于闐國人。'},
-  {q:'不綺語屬於「意業」範疇。',ans:false,exp:'不綺語屬「口業」，是口業的第四種。'},
-  {q:'離殺生得十種離惱法，包括「身常無病」和「壽命長遠」。',ans:true,exp:'正確！十益之第四（身常無病）和第五（壽命長遠）。'},
-  {q:'不邪見屬於意業，離邪見可得十種功德法。',ans:true,exp:'正確！意業三種之三，離邪見得十功德法。'},
-  {q:'十善業道若能迴向，只能成就人天福報。',ans:false,exp:'經文明言可迴向無上正等菩提，後成佛時得圓滿佛果。'},
-  {q:'佛說：「一切眾生，心想異故，造業亦異，由是故有諸趣輪迴。」',ans:true,exp:'正確！這是本經開宗明義的核心教導。'},
-  {q:'本經聽法眾包括八千大比丘眾及三萬二千菩薩摩訶薩。',ans:true,exp:'正確！序分明載。'},
-  {q:'「不兩舌」的意思是不說粗惡的語言。',ans:false,exp:'不兩舌是不搬弄是非、不挑撥離間。不說粗惡語是「不惡口」。'},
-  {q:'意業包括不貪欲、不瞋恚和不邪見三種。',ans:true,exp:'正確！意業三種全是心念層面的善業。'},
-  {q:'離殺生的功德包括「恒為非人之所守護」。',ans:true,exp:'正確！離殺生十益之第六。'},
-  {q:'「不惡口」屬於身業的一種。',ans:false,exp:'「不惡口」屬口業，不是身業。身業是不殺、不盜、不邪淫。'},
-  {q:'離邪見的功德包括「深信因果，寧殞身命，終不作惡」。',ans:true,exp:'正確！離邪見十功德法之第二。'},
-  {q:'十善業道的梵文是daśa-kuśala-karmapatha。',ans:true,exp:'正確！daśa（十）+ kuśala（善）+ karmapatha（業道）。'},
-  {q:'本經結尾，大眾聞佛所說後皆大歡喜，信受奉行。',ans:true,exp:'正確！流通分明載：「皆大歡喜，信受奉行。」'},
-  {q:'「不貪欲」是指不貪著他人財物及五欲之樂。',ans:true,exp:'正確！不貪欲是心念層面的善業，培養知足喜捨。'},
-  {q:'本經主要是佛陀對比丘眾講說的。',ans:false,exp:'本經主要以龍王為說法對象，雖有比丘在場。'},
-  {q:'離妄語所得「天所讚法」共有八種。',ans:true,exp:'正確！離妄語得八種天所讚法。'},
-  {q:'十善業道中，口業的種類最多，共有四種。',ans:true,exp:'正確！口業有四種，是十善中數量最多的類別。'},
-  {q:'「不邪淫」只適用於出家修行者。',ans:false,exp:'不正確。不邪淫對在家居士同樣重要，指不行不正當男女關係。'},
-  {q:'佛說佈施、持戒、忍辱、精進、禪定、智慧皆以十善業道為根本。',ans:true,exp:'正確！經文明言：「皆由十善業道而為根本，具足得生。」'},
-{q:'「不瞋恚」屬於意業，指不生氣、不懷恨，保持平靜的心。',ans:true,exp:'正確！意業三種之二，瞋恚是心念中的惡業。'},
-  {q:'離偷盜可得「多人愛念」的功德。',ans:true,exp:'正確！離偷盜十種可保信法之第二。'},
-  {q:'本經說「施莊嚴故，能捨一切所有」是以布施修行。',ans:true,exp:'正確！菩薩以十善業為基礎，先以施莊嚴，能捨一切。'},
-  {q:'十善業道中，「不邪淫」共可得八種功德。',ans:false,exp:'不邪淫得四種智所讚法，不是八種。離妄語才得八種。'},
-  {q:'離惡口可成就「言不乖度、言皆利益」等八種淨業。',ans:true,exp:'正確！離惡口八種淨業之首兩種。'},
-  {q:'「戒莊嚴」意指以持戒修行，能遠離一切過失毀辱。',ans:true,exp:'正確！菩薩修行次第：施、戒、忍、進、禪、慧，皆以十善為根。'},
-  {q:'本經流通分記載：大眾聞佛所說法，「皆大歡喜，各作禮而退」。',ans:false,exp:'流通分是「皆大歡喜，信受奉行」，不是「各作禮而退」。'},
-  {q:'離邪見可得「真善意樂、真善等侶」的功德。',ans:true,exp:'正確！離邪見十功德法之第一。'},
-  {q:'本經的十善業道可以幫助人成就人天福報，但無法成就佛果。',ans:false,exp:'錯誤！本經明言迴向無上菩提後，可成就圓滿佛果。'},
-  {q:'「忍辱莊嚴故，得佛圓音，具眾相好。」',ans:true,exp:'正確！忍辱莊嚴的功德是佛圓音及眾相好。'},
-  {q:'不兩舌可得「五種不可壞法」，包括「不壞身、不壞眷屬」。',ans:true,exp:'正確！五種不可壞：不壞身、不壞眷屬、不壞信、不壞法行、不壞善知識。'},
-  {q:'「禪定莊嚴故，能生慚愧輕安等法」。',ans:true,exp:'正確！禪定莊嚴的功德是生慚愧、輕安。'},
-  {q:'海龍王的名字是娑竭羅（Sāgara）。',ans:true,exp:'正確！娑竭羅是梵文 Sāgara，意為「海」。'},
-  {q:'本經的核心主題是「持咒可以消業」。',ans:false,exp:'本經核心是十善業道，強調行為、語言、心念的淨化，非持咒。'},
-  {q:'「智慧莊嚴故，能斷一切分別妄見」。',ans:true,exp:'正確！智慧莊嚴的功德是斷一切分別妄見。'},
+  {q:'《佛說十善業道經》的說法地點是在靈鷲山。',ans:false,exp:'說法地點是娑竭羅龍宮（海龍王宮殿），非靈鷲山。',qEn:'The Sūtra on the Ten Wholesome Courses of Action was delivered on Vulture Peak (Gṛdhrakūṭa).',expEn:'False. The Buddha taught at the Palace of Sāgara the Dragon King, not on Vulture Peak.'},
+  {q:'十善業道分身業3種、口業4種、意業3種，合計10種。',ans:true,exp:'正確！三業各3、4、3種，合計10種。',qEn:'The ten wholesome deeds consist of 3 bodily, 4 verbal, and 3 mental deeds, totaling ten.',expEn:'True! The \'3-4-3\' structure: 3 bodily, 4 verbal, 3 mental.'},
+  {q:'不殺生是口業的第一種善業。',ans:false,exp:'不殺生是「身業」第一種，口業第一是不妄語。',qEn:'Non-killing (prāṇātipāta-virati) is the first verbal deed.',expEn:'False. Non-killing is the first bodily deed. The first verbal deed is non-false speech (mṛṣāvāda-virati).'},
+  {q:'離妄語可得「口常清淨，如優缽羅香」的功德。',ans:true,exp:'正確！離妄語八種天所讚法之首。',qEn:'Abstaining from false speech yields the virtue \'a mouth ever pure as the fragrance of the utpala lotus.\'',expEn:'True! This is the first of the eight virtues praised by gods arising from non-false speech.'},
+  {q:'十善業道只是世間人天善道的根本，與出世間菩提無關。',ans:false,exp:'經文明言十善業道亦是出世間聲聞、獨覺、無上菩提之根本。',qEn:'The ten wholesome deeds are only the foundation of worldly goodness and are unrelated to transcendent bodhi.',expEn:'False. The sutra explicitly states they are also the foundation for śrāvaka-bodhi, pratyekabuddha-bodhi, and unsurpassed bodhi.'},
+  {q:'本經譯者實叉難陀是唐代于闐國（今新疆）的三藏法師。',ans:true,exp:'正確！實叉難陀（Śikṣānanda, 652–710），于闐國人。',qEn:'Śikṣānanda, the translator, was a Tang-dynasty Tripiṭaka master from Khotan (modern Xinjiang).',expEn:'True! Śikṣānanda (652–710) was from Khotan and translated under imperial edict.'},
+  {q:'不綺語屬於「意業」範疇。',ans:false,exp:'不綺語屬「口業」，是口業的第四種。',qEn:'Idle chatter (prapañca-virati) belongs to mental karma.',expEn:'False. Idle chatter belongs to verbal karma — it is the fourth verbal wholesome deed.'},
+  {q:'離殺生得十種離惱法，包括「身常無病」和「壽命長遠」。',ans:true,exp:'正確！十益之第四（身常無病）和第五（壽命長遠）。',qEn:'Abstaining from killing includes the benefits \'body ever free from illness\' and \'long life.\'',expEn:'True! These are the 4th and 5th of the ten benefits of non-killing.'},
+  {q:'不邪見屬於意業，離邪見可得十種功德法。',ans:true,exp:'正確！意業三種之三，離邪見得十功德法。',qEn:'Non-wrong-view is a mental deed, and abstaining from it yields ten virtuous qualities.',expEn:'True! Non-wrong-view (mithyādṛṣṭi-virati) is the third mental deed.'},
+  {q:'十善業道若能迴向，只能成就人天福報。',ans:false,exp:'經文明言可迴向無上正等菩提，後成佛時得圓滿佛果。',qEn:'When the ten wholesome deeds are dedicated to enlightenment, one can only attain rebirth in the heavens.',expEn:'False. The sutra states one can ultimately attain perfect buddhahood (anuttarā-samyak-saṃbodhi).'},
+  {q:'佛說：「一切眾生，心想異故，造業亦異，由是故有諸趣輪迴。」',ans:true,exp:'正確！這是本經開宗明義的核心教導。',qEn:'The Buddha said: \'Because the minds of sentient beings differ, their actions also differ, and thus they transmigrate through various realms.\'',expEn:'True! This is the central teaching of the sutra.'},
+  {q:'本經聽法眾包括八千大比丘眾及三萬二千菩薩摩訶薩。',ans:true,exp:'正確！序分明載。',qEn:'The assembly included eight thousand great bhikṣus and thirty-two thousand bodhisattva-mahāsattvas.',expEn:'True! As stated in the introductory section.'},
+  {q:'「不兩舌」的意思是不說粗惡的語言。',ans:false,exp:'不兩舌是不搬弄是非、不挑撥離間。不說粗惡語是「不惡口」。',qEn:'Non-divisive speech (paiśunya-virati) means not using coarse or harsh language.',expEn:'False. Non-divisive speech means not gossiping or sowing discord. Not using harsh language is non-harsh speech (pāruṣya-virati).'},
+  {q:'意業包括不貪欲、不瞋恚和不邪見三種。',ans:true,exp:'正確！意業三種全是心念層面的善業。',qEn:'Mental karma includes non-greed, non-hatred, and non-wrong-view.',expEn:'True! All three mental wholesome deeds operate at the level of mind and intention.'},
+  {q:'離殺生的功德包括「恒為非人之所守護」。',ans:true,exp:'正確！離殺生十益之第六。',qEn:'Abstaining from killing includes the benefit \'ever being protected by non-human beings.\'',expEn:'True! This is the sixth of the ten benefits of non-killing.'},
+  {q:'「不惡口」屬於身業的一種。',ans:false,exp:'「不惡口」屬口業，不是身業。身業是不殺、不盜、不邪淫。',qEn:'Non-harsh speech (pāruṣya-virati) is a type of bodily karma.',expEn:'False. Non-harsh speech is verbal karma. The three bodily deeds are non-killing, non-stealing, and no sexual misconduct.'},
+  {q:'離邪見的功德包括「深信因果，寧殞身命，終不作惡」。',ans:true,exp:'正確！離邪見十功德法之第二。',qEn:'Abstaining from wrong-view includes the virtue: \'deeply trusting in cause and effect, never doing evil even at the cost of one\'s life.\'',expEn:'True! This is the second of the ten virtuous qualities from non-wrong-view.'},
+  {q:'十善業道的梵文是daśa-kuśala-karmapatha。',ans:true,exp:'正確！daśa（十）+ kuśala（善）+ karmapatha（業道）。',qEn:'The Sanskrit name for the ten wholesome deeds is daśa-kuśala-karmapatha.',expEn:'True! daśa = ten, kuśala = wholesome, karmapatha = courses of action.'},
+  {q:'本經結尾，大眾聞佛所說後皆大歡喜，信受奉行。',ans:true,exp:'正確！流通分明載：「皆大歡喜，信受奉行。」',qEn:'At the end of the sutra, the assembly greatly rejoiced and received the teaching in faith and practice.',expEn:'True! The concluding section states: \'all greatly rejoiced and received the teaching in faith and practice.\''},
+  {q:'「不貪欲」是指不貪著他人財物及五欲之樂。',ans:true,exp:'正確！不貪欲是心念層面的善業，培養知足喜捨。',qEn:'Non-greed means not coveting others\' wealth or the pleasures of the five senses.',expEn:'True! Non-greed (abhidhyā-virati) is a mental deed cultivating contentment and generosity.'},
+  {q:'本經主要是佛陀對比丘眾講說的。',ans:false,exp:'本經主要以龍王為說法對象，雖有比丘在場。',qEn:'This sutra was primarily delivered to the community of bhikṣus.',expEn:'False. The teaching primarily addressed Sāgara the Dragon King, though bhikṣus were also present.'},
+  {q:'離妄語所得「天所讚法」共有八種。',ans:true,exp:'正確！離妄語得八種天所讚法。',qEn:'Abstaining from false speech yields eight virtues praised by the gods.',expEn:'True! Non-false speech yields eight god-praised virtues.'},
+  {q:'十善業道中，口業的種類最多，共有四種。',ans:true,exp:'正確！口業有四種，是十善中數量最多的類別。',qEn:'Among the three categories, verbal karma has the most deeds — four in total.',expEn:'True! Verbal deeds (4) outnumber bodily (3) and mental (3) deeds.'},
+  {q:'「不邪淫」只適用於出家修行者。',ans:false,exp:'不正確。不邪淫對在家居士同樣重要，指不行不正當男女關係。',qEn:'No sexual misconduct (kāmamithyācāra-virati) only applies to monastics.',expEn:'False. No sexual misconduct applies equally to laypeople, meaning avoiding improper sexual conduct.'},
+  {q:'佛說佈施、持戒、忍辱、精進、禪定、智慧皆以十善業道為根本。',ans:true,exp:'正確！經文明言：「皆由十善業道而為根本，具足得生。」',qEn:'The Buddha stated that generosity, ethics, patience, diligence, meditation, and wisdom all have the ten wholesome deeds as their foundation.',expEn:'True! The sutra states all are \'grounded in the ten wholesome courses of action and fully developed.\''},
+  {q:'「不瞋恚」屬於意業，指不生氣、不懷恨，保持平靜的心。',ans:true,exp:'正確！意業三種之二，瞋恚是心念中的惡業。',qEn:'Non-hatred (vyāpāda-virati) is a mental deed meaning not harboring anger or resentment.',expEn:'True! It is the second of the three mental wholesome deeds.'},
+  {q:'離偷盜可得「多人愛念」的功德。',ans:true,exp:'正確！離偷盜十種可保信法之第二。',qEn:'Abstaining from stealing yields the benefit \'many people cherish and care for you.\'',expEn:'True! This is the second of the ten trustworthy qualities from non-stealing.'},
+  {q:'本經說「施莊嚴故，能捨一切所有」是以布施修行。',ans:true,exp:'正確！菩薩以十善業為基礎，先以施莊嚴，能捨一切。',qEn:'The \'ornament of generosity\' enables one to relinquish all possessions.',expEn:'True! Dana-pāramitā as an ornament allows complete giving.'},
+  {q:'十善業道中，「不邪淫」共可得八種功德。',ans:false,exp:'不邪淫得四種智所讚法，不是八種。離妄語才得八種。',qEn:'No sexual misconduct yields eight virtuous qualities praised by the wise.',expEn:'False. No sexual misconduct yields four qualities praised by the wise. Non-false speech yields eight.'},
+  {q:'離惡口可成就「言不乖度、言皆利益」等八種淨業。',ans:true,exp:'正確！離惡口八種淨業之首兩種。',qEn:'Abstaining from harsh speech produces the pure deeds \'speech never contrary to proper measure\' and \'speech always beneficial.\'',expEn:'True! These are the first two of the eight pure deeds from non-harsh speech.'},
+  {q:'「戒莊嚴」意指以持戒修行，能遠離一切過失毀辱。',ans:true,exp:'正確！菩薩修行次第：施、戒、忍、進、禪、慧，皆以十善為根。',qEn:'The \'ornament of precepts\' means practicing ethical discipline, enabling one to be far from all faults.',expEn:'True! Śīla-pāramitā as an ornament removes all misconduct.'},
+  {q:'本經流通分記載：大眾聞佛所說法，「皆大歡喜，各作禮而退」。',ans:false,exp:'流通分是「皆大歡喜，信受奉行」，不是「各作禮而退」。',qEn:'The concluding section states: \'All greatly rejoiced and each bowed and departed.\'',expEn:'False. The text says \'all greatly rejoiced and received the teaching in faith and practice\' — not \'bowed and departed.\''},
+  {q:'離邪見可得「真善意樂、真善等侶」的功德。',ans:true,exp:'正確！離邪見十功德法之第一。',qEn:'Abstaining from wrong-view includes the virtue: \'obtaining truly good intentions and truly good companions.\'',expEn:'True! This is the first of the ten virtuous qualities from non-wrong-view.'},
+  {q:'本經的十善業道可以幫助人成就人天福報，但無法成就佛果。',ans:false,exp:'錯誤！本經明言迴向無上菩提後，可成就圓滿佛果。',qEn:'This sutra states the ten wholesome deeds can only lead to heavenly rebirth, not buddhahood.',expEn:'False. When dedicated to unsurpassed enlightenment, the sutra explicitly states one can attain the perfect fruition of buddhahood.'},
+  {q:'「忍辱莊嚴故，得佛圓音，具眾相好。」',ans:true,exp:'正確！忍辱莊嚴的功德是佛圓音及眾相好。',qEn:'\'The ornament of patience yields the perfect vocal sound of a buddha and all the marks of excellence.\'',expEn:'True! Kṣānti-pāramitā as an ornament yields the Buddha\'s perfect vocal sound and the marks of excellence.'},
+  {q:'不兩舌可得「五種不可壞法」，包括「不壞身、不壞眷屬」。',ans:true,exp:'正確！五種不可壞：不壞身、不壞眷屬、不壞信、不壞法行、不壞善知識。',qEn:'Non-divisive speech yields five indestructible qualities including \'indestructible body\' and \'indestructible family.\'',expEn:'True! The five indestructible qualities include indestructible body, family, faith, practice, and virtuous friends.'},
+  {q:'「禪定莊嚴故，能生慚愧輕安等法」。',ans:true,exp:'正確！禪定莊嚴的功德是生慚愧、輕安。',qEn:'\'The ornament of meditation gives rise to remorse, lightness-and-ease, and other virtuous qualities.\'',expEn:'True! Dhyāna-pāramitā as an ornament generates śāmatha virtues like remorse and ease.'},
+  {q:'海龍王的名字是娑竭羅（Sāgara）。',ans:true,exp:'正確！娑竭羅是梵文 Sāgara，意為「海」。',qEn:'Sāgara is the Sanskrit name of the Dragon King, meaning \'ocean.\'',expEn:'True! Sāgara (娑竭羅) indeed means ocean in Sanskrit.'},
+  {q:'本經的核心主題是「持咒可以消業」。',ans:false,exp:'本經核心是十善業道，強調行為、語言、心念的淨化，非持咒。',qEn:'The core theme of this sutra is that reciting mantras can purify karma.',expEn:'False. The core theme is the ten wholesome courses of action — purifying body, speech, and mind — not mantra recitation.'},
+  {q:'「智慧莊嚴故，能斷一切分別妄見」。',ans:true,exp:'正確！智慧莊嚴的功德是斷一切分別妄見。',qEn:'\'The ornament of wisdom enables one to cut through all discriminative false views.\'',expEn:'True! Prajñā-pāramitā as an ornament cuts all discriminative false views.'},
 ];
-
 const mcqBank=[
-  {q:'十善業道中，「口業」共有幾種？',opts:['A.2種','B.3種','C.4種','D.5種'],ans:2,exp:'口業共4種：不妄語、不兩舌、不惡口、不綺語。'},
-  {q:'離殺生可得幾種「離惱法」？',opts:['A.五種','B.八種','C.十種','D.十二種'],ans:2,exp:'離殺生得十種離惱法。'},
-  {q:'《佛說十善業道經》在哪裡說法？',opts:['A.祇樹給孤獨園','B.娑竭羅龍宮','C.靈鷲山','D.忉利天宮'],ans:1,exp:'說法地點是「娑竭羅龍宮」，即海中龍王宮殿。'},
-  {q:'下列哪項屬於「意業」？',opts:['A.不妄語','B.不惡口','C.不邪淫','D.不貪欲'],ans:3,exp:'意業三種：不貪欲、不瞋恚、不邪見。'},
-  {q:'離妄語可得幾種「天所讚法」？',opts:['A.六種','B.七種','C.八種','D.十種'],ans:2,exp:'離妄語得八種天所讚法。'},
-  {q:'佛說一切善法以什麼為根本？',opts:['A.六度萬行','B.八正道','C.十善業道','D.四攝法'],ans:2,exp:'佛明言：「一切善法，以十善業道而為根本。」'},
-  {q:'「不兩舌」的核心含義是？',opts:['A.不說謊話','B.不說粗惡之語','C.不搬弄是非離間他人','D.不說無意義之語'],ans:2,exp:'不兩舌是不搬弄是非、不挑撥離間。'},
-  {q:'離邪見可得幾種功德法？',opts:['A.五種','B.八種','C.九種','D.十種'],ans:3,exp:'離邪見得十種功德法。'},
-  {q:'本經譯者實叉難陀來自哪裡？',opts:['A.印度','B.龜茲國','C.于闐國（今新疆）','D.摩揭陀國'],ans:2,exp:'實叉難陀是于闐國（今新疆）人，唐代著名譯師。'},
-  {q:'十善業道若能迴向，最終可成就什麼？',opts:['A.人天福報','B.聲聞阿羅漢果','C.獨覺菩提','D.無上正等菩提（佛果）'],ans:3,exp:'佛一再強調可迴向無上正等菩提，後成佛時得圓滿佛果。'},
-  {q:'「不綺語」屬於哪一種業？',opts:['A.身業','B.口業','C.意業','D.三業皆有'],ans:1,exp:'不綺語屬口業，是口業四種中的第四種。'},
-  {q:'本經開篇：佛與多少位菩薩摩訶薩俱？',opts:['A.一萬二千','B.二萬四千','C.三萬二千','D.四萬八千'],ans:2,exp:'序分明載：「三萬二千菩薩摩訶薩俱」。'},
-  {q:'下列哪項是「身業」的善業？',opts:['A.不妄語','B.不瞋恚','C.不偷盜','D.不兩舌'],ans:2,exp:'身業三種：不殺生、不偷盜、不邪淫。'},
-  {q:'「非人守護」是離殺生十益中的第幾種？',opts:['A.第三種','B.第四種','C.第五種','D.第六種'],ans:3,exp:'離殺生十益順序：①施無畏②起慈心③斷瞋習④身無病⑤壽命長⑥非人護…，第六種是非人守護。'},
-  {q:'「直心正見，永離一切吉凶疑網」是離什麼的功德？',opts:['A.不殺生','B.不妄語','C.不瞋恚','D.不邪見'],ans:3,exp:'這是離邪見（不邪見）所得十功德法中的第四種。'},
-  {q:'本經結束後，大眾的反應是什麼？',opts:['A.皆生懷疑','B.半信半疑','C.皆大歡喜，信受奉行','D.辯論不休'],ans:2,exp:'流通分明載：「聞佛所說，皆大歡喜，信受奉行。」'},
-  {q:'下列哪項「不」屬於口業？',opts:['A.不妄語','B.不兩舌','C.不邪淫','D.不惡口'],ans:2,exp:'不邪淫屬「身業」，不是口業。'},
-  {q:'十善業道的記憶結構是？',opts:['A.4-3-3','B.3-4-3','C.3-3-4','D.5-3-2'],ans:1,exp:'身業3 + 口業4 + 意業3，結構是「3-4-3」。'},
-  {q:'「不偷盜」的梵文是？',opts:['A.prāṇātipāta-virati','B.adattādāna-virati','C.mṛṣāvāda-virati','D.abhidhyā-virati'],ans:1,exp:'不偷盜 = adattādāna-virati。prāṇātipāta是不殺生；mṛṣāvāda是不妄語。'},
-  {q:'依本經，哪種修行方法是斷一切惡道苦的「一法」？',opts:['A.每日誦經懺悔','B.嚴格持守五戒','C.晝夜常念思惟觀察善法','D.一心念佛求生淨土'],ans:2,exp:'佛告龍王：「謂於晝夜，常念思惟觀察善法，令諸善法念念增長。」'},
-  {q:'「常無惡夢，寢覺快樂」是離哪種惡業的功德？',opts:['A.不妄語','B.不兩舌','C.不殺生','D.不瞋恚'],ans:2,exp:'這是離殺生十種離惱法中的第七種。'},
-  {q:'離妄語第一功德「優缽羅香」中，優缽羅是指？',opts:['A.栴檀木','B.龍涎香','C.蓮花','D.沉香木'],ans:2,exp:'優缽羅（utpala）是梵文「青蓮花」，以蓮花清香比喻誠實者口中的清淨芬芳。'},
-  {q:'「深信因果，寧殞身命，終不作惡」是離邪見功德的第幾種？',opts:['A.第一種','B.第二種','C.第三種','D.第四種'],ans:1,exp:'離邪見十功德法之第二：「深信因果，寧殞身命，終不作惡。」'},
-  {q:'佛在本經的說法聽法眾中，大比丘眾有多少？',opts:['A.三千','B.五千','C.八千','D.一萬二千'],ans:2,exp:'序分明載：「與八千大比丘眾」。'},
-  {q:'十善業道中，「意業」不包括哪一項？',opts:['A.不貪欲','B.不惡口','C.不瞋恚','D.不邪見'],ans:1,exp:'不惡口屬「口業」，不是意業。意業三種：不貪欲、不瞋恚、不邪見。'},
-  {q:'「令諸善法念念增長，不容毫分不善間雜」描述的是？',opts:['A.禪定','B.精進','C.常念思惟觀察善法','D.持戒'],ans:2,exp:'這是佛告龍王修持十善業道的「一法」中的核心要求。'},
-  {q:'海中眾生「形色種類各別」，佛說根本原因是什麼？',opts:['A.宿世願力不同','B.由心造善不善身業語業意業','C.因緣際會不同','D.父母基因不同'],ans:1,exp:'佛明示：「靡不由心造善不善，身業、語業及與意業。」'},
-  {q:'依本經，十善業道能「生」的最高境界是？',opts:['A.生天道','B.生阿羅漢果','C.生辟支佛','D.生無上正等菩提（佛果）'],ans:3,exp:'經文明列能生人天、聲聞、獨覺，乃至「無上正等菩提」，佛果為最高。'},
-  {q:'「不貪欲」對應的修養核心是？',opts:['A.禪定','B.般若智慧','C.知足喜捨','D.精進勇猛'],ans:2,exp:'不貪欲對應知足與喜捨，培養放下、無私的心態。'},
-  {q:'本經中「迴向阿耨多羅三藐三菩提」的意思是？',opts:['A.念佛求生淨土','B.將修行功德轉向成就無上佛果','C.懺悔過去所有惡業','D.修習禪定達到三昧境界'],ans:1,exp:'「迴向」是將功德轉向，以成就無上正等正覺為目標發願。'},
-{q:'菩薩修行六度，哪一度與「戒莊嚴」直接對應？',opts:['A.布施','B.持戒','C.忍辱','D.精進'],ans:1,exp:'戒莊嚴對應持戒波羅蜜，能遠離一切過失。'},
-  {q:'離兩舌可得幾種「不可壞法」？',opts:['A.三種','B.四種','C.五種','D.六種'],ans:2,exp:'離兩舌得五種不可壞法：不壞身、眷屬、信、法行、善知識。'},
-  {q:'以下哪項不是「離惡口」的功德？',opts:['A.言皆利益','B.言必契理','C.言詞美妙','D.多人愛念'],ans:3,exp:'多人愛念是離偷盜的功德，不是離惡口的功德。'},
-  {q:'本經說十善業道是一切哪些法的根本？',opts:['A.只是人天福報','B.只是出家戒律','C.聲聞、獨覺、菩薩菩提','D.只是在家五戒'],ans:2,exp:'經文明言：為根本，人天乃至三乘菩提皆依此建立。'},
-  {q:'「忍辱莊嚴」的功德是什麼？',opts:['A.得大神通','B.得佛圓音具眾相好','C.能捨一切所有','D.能生慚愧輕安'],ans:1,exp:'忍辱莊嚴故，得佛圓音，具眾相好。'},
-  {q:'十善業道梵文「kuśala」的意思是？',opts:['A.業道','B.善','C.十','D.道路'],ans:1,exp:'kuśala意為「善、善巧」，daśa意為十，karmapatha意為業道。'},
-  {q:'離邪淫可得幾種「智所讚法」？',opts:['A.兩種','B.三種','C.四種','D.五種'],ans:2,exp:'離邪行得四種智所讚法：諸根調順、永離諠掉、世所稱歎、妻莫能侵。'},
-  {q:'以下哪個不屬於「意業」的範疇？',opts:['A.不貪欲','B.不瞋恚','C.不邪見','D.不惡口'],ans:3,exp:'不惡口屬口業，意業三種是：不貪欲、不瞋恚、不邪見。'},
-  {q:'「精進莊嚴」的功德是什麼？',opts:['A.能摧伏魔怨，入佛法藏','B.能生慚愧輕安','C.得佛圓音','D.能捨一切所有'],ans:0,exp:'精進莊嚴故，能摧伏魔怨，入佛法藏。'},
-  {q:'離妄語可得多少種「天所讚法」？',opts:['A.四種','B.六種','C.八種','D.十種'],ans:2,exp:'離妄語得八種天所讚法，包括口常清淨如蓮香等。'},
-  {q:'本經在哪個王朝被翻譯成中文？',opts:['A.漢朝','B.隋朝','C.唐朝','D.宋朝'],ans:2,exp:'唐代于闐三藏實叉難陀（652–710）奉制翻譯。'},
-  {q:'「禪定莊嚴」能帶來什麼功德？',opts:['A.能斷一切分別妄見','B.能生慚愧輕安等法','C.能摧伏魔怨','D.得佛圓音'],ans:1,exp:'禪定莊嚴故，能生慚愧、輕安等善法。'},
+  {q:'十善業道中，「口業」共有幾種？',opts:['A.2種','B.3種','C.4種','D.5種'],ans:2,exp:'口業共4種：不妄語、不兩舌、不惡口、不綺語。',qEn:'How many types of verbal karma are there in the ten wholesome deeds?',optsEn:['A. 2 types','B. 3 types','C. 4 types','D. 5 types'],expEn:'Verbal karma has 4 types: non-false speech, non-divisive speech, non-harsh speech, no idle chatter.'},
+  {q:'離殺生可得幾種「離惱法」？',opts:['A.五種','B.八種','C.十種','D.十二種'],ans:2,exp:'離殺生得十種離惱法。',qEn:'How many freedom-from-affliction benefits arise from non-killing?',optsEn:['A. Five','B. Eight','C. Ten','D. Twelve'],expEn:'Non-killing yields ten freedom-from-affliction benefits.'},
+  {q:'《佛說十善業道經》在哪裡說法？',opts:['A.祇樹給孤獨園','B.娑竭羅龍宮','C.靈鷲山','D.忉利天宮'],ans:1,exp:'說法地點是「娑竭羅龍宮」，即海中龍王宮殿。',qEn:'Where did the Buddha deliver this teaching?',optsEn:['A. Jeta Grove','B. Sāgara Dragon Palace','C. Vulture Peak','D. Trāyastriṃśa Heaven'],expEn:'The teaching was given at the Palace of Sāgara the Dragon King.'},
+  {q:'下列哪項屬於「意業」？',opts:['A.不妄語','B.不惡口','C.不邪淫','D.不貪欲'],ans:3,exp:'意業三種：不貪欲、不瞋恚、不邪見。',qEn:'Which of the following belongs to mental karma?',optsEn:['A. Non-false speech','B. Non-harsh speech','C. No sexual misconduct','D. Non-greed'],expEn:'The three mental deeds are non-greed, non-hatred, and non-wrong-view.'},
+  {q:'離妄語可得幾種「天所讚法」？',opts:['A.六種','B.七種','C.八種','D.十種'],ans:2,exp:'離妄語得八種天所讚法。',qEn:'How many god-praised virtues arise from non-false speech?',optsEn:['A. Six','B. Seven','C. Eight','D. Ten'],expEn:'Non-false speech yields eight virtues praised by the gods.'},
+  {q:'佛說一切善法以什麼為根本？',opts:['A.六度萬行','B.八正道','C.十善業道','D.四攝法'],ans:2,exp:'佛明言：「一切善法，以十善業道而為根本。」',qEn:'The Buddha said all wholesome dharmas have what as their foundation?',optsEn:['A. The six pāramitās','B. The Noble Eightfold Path','C. The ten wholesome courses of action','D. The four means of attraction'],expEn:'The Buddha explicitly stated: all wholesome dharmas have the ten wholesome courses of action as their root.'},
+  {q:'「不兩舌」的核心含義是？',opts:['A.不說謊話','B.不說粗惡之語','C.不搬弄是非離間他人','D.不說無意義之語'],ans:2,exp:'不兩舌是不搬弄是非、不挑撥離間。',qEn:'The core meaning of non-divisive speech is?',optsEn:['A. Not telling lies','B. Not using coarse language','C. Not gossiping or stirring up discord','D. Not speaking meaninglessly'],expEn:'Non-divisive speech means not gossiping or sowing discord among people.'},
+  {q:'離邪見可得幾種功德法？',opts:['A.五種','B.八種','C.九種','D.十種'],ans:3,exp:'離邪見得十種功德法。',qEn:'How many virtuous qualities arise from non-wrong-view?',optsEn:['A. Five','B. Eight','C. Nine','D. Ten'],expEn:'Non-wrong-view (mithyādṛṣṭi-virati) yields ten virtuous qualities.'},
+  {q:'本經譯者實叉難陀來自哪裡？',opts:['A.印度','B.龜茲國','C.于闐國（今新疆）','D.摩揭陀國'],ans:2,exp:'實叉難陀是于闐國（今新疆）人，唐代著名譯師。',qEn:'The translator Śikṣānanda came from where?',optsEn:['A. India','B. Kucha','C. Khotan (modern Xinjiang)','D. Magadha'],expEn:'Śikṣānanda was from Khotan (modern Xinjiang), a celebrated Tang-dynasty translator.'},
+  {q:'十善業道若能迴向，最終可成就什麼？',opts:['A.人天福報','B.聲聞阿羅漢果','C.獨覺菩提','D.無上正等菩提（佛果）'],ans:3,exp:'佛一再強調可迴向無上正等菩提，後成佛時得圓滿佛果。',qEn:'When the ten wholesome deeds are dedicated, what can ultimately be attained?',optsEn:['A. Heavenly merit','B. Śrāvaka arhatship','C. Pratyekabuddha-bodhi','D. Unsurpassed perfect enlightenment (buddhahood)'],expEn:'The Buddha repeatedly emphasizes dedication to unsurpassed bodhi leads to perfect buddhahood.'},
+  {q:'「不綺語」屬於哪一種業？',opts:['A.身業','B.口業','C.意業','D.三業皆有'],ans:1,exp:'不綺語屬口業，是口業四種中的第四種。',qEn:'No idle chatter belongs to which karma?',optsEn:['A. Bodily karma','B. Verbal karma','C. Mental karma','D. All three'],expEn:'No idle chatter belongs to verbal karma — the fourth verbal deed.'},
+  {q:'本經開篇：佛與多少位菩薩摩訶薩俱？',opts:['A.一萬二千','B.二萬四千','C.三萬二千','D.四萬八千'],ans:2,exp:'序分明載：「三萬二千菩薩摩訶薩俱」。',qEn:'At the opening, the Buddha was accompanied by how many bodhisattva-mahāsattvas?',optsEn:['A. 12,000','B. 24,000','C. 32,000','D. 48,000'],expEn:'The text states: together with thirty-two thousand bodhisattva-mahāsattvas.'},
+  {q:'下列哪項是「身業」的善業？',opts:['A.不妄語','B.不瞋恚','C.不偷盜','D.不兩舌'],ans:2,exp:'身業三種：不殺生、不偷盜、不邪淫。',qEn:'Which of the following is a bodily wholesome deed?',optsEn:['A. Non-false speech','B. Non-hatred','C. Non-stealing','D. Non-divisive speech'],expEn:'The three bodily deeds are non-killing, non-stealing, and no sexual misconduct.'},
+  {q:'「非人守護」是離殺生十益中的第幾種？',opts:['A.第三種','B.第四種','C.第五種','D.第六種'],ans:3,exp:'離殺生十益：①施無畏②起慈心③斷瞋習④身無病⑤壽命長⑥非人護。第六種是非人守護。',qEn:'Always guarded by non-human beings — is which benefit of non-killing?',optsEn:['A. Third','B. Fourth','C. Fifth','D. Sixth'],expEn:'Order: ①no fear ②compassion ③cutting anger ④no illness ⑤long life ⑥guarded by non-humans.'},
+  {q:'「直心正見，永離一切吉凶疑網」是離什麼的功德？',opts:['A.不殺生','B.不妄語','C.不瞋恚','D.不邪見'],ans:3,exp:'這是離邪見所得十功德法中的第四種。',qEn:'Straightforward mind with right view, forever free from doubts about omens — is a virtue of abstaining from?',optsEn:['A. Killing','B. False speech','C. Hatred','D. Wrong-view'],expEn:'This is the fourth of the ten virtuous qualities from non-wrong-view.'},
+  {q:'本經結束後，大眾的反應是什麼？',opts:['A.皆生懷疑','B.半信半疑','C.皆大歡喜，信受奉行','D.辯論不休'],ans:2,exp:'流通分明載：「聞佛所說，皆大歡喜，信受奉行。」',qEn:'At the end of the sutra, how did the assembly respond?',optsEn:['A. All became doubtful','B. Half believed, half doubted','C. All rejoiced greatly and received in faith','D. Argued endlessly'],expEn:'The text states: all rejoiced greatly and received the teaching in faith and practice.'},
+  {q:'下列哪項「不」屬於口業？',opts:['A.不妄語','B.不兩舌','C.不邪淫','D.不惡口'],ans:2,exp:'不邪淫屬「身業」，不是口業。',qEn:'Which does NOT belong to verbal karma?',optsEn:['A. Non-false speech','B. Non-divisive speech','C. No sexual misconduct','D. Non-harsh speech'],expEn:'No sexual misconduct belongs to bodily karma, not verbal karma.'},
+  {q:'十善業道的記憶結構是？',opts:['A.4-3-3','B.3-4-3','C.3-3-4','D.5-3-2'],ans:1,exp:'身業3 + 口業4 + 意業3，結構是「3-4-3」。',qEn:'The memory structure of the ten wholesome deeds is?',optsEn:['A. 4-3-3','B. 3-4-3','C. 3-3-4','D. 5-3-2'],expEn:'Bodily (3) + Verbal (4) + Mental (3) = the 3-4-3 structure.'},
+  {q:'「不偷盜」的梵文是？',opts:['A.prāṇātipāta-virati','B.adattādāna-virati','C.mṛṣāvāda-virati','D.abhidhyā-virati'],ans:1,exp:'不偷盜 = adattādāna-virati。prāṇātipāta是不殺生；mṛṣāvāda是不妄語。',qEn:'The Sanskrit for non-stealing is?',optsEn:['A. prāṇātipāta-virati','B. adattādāna-virati','C. mṛṣāvāda-virati','D. abhidhyā-virati'],expEn:'Non-stealing = adattādāna-virati. prāṇātipāta = non-killing; mṛṣāvāda = non-false speech.'},
+  {q:'依本經，哪種修行方法是斷一切惡道苦的「一法」？',opts:['A.每日誦經懺悔','B.嚴格持守五戒','C.晝夜常念思惟觀察善法','D.一心念佛求生淨土'],ans:2,exp:'佛告龍王：「謂於晝夜，常念思惟觀察善法，令諸善法念念增長。」',qEn:'According to this sutra, what is the one dharma that cuts all suffering of evil paths?',optsEn:['A. Daily sutra recitation','B. Strictly keeping five precepts','C. Constantly contemplating wholesome dharmas','D. Reciting the Buddha name for rebirth'],expEn:'The Buddha told the Dragon King: day and night constantly contemplating wholesome dharmas, allowing them to grow moment by moment.'},
+  {q:'「常無惡夢，寢覺快樂」是離哪種惡業的功德？',opts:['A.不妄語','B.不兩舌','C.不殺生','D.不瞋恚'],ans:2,exp:'這是離殺生十種離惱法中的第七種。',qEn:'Always free from nightmares, waking joyful — is a virtue of abstaining from?',optsEn:['A. False speech','B. Divisive speech','C. Killing','D. Hatred'],expEn:'This is the seventh of the ten freedom-from-affliction benefits of non-killing.'},
+  {q:'離妄語第一功德「優缽羅香」中，優缽羅是指？',opts:['A.栴檀木','B.龍涎香','C.蓮花','D.沉香木'],ans:2,exp:'優缽羅（utpala）是梵文「青蓮花」，以蓮花清香比喻誠實者口中的清淨芬芳。',qEn:'In the first virtue of non-false speech, "utpala fragrance" — utpala refers to?',optsEn:['A. Sandalwood','B. Ambergris','C. Lotus flower','D. Aloe wood'],expEn:'Utpala (優缽羅) is Sanskrit for blue lotus, symbolizing the purity of an honest person\'s speech.'},
+  {q:'「深信因果，寧殞身命，終不作惡」是離邪見功德的第幾種？',opts:['A.第一種','B.第二種','C.第三種','D.第四種'],ans:1,exp:'離邪見十功德法之第二：「深信因果，寧殞身命，終不作惡。」',qEn:'Deeply trusting cause and effect, preferring death to doing evil — is which virtue of non-wrong-view?',optsEn:['A. First','B. Second','C. Third','D. Fourth'],expEn:'The second virtue of non-wrong-view: deeply trusting cause and effect, preferring death to evil.'},
+  {q:'佛在本經的說法聽法眾中，大比丘眾有多少？',opts:['A.三千','B.五千','C.八千','D.一萬二千'],ans:2,exp:'序分明載：「與八千大比丘眾」。',qEn:'How many great bhikṣus were in the assembly?',optsEn:['A. 3,000','B. 5,000','C. 8,000','D. 12,000'],expEn:'The text states: together with eight thousand great bhikṣus.'},
+  {q:'十善業道中，「意業」不包括哪一項？',opts:['A.不貪欲','B.不惡口','C.不瞋恚','D.不邪見'],ans:1,exp:'不惡口屬「口業」，不是意業。意業三種：不貪欲、不瞋恚、不邪見。',qEn:'Which is NOT included in mental karma?',optsEn:['A. Non-greed','B. Non-harsh speech','C. Non-hatred','D. Non-wrong-view'],expEn:'Non-harsh speech belongs to verbal karma. Mental deeds: non-greed, non-hatred, non-wrong-view.'},
+  {q:'「令諸善法念念增長，不容毫分不善間雜」描述的是？',opts:['A.禪定','B.精進','C.常念思惟觀察善法','D.持戒'],ans:2,exp:'這是佛告龍王修持十善業道的「一法」中的核心要求。',qEn:'Allowing wholesome dharmas to grow moment by moment, not allowing any unwholesome to mix in — describes?',optsEn:['A. Meditation','B. Diligence','C. Constantly contemplating wholesome dharmas','D. Precept-keeping'],expEn:'This is the core of the Buddha one-dharma teaching to the Dragon King.'},
+  {q:'海中眾生「形色種類各別」，佛說根本原因是什麼？',opts:['A.宿世願力不同','B.由心造善不善身業語業意業','C.因緣際會不同','D.父母基因不同'],ans:1,exp:'佛明示：「靡不由心造善不善，身業、語業及與意業。」',qEn:'The variety of ocean beings forms is fundamentally caused by?',optsEn:['A. Different past vows','B. Mind creating wholesome/unwholesome bodily, verbal, mental karma','C. Different karmic conditions','D. Different parental genetics'],expEn:'The Buddha said: without exception produced by the mind creating wholesome and unwholesome karma.'},
+  {q:'依本經，十善業道能「生」的最高境界是？',opts:['A.生天道','B.生阿羅漢果','C.生辟支佛','D.生無上正等菩提（佛果）'],ans:3,exp:'經文明列能生人天、聲聞、獨覺，乃至「無上正等菩提」，佛果為最高。',qEn:'The highest fruition the ten wholesome deeds can give rise to is?',optsEn:['A. Heavenly rebirth','B. Arhatship','C. Pratyekabuddha','D. Unsurpassed perfect enlightenment (buddhahood)'],expEn:'The sutra lists up to unsurpassed perfect enlightenment — buddhahood is the highest.'},
+  {q:'「不貪欲」對應的修養核心是？',opts:['A.禪定','B.般若智慧','C.知足喜捨','D.精進勇猛'],ans:2,exp:'不貪欲對應知足與喜捨，培養放下、無私的心態。',qEn:'The core cultivation of non-greed is?',optsEn:['A. Meditation','B. Prajna wisdom','C. Contentment and joyful generosity','D. Diligent courage'],expEn:'Non-greed corresponds to contentment and joyful giving.'},
+  {q:'本經中「迴向阿耨多羅三藐三菩提」的意思是？',opts:['A.念佛求生淨土','B.將修行功德轉向成就無上佛果','C.懺悔過去所有惡業','D.修習禪定達到三昧境界'],ans:1,exp:'「迴向」是將功德轉向，以成就無上正等正覺為目標發願。',qEn:'Dedicating to anuttarā-samyak-saṃbodhi in this sutra means?',optsEn:['A. Reciting the Buddha name for Pure Land rebirth','B. Dedicating merit toward attaining unsurpassed buddhahood','C. Repenting all past evil karma','D. Practicing meditation to attain samādhi'],expEn:'Dedication means directing merit toward the goal of unsurpassed perfect enlightenment.'},
+  {q:'菩薩修行六度，哪一度與「戒莊嚴」直接對應？',opts:['A.布施','B.持戒','C.忍辱','D.精進'],ans:1,exp:'戒莊嚴對應持戒波羅蜜，能遠離一切過失。',qEn:'Which pāramitā directly corresponds to the precept ornament?',optsEn:['A. Generosity','B. Ethical discipline','C. Patience','D. Diligence'],expEn:'Precept ornament corresponds to śīla-pāramitā, enabling one to be far from all faults.'},
+  {q:'離兩舌可得幾種「不可壞法」？',opts:['A.三種','B.四種','C.五種','D.六種'],ans:2,exp:'離兩舌得五種不可壞法：不壞身、眷屬、信、法行、善知識。',qEn:'How many indestructible qualities arise from non-divisive speech?',optsEn:['A. Three','B. Four','C. Five','D. Six'],expEn:'Five indestructible qualities: indestructible body, family, faith, practice, and virtuous friends.'},
+  {q:'以下哪項不是「離惡口」的功德？',opts:['A.言皆利益','B.言必契理','C.言詞美妙','D.多人愛念'],ans:3,exp:'多人愛念是離偷盜的功德，不是離惡口的功德。',qEn:'Which is NOT a virtue of abstaining from harsh speech?',optsEn:['A. Speech always beneficial','B. Speech always in accord with truth','C. Wonderfully pleasant speech','D. Many people cherish you'],expEn:'Many people cherish you is a virtue of non-stealing, not non-harsh speech.'},
+  {q:'本經說十善業道是一切哪些法的根本？',opts:['A.只是人天福報','B.只是出家戒律','C.聲聞、獨覺、菩薩菩提','D.只是在家五戒'],ans:2,exp:'經文明言：為根本，人天乃至三乘菩提皆依此建立。',qEn:'The sutra says the ten wholesome deeds are the foundation of which teachings?',optsEn:['A. Only human and heavenly merit','B. Only monastic precepts','C. Śrāvaka-, pratyekabuddha-, and bodhisattva-bodhi','D. Only the five precepts for laypeople'],expEn:'The text states they are the foundation for all three vehicles of enlightenment.'},
+  {q:'「忍辱莊嚴」的功德是什麼？',opts:['A.得大神通','B.得佛圓音具眾相好','C.能捨一切所有','D.能生慚愧輕安'],ans:1,exp:'忍辱莊嚴故，得佛圓音，具眾相好。',qEn:'The virtue of the patience ornament is?',optsEn:['A. Attaining great supernormal powers','B. Attaining perfect vocal sound and marks of excellence','C. Relinquishing all possessions','D. Generating remorse and ease'],expEn:'Patience ornament yields the Buddhas perfect vocal sound and all marks of excellence.'},
+  {q:'十善業道梵文「kuśala」的意思是？',opts:['A.業道','B.善','C.十','D.道路'],ans:1,exp:'kuśala意為「善、善巧」，daśa意為十，karmapatha意為業道。',qEn:'The Sanskrit term kuśala in the ten wholesome deeds means?',optsEn:['A. Karma-path','B. Wholesome / skillful','C. Ten','D. Road / path'],expEn:'kuśala means wholesome or skillful. daśa = ten; karmapatha = courses of action.'},
+  {q:'離邪淫可得幾種「智所讚法」？',opts:['A.兩種','B.三種','C.四種','D.五種'],ans:2,exp:'離邪行得四種智所讚法：諸根調順、永離諠掉、世所稱歎、妻莫能侵。',qEn:'How many wisdom-praised virtues arise from no sexual misconduct?',optsEn:['A. Two','B. Three','C. Four','D. Five'],expEn:'No sexual misconduct yields four wisdom-praised virtues: composed senses, free from restlessness, world-praised, spouse cannot invade.'},
+  {q:'以下哪個不屬於「意業」的範疇？',opts:['A.不貪欲','B.不瞋恚','C.不邪見','D.不惡口'],ans:3,exp:'不惡口屬口業，意業三種是：不貪欲、不瞋恚、不邪見。',qEn:'Which does NOT belong to mental karma?',optsEn:['A. Non-greed','B. Non-hatred','C. Non-wrong-view','D. Non-harsh speech'],expEn:'Non-harsh speech belongs to verbal karma. Mental deeds: non-greed, non-hatred, non-wrong-view.'},
+  {q:'「精進莊嚴」的功德是什麼？',opts:['A.能摧伏魔怨，入佛法藏','B.能生慚愧輕安','C.得佛圓音','D.能捨一切所有'],ans:0,exp:'精進莊嚴故，能摧伏魔怨，入佛法藏。',qEn:'The virtue of the diligence ornament is?',optsEn:['A. Crushing māra adversaries, entering the storehouse of Buddha-dharma','B. Generating remorse and ease','C. Attaining the Buddha vocal sound','D. Relinquishing all possessions'],expEn:'Diligence ornament enables one to crush māra adversaries and enter the storehouse of Buddha-dharma.'},
+  {q:'離妄語可得多少種「天所讚法」？',opts:['A.四種','B.六種','C.八種','D.十種'],ans:2,exp:'離妄語得八種天所讚法，包括口常清淨如蓮香等。',qEn:'How many god-praised virtues arise from non-false speech?',optsEn:['A. Four','B. Six','C. Eight','D. Ten'],expEn:'Non-false speech yields eight god-praised virtues, including a mouth pure as lotus fragrance.'},
+  {q:'本經在哪個王朝被翻譯成中文？',opts:['A.漢朝','B.隋朝','C.唐朝','D.宋朝'],ans:2,exp:'唐代于闐三藏實叉難陀（652–710）奉制翻譯。',qEn:'This sutra was translated into Chinese during which dynasty?',optsEn:['A. Han dynasty','B. Sui dynasty','C. Tang dynasty','D. Song dynasty'],expEn:'Translated during the Tang dynasty by Śikṣānanda from Khotan (652–710).'},
+  {q:'「禪定莊嚴」能帶來什麼功德？',opts:['A.能斷一切分別妄見','B.能生慚愧輕安等法','C.能摧伏魔怨','D.得佛圓音'],ans:1,exp:'禪定莊嚴故，能生慚愧、輕安等善法。',qEn:'The virtue of the meditation ornament is?',optsEn:['A. Cutting all discriminative false views','B. Generating remorse, ease, and virtuous qualities','C. Crushing māra adversaries','D. Attaining the Buddha vocal sound'],expEn:'Meditation ornament gives rise to remorse, lightness-and-ease, and other virtuous qualities.'},
+];const saBank=[
+  {q:'請解釋「十善業道」是哪十種，並按身、口、意三業分類列舉。',ans:`<strong>身業（3種）：</strong>不殺生、不偷盜、不邪淫<br><strong>口業（4種）：</strong>不妄語、不兩舌、不惡口、不綺語<br><strong>意業（3種）：</strong>不貪欲、不瞋恚、不邪見<br><br>記憶口訣：「3-4-3」結構，身守三門、口言四德、意持三慧。`,qEn:'Explain what the ten wholesome courses of action are, and classify them under bodily, verbal, and mental karma.',ansEn:`<strong>Bodily karma (3):</strong> non-killing, non-stealing, no sexual misconduct<br><strong>Verbal karma (4):</strong> non-false speech, non-divisive speech, non-harsh speech, no idle chatter<br><strong>Mental karma (3):</strong> non-greed, non-hatred, non-wrong-view<br><br>Memory tip: the \'3-4-3\' structure — guard three bodily gates, speak four verbal virtues, maintain three mental wisdoms.`},
+  {q:'《佛說十善業道經》中，佛陀在哪裡說法？主要聽法對象是誰？說法的緣起是什麼？',ans:`<strong>說法地點：</strong>娑竭羅龍宮（海龍王宮殿）<br><strong>聽法對象：</strong>八千大比丘眾、三萬二千菩薩摩訶薩，以及娑竭羅龍王等<br><strong>說法緣起：</strong>佛以海中眾生形色種類各別為喻，開示一切皆由「心」造業之差異，以龍王請法為緣起，說十善業道是一切善法的根本。`,qEn:'In the Sūtra on the Ten Wholesome Courses of Action, where did the Buddha teach, who was the primary audience, and what gave rise to the teaching?',ansEn:`<strong>Location:</strong> Palace of Sāgara the Dragon King (underwater dragon palace)<br><strong>Primary audience:</strong> Eight thousand great bhikṣus, thirty-two thousand bodhisattva-mahāsattvas, and Sāgara the Dragon King<br><strong>Occasion:</strong> The Buddha used the variety of ocean beings\' forms as a metaphor, teaching that all arise from the mind creating different karma, with the Dragon King\'s request as the immediate cause.`},
+  {q:'佛說不殺生有「十種離惱法」，請列舉其中五種，並說明意義。',ans:`離殺生五種功德：<br>① <strong>普施無畏</strong>——對眾生給予安全感<br>② <strong>起大慈心</strong>——自然生起廣大慈悲<br>③ <strong>身常無病</strong>——不傷命，身體健康<br>④ <strong>壽命長遠</strong>——尊重生命，感召長壽<br>⑤ <strong>命終生天</strong>——命終投生天道<br><br>意義：不殺生不僅是慈悲展現，更帶來自身利益，體現「善有善報」因果觀。`,qEn:'The Buddha said non-killing yields \'ten freedoms from affliction.\' List five of them and explain their significance.',ansEn:`Five benefits of non-killing:<br>① <strong>Giving fearlessness</strong> — offering safety to all beings<br>② <strong>Great compassion</strong> — naturally developing vast compassion<br>③ <strong>Body ever free from illness</strong> — respecting life keeps one healthy<br>④ <strong>Long life</strong> — honoring life attracts longevity<br>⑤ <strong>Rebirth in heaven</strong> — at death, born in a heavenly realm<br><br>Significance: Non-killing is not only an expression of compassion but also brings personal benefit, demonstrating the law of karmic cause and effect.`},
+  {q:'為什麼十善業道是「世間」和「出世間」一切善法的根本？請根據經文說明。',ans:`經文：「一切善法，以十善業道而為根本，能生人天，能生聲聞菩提、獨覺菩提，及以無上正等菩提，皆由十善業道以為根本。」<br><br><strong>世間層面：</strong>持十善可得人天善果，是世間道德的基礎。<br><strong>出世間層面：</strong>聲聞、獨覺、菩薩乃至佛果，皆以十善業道為修行根本。六度萬行也以十善為基礎。`,qEn:'Why are the ten wholesome courses of action the foundation of both worldly and transcendent wholesome dharmas? Explain based on the sutra.',ansEn:`The sutra states: \'All wholesome dharmas have the ten wholesome courses of action as their foundation — capable of giving rise to human and heavenly realms, śrāvaka-bodhi, pratyekabuddha-bodhi, and unsurpassed perfect enlightenment; all are rooted in the ten wholesome courses of action.\'<br><br><strong>Worldly level:</strong> practicing the ten wholesome deeds yields human and heavenly merit — it is the basis of worldly ethics.<br><strong>Transcendent level:</strong> śrāvakas, pratyekabuddhas, bodhisattvas, and buddhas all ground their practice in the ten wholesome deeds. The six pāramitās are also based on them.`},
+  {q:'「不妄語」的功德是什麼？請列出四種「天所讚法」並說明現實啟示。',ans:`離妄語四種天所讚法：<br>① <strong>口常清淨，優缽羅香</strong>——誠實言語如蓮花芬芳<br>② <strong>為諸世間之所信伏</strong>——得世人信任尊重<br>③ <strong>發言成證，人天敬愛</strong>——言出必行，得人敬愛<br>④ <strong>智慧殊勝，無能制伏</strong>——誠實增長智慧<br><br><strong>現實啟示：</strong>誠信是信任的基礎，長遠看誠實比謊言更能建立持久關係和好口碑。`,qEn:'What are the virtues of non-false speech? List four \'god-praised virtues\' and explain their real-life significance.',ansEn:`Four god-praised virtues from non-false speech:<br>① <strong>Mouth ever pure as utpala fragrance</strong> — honest speech is as pure as lotus fragrance<br>② <strong>Trusted and respected by the world</strong> — gaining the world\'s trust and reverence<br>③ <strong>Words become testimony, honored by humans and gods</strong> — what one says comes true, respected by all<br>④ <strong>Wisdom supreme, none can overcome</strong> — honesty cultivates wisdom<br><br><strong>Real-life significance:</strong> Trustworthiness is the foundation of trust; long-term, honesty builds more lasting relationships and reputation than deception.`},
+  {q:'請說明「不邪見」與因果正見的關係，以及離邪見可得哪些功德？',ans:`邪見指否認因果、業報的錯誤認知。離邪見即建立正見——深信因果業報、歸依三寶。<br><br><strong>離邪見五種功德：</strong><br>① 得真善意樂，真善等侶<br>② 深信因果，寧殞身命，終不作惡<br>③ 惟歸依佛，非餘天等<br>④ 直心正見，永離吉凶疑網<br>⑤ 常生人天，不更惡道<br><br><strong>結論：</strong>正見是修行的指南針，有正確世界觀才能不偏不倚直至菩提。`,qEn:'Explain the relationship between non-wrong-view and right understanding of cause and effect, and what virtues arise from non-wrong-view.',ansEn:`Wrong-view denies karma and rebirth. Non-wrong-view establishes right understanding — deeply trusting in cause and effect and taking refuge in the Three Jewels.<br><br><strong>Five virtues from non-wrong-view:</strong><br>① Obtaining truly good intentions and truly good companions<br>② Deeply trusting cause and effect, preferring death to evil<br>③ Taking refuge only in the Buddha, not other devas<br>④ Straightforward mind with right view, free from all doubts<br>⑤ Constantly reborn in human or heavenly realms, never in evil paths<br><br><strong>Conclusion:</strong> Right view is the compass of practice; only with a correct worldview can one proceed directly to bodhi without deviation.`},
+  {q:'佛告龍王說修習「一法」能斷一切諸惡道苦，這一法是什麼？如何實踐？',ans:`<strong>這一法：</strong>「謂於晝夜，常念思惟觀察善法，令諸善法念念增長，不容毫分不善間雜。」<br><br><strong>實踐方法：</strong><br>① 「常念」——時時記住善法，保持善念<br>② 「思惟」——深思善法道理，明白為何要行善<br>③ 「觀察」——觀察自己身口意三業是否符合善法<br>④ 「念念增長」——讓善法力量越來越強<br>⑤ 「不容不善間雜」——時刻警覺，不讓惡念趁虛而入`,qEn:'The Buddha told the Dragon King there is \'one dharma\' that cuts all suffering of the evil paths. What is it, and how is it practiced?',ansEn:`<strong>The one dharma:</strong> \'That is, day and night constantly mindful, contemplating wholesome dharmas, allowing wholesome dharmas to grow moment by moment, not permitting even a fraction of unwholesome to mix in.\'<br><br><strong>Four practices:</strong><br>① <strong>Constantly mindful</strong> — always remembering wholesome dharmas<br>② <strong>Contemplating</strong> — deeply reflecting on why to practice good<br>③ <strong>Observing</strong> — watching whether one\'s body, speech, and mind accord with wholesome dharmas<br>④ <strong>Growing moment by moment</strong> — continuously strengthening wholesome dharmas<br>⑤ <strong>Not permitting any unwholesome</strong> — always vigilant against unwholesome thoughts`},
+  {q:'口業四種（不妄語、不兩舌、不惡口、不綺語）有何不同？請分別解釋。',ans:`① <strong>不妄語：</strong>不說謊欺騙，誠實是口業基礎，得人信任。<br>② <strong>不兩舌：</strong>不搬弄是非挑撥離間，維護人際和諧。<br>③ <strong>不惡口：</strong>不說粗惡侮辱傷人的話，說話柔和愛語。<br>④ <strong>不綺語：</strong>不說無意義、猥褻、散漫的話，語言要有益有建設性。<br><br><strong>比較：</strong>妄語違背事實；兩舌製造不和；惡口傷害感情；綺語浪費言語。四者各有側重，合則守護口業清淨。`,qEn:'What are the four types of verbal karma (non-false speech, non-divisive speech, non-harsh speech, no idle chatter)? Explain the differences.',ansEn:`① <strong>Non-false speech:</strong> not lying or deceiving — the foundation of verbal karma, earning trust.<br>② <strong>Non-divisive speech:</strong> not gossiping or stirring up conflict — maintaining interpersonal harmony.<br>③ <strong>Non-harsh speech:</strong> not using coarse or hurtful language — speaking with gentle, loving words.<br>④ <strong>No idle chatter:</strong> not speaking meaninglessly or vulgarly — language should be beneficial and constructive.<br><br><strong>Comparison:</strong> False speech violates truth; divisive speech creates discord; harsh speech injures feelings; idle chatter wastes words. Each has its own focus; together they guard the purity of verbal karma.`},
+  {q:'請說明十善業道與「五戒」的關係，並指出十善業道超越五戒的部分。',ans:`<strong>五戒：</strong>不殺生、不偷盜、不邪淫、不妄語、不飲酒<br><br><strong>重疊：</strong>十善前四種（不殺、不盜、不邪淫、不妄語）與五戒前四戒完全相同。<br><br><strong>十善超越五戒：</strong><br>① 多口業三種：不兩舌、不惡口、不綺語<br>② 多意業三種：不貪欲、不瞋恚、不邪見<br>③ 涵蓋心念（意業）層面，範圍更廣更深<br><br><strong>結論：</strong>五戒主要規範行為，十善業道進一步規範心念，是更完整的修行準則。`,qEn:'Explain the relationship between the ten wholesome deeds and the five precepts, and in what ways the ten wholesome deeds go beyond the five precepts.',ansEn:`<strong>Five precepts:</strong> non-killing, non-stealing, no sexual misconduct, non-false speech, no intoxicants<br><br><strong>Overlap:</strong> The first four of the ten wholesome deeds (non-killing, non-stealing, no sexual misconduct, non-false speech) are identical to the first four precepts.<br><br><strong>Where ten wholesome deeds go further:</strong><br>① Three additional verbal deeds: non-divisive speech, non-harsh speech, no idle chatter<br>② Three mental deeds: non-greed, non-hatred, non-wrong-view<br>③ Covers the level of mind and intention — broader and deeper<br><br><strong>Conclusion:</strong> The five precepts primarily regulate behavior; the ten wholesome deeds also regulate thought — a more complete guide to practice.`},
+  {q:'請解釋「一切眾生，心想異故，造業亦異，由是故有諸趣輪迴」這句話的含義及實踐意義。',ans:`<strong>三層含義：</strong><br>① <strong>心念決定業力：</strong>每人心念各異→造業各異→善念生善業，惡念生惡業<br>② <strong>業力決定輪迴：</strong>業力不同→六道去處不同<br>③ <strong>心是根源：</strong>改變心念→改變業力→改變命運軌道<br><br><strong>實踐意義：</strong>修行的起點就是從「心」開始——觀察心念、淨化心念，這是十善業道的精髓。不需等到「有空」才修行，當下每個念頭都是修行的機會。`,qEn:'Explain the meaning of \'Because the minds of beings differ, their actions differ, and thus they transmigrate\' and its practical significance.',ansEn:`<strong>Three levels:</strong><br>① <strong>Mind determines karma:</strong> each person\'s intentions differ → different karma → wholesome intentions create wholesome karma, unwholesome intentions create unwholesome karma<br>② <strong>Karma determines rebirth:</strong> different karma → different realms in the six destinations<br>③ <strong>Mind is the root:</strong> change the mind → change karma → change life\'s trajectory<br><br><strong>Practical significance:</strong> The starting point of practice is the mind — observe thoughts, purify them. This is the essence of the ten wholesome deeds. One doesn\'t need to wait for \'free time\' — every thought right now is an opportunity for practice.`},
+  {q:'「迴向阿耨多羅三藐三菩提」是什麼意思？為何本經一再強調這一點？',ans:`<strong>名詞解釋：</strong>「阿耨多羅三藐三菩提」= anuttarā-samyak-saṃbodhi = 無上正等正覺（最圓滿的佛陀覺悟）。「迴向」是將修行功德轉向以成就佛果為目標。<br><br><strong>為何一再強調：</strong><br>① 十善業道若只為世間福報，功德有限<br>② 以大菩提心統攝十善，每善業都成為成佛資糧<br>③ 心量不同，果報不同：小心量得小果，大心量得大果<br><br><strong>結論：</strong>迴向菩提是把十善業道從「善人行為」提升為「菩薩修行」的關鍵，是大乘佛法的特色。`,qEn:'What does \'dedicating to anuttarā-samyak-saṃbodhi\' mean? Why does the sutra repeatedly emphasize this point?',ansEn:`<strong>Term explanation:</strong> Anuttarā-samyak-saṃbodhi = unsurpassed perfect enlightenment = the most complete awakening of a buddha. \'Dedication\' means directing the merit of practice toward the goal of buddhahood.<br><br><strong>Why the sutra repeatedly emphasizes this:</strong><br>① If the ten wholesome deeds are practiced only for worldly merit, the merit is limited<br>② Encompassing them with the great bodhi mind, each wholesome act becomes provision for buddhahood<br>③ Different aspirations, different results: small aspiration yields small fruition; vast aspiration yields vast fruition<br><br><strong>Conclusion:</strong> Dedicating to bodhi transforms the ten wholesome deeds from \'good person behavior\' to \'bodhisattva practice\' — the hallmark of Mahāyāna Buddhism.`},
+  {q:'如果用十善業道對照現代日常生活，你認為哪一種最難實踐？請說明理由並提出建議。',ans:`<strong>參考（可有不同看法）：</strong><br><br><strong>最難實踐者：不綺語</strong><br>現代人每天刷短影片、聊無聊的話題，不知不覺說了大量無意義的話。<br>建議：定一個「有意義才開口」的原則，說話前問自己「這句話有助於誰？」<br><br><strong>另一選擇：不貪欲</strong><br>廣告、社交媒體不斷刺激欲望，難以知足。<br>建議：每月一次「感恩清單」，寫下已擁有的美好，練習知足心。<br><br><strong>結論：</strong>十善業道是在任何時代都深具現代意義的生活準則，從最難的那一條開始改變，就是最勇敢的修行。`,qEn:'If applying the ten wholesome deeds to modern daily life, which do you find most difficult to practice? Explain your reasons and suggest a practical approach.',ansEn:`<strong>Reference (personal views may differ):</strong><br><br><strong>Most difficult: No idle chatter</strong><br>Modern people mindlessly scroll through short videos and chat about trivial things — meaningless talk has become habitual.<br>Suggestion: Set a principle of \'only speak when it\'s meaningful.\' Before speaking, ask yourself: \'Does this benefit anyone?\'<br><br><strong>Another choice: Non-greed</strong><br>Advertising and social media constantly stimulate desire, making contentment difficult.<br>Suggestion: Once a month, write a \'gratitude list\' noting all the good things you already have, practicing a contented heart.<br><br><strong>Conclusion:</strong> The ten wholesome courses of action are deeply relevant guidelines for living in any era. Starting with the one you find most difficult is the most courageous form of practice.`},
 ];
-const saBank=[
-  {q:'請解釋「十善業道」是哪十種，並按身、口、意三業分類列舉。',ans:`<strong>身業（3種）：</strong>不殺生、不偷盜、不邪淫<br><strong>口業（4種）：</strong>不妄語、不兩舌、不惡口、不綺語<br><strong>意業（3種）：</strong>不貪欲、不瞋恚、不邪見<br><br>記憶口訣：「3-4-3」結構，身守三門、口言四德、意持三慧。`},
-  {q:'《佛說十善業道經》中，佛陀在哪裡說法？主要聽法對象是誰？說法的緣起是什麼？',ans:`<strong>說法地點：</strong>娑竭羅龍宮（海龍王宮殿）<br><strong>聽法對象：</strong>八千大比丘眾、三萬二千菩薩摩訶薩，以及娑竭羅龍王等<br><strong>說法緣起：</strong>佛以海中眾生形色種類各別為喻，開示一切皆由「心」造業之差異，以龍王請法為緣起，說十善業道是一切善法的根本。`},
-  {q:'佛說不殺生有「十種離惱法」，請列舉其中五種，並說明意義。',ans:`離殺生五種功德：<br>① <strong>普施無畏</strong>——對眾生給予安全感<br>② <strong>起大慈心</strong>——自然生起廣大慈悲<br>③ <strong>身常無病</strong>——不傷命，身體健康<br>④ <strong>壽命長遠</strong>——尊重生命，感召長壽<br>⑤ <strong>命終生天</strong>——命終投生天道<br><br>意義：不殺生不僅是慈悲展現，更帶來自身利益，體現「善有善報」因果觀。`},
-  {q:'為什麼十善業道是「世間」和「出世間」一切善法的根本？請根據經文說明。',ans:`經文：「一切善法，以十善業道而為根本，能生人天，能生聲聞菩提、獨覺菩提，及以無上正等菩提，皆由十善業道以為根本。」<br><br><strong>世間層面：</strong>持十善可得人天善果，是世間道德的基礎。<br><strong>出世間層面：</strong>聲聞、獨覺、菩薩乃至佛果，皆以十善業道為修行根本。六度萬行也以十善為基礎。`},
-  {q:'「不妄語」的功德是什麼？請列出四種「天所讚法」並說明現實啟示。',ans:`離妄語四種天所讚法：<br>① <strong>口常清淨，優缽羅香</strong>——誠實言語如蓮花芬芳<br>② <strong>為諸世間之所信伏</strong>——得世人信任尊重<br>③ <strong>發言成證，人天敬愛</strong>——言出必行，得人敬愛<br>④ <strong>智慧殊勝，無能制伏</strong>——誠實增長智慧<br><br><strong>現實啟示：</strong>誠信是信任的基礎，長遠看誠實比謊言更能建立持久關係和好口碑。`},
-  {q:'請說明「不邪見」與因果正見的關係，以及離邪見可得哪些功德？',ans:`邪見指否認因果、業報的錯誤認知。離邪見即建立正見——深信因果業報、歸依三寶。<br><br><strong>離邪見五種功德：</strong><br>① 得真善意樂，真善等侶<br>② 深信因果，寧殞身命，終不作惡<br>③ 惟歸依佛，非餘天等<br>④ 直心正見，永離吉凶疑網<br>⑤ 常生人天，不更惡道<br><br><strong>結論：</strong>正見是修行的指南針，有正確世界觀才能不偏不倚直至菩提。`},
-  {q:'佛告龍王說修習「一法」能斷一切諸惡道苦，這一法是什麼？如何實踐？',ans:`<strong>這一法：</strong>「謂於晝夜，常念思惟觀察善法，令諸善法念念增長，不容毫分不善間雜。」<br><br><strong>實踐方法：</strong><br>① 「常念」——時時記住善法，保持善念<br>② 「思惟」——深思善法道理，明白為何要行善<br>③ 「觀察」——觀察自己身口意三業是否符合善法<br>④ 「念念增長」——讓善法力量越來越強<br>⑤ 「不容不善間雜」——時刻警覺，不讓惡念趁虛而入`},
-  {q:'口業四種（不妄語、不兩舌、不惡口、不綺語）有何不同？請分別解釋。',ans:`① <strong>不妄語：</strong>不說謊欺騙，誠實是口業基礎，得人信任。<br>② <strong>不兩舌：</strong>不搬弄是非挑撥離間，維護人際和諧。<br>③ <strong>不惡口：</strong>不說粗惡侮辱傷人的話，說話柔和愛語。<br>④ <strong>不綺語：</strong>不說無意義、猥褻、散漫的話，語言要有益有建設性。<br><br><strong>比較：</strong>妄語違背事實；兩舌製造不和；惡口傷害感情；綺語浪費言語。四者各有側重，合則守護口業清淨。`},
-  {q:'請說明十善業道與「五戒」的關係，並指出十善業道超越五戒的部分。',ans:`<strong>五戒：</strong>不殺生、不偷盜、不邪淫、不妄語、不飲酒<br><br><strong>重疊：</strong>十善前四種（不殺、不盜、不邪淫、不妄語）與五戒前四戒完全相同。<br><br><strong>十善超越五戒：</strong><br>① 多口業三種：不兩舌、不惡口、不綺語<br>② 多意業三種：不貪欲、不瞋恚、不邪見<br>③ 涵蓋心念（意業）層面，範圍更廣更深<br><br><strong>結論：</strong>五戒主要規範行為，十善業道進一步規範心念，是更完整的修行準則。`},
-  {q:'請解釋「一切眾生，心想異故，造業亦異，由是故有諸趣輪迴」這句話的含義及實踐意義。',ans:`<strong>三層含義：</strong><br>① <strong>心念決定業力：</strong>每人心念各異→造業各異→善念生善業，惡念生惡業<br>② <strong>業力決定輪迴：</strong>業力不同→六道去處不同<br>③ <strong>心是根源：</strong>改變心念→改變業力→改變命運軌道<br><br><strong>實踐意義：</strong>修行的起點就是從「心」開始——觀察心念、淨化心念，這是十善業道的精髓。不需等到「有空」才修行，當下每個念頭都是修行的機會。`},
-  {q:'「迴向阿耨多羅三藐三菩提」是什麼意思？為何本經一再強調這一點？',ans:`<strong>名詞解釋：</strong>「阿耨多羅三藐三菩提」= anuttarā-samyak-saṃbodhi = 無上正等正覺（最圓滿的佛陀覺悟）。「迴向」是將修行功德轉向以成就佛果為目標。<br><br><strong>為何一再強調：</strong><br>① 十善業道若只為世間福報，功德有限<br>② 以大菩提心統攝十善，每善業都成為成佛資糧<br>③ 心量不同，果報不同：小心量得小果，大心量得大果<br><br><strong>結論：</strong>迴向菩提是把十善業道從「善人行為」提升為「菩薩修行」的關鍵，是大乘佛法的特色。`},
-  {q:'如果用十善業道對照現代日常生活，你認為哪一種最難實踐？請說明理由並提出建議。',ans:`<strong>參考（可有不同看法）：</strong><br><br><strong>最難實踐者：不綺語</strong><br>現代人每天刷短影片、聊無聊的話題，不知不覺說了大量無意義的話。<br>建議：定一個「有意義才開口」的原則，說話前問自己「這句話有助於誰？」<br><br><strong>另一選擇：不貪欲</strong><br>廣告、社交媒體不斷刺激欲望，難以知足。<br>建議：每月一次「感恩清單」，寫下已擁有的美好，練習知足心。<br><br><strong>結論：</strong>十善業道是在任何時代都深具現代意義的生活準則，從最難的那一條開始改變，就是最勇敢的修行。`},
-];
-
 function pickRandom(arr,n){return[...arr].sort(()=>Math.random()-.5).slice(0,n);}
 
 // TF
 let tfAnswered=0,tfCorrect=0,tfCurrent=[];
 function buildTF(){
   tfCurrent=pickRandom(tfBank,12);
+  var isEn=LANG_MODE==='en';
   const con=document.getElementById('tfContainer');
   con.innerHTML='';tfAnswered=0;tfCorrect=0;updateTFScore();
   tfCurrent.forEach((item,idx)=>{
+    var qText = (isEn && item.qEn) ? item.qEn : item.q;
     const div=document.createElement('div');div.className='quiz-card';
     div.innerHTML=`<div class="quiz-q"><strong>第${idx+1}題．</strong>${item.q}</div>
     <div class="tf-opts"><button class="tf-btn" onclick="checkTF(${idx},true,this)">○ 是（True）</button><button class="tf-btn" onclick="checkTF(${idx},false,this)">✕ 非（False）</button></div>
@@ -2614,8 +2701,8 @@ function checkTF(idx,val,btn){
   const item=tfCurrent[idx];btn.parentElement.querySelectorAll('.tf-btn').forEach(b=>b.classList.add('disabled'));
   const fb=document.getElementById(`tf-fb-${idx}`);tfAnswered++;
   var correct=(val===item.ans);
-  if(correct){btn.classList.add('correct');fb.textContent='✅ 正確！'+item.exp;fb.className='quiz-feedback show feedback-correct';tfCorrect++;}
-  else{btn.classList.add('wrong');btn.parentElement.querySelectorAll('.tf-btn').forEach(b=>{if((b.textContent.includes('是')&&item.ans)||(b.textContent.includes('非')&&!item.ans))b.classList.add('correct');});fb.textContent='❌ 不正確。'+item.exp;fb.className='quiz-feedback show feedback-wrong';}
+  if(correct){btn.classList.add('correct');fb.textContent='✅ 正確！'+(isEn && item.expEn ? item.expEn : item.exp);fb.className='quiz-feedback show feedback-correct';tfCorrect++;}
+  else{btn.classList.add('wrong');btn.parentElement.querySelectorAll('.tf-btn').forEach(b=>{if((b.textContent.includes('是')&&item.ans)||(b.textContent.includes('非')&&!item.ans))b.classList.add('correct');});fb.textContent='❌ 不正確。'+(isEn && item.expEn ? item.expEn : item.exp);fb.className='quiz-feedback show feedback-wrong';}
   updateTFScore();
   try{logActivity('tf',{q:item.q,a:val?'是 (True)':'否 (False)',correct:correct});}catch(e){}
 }
@@ -2627,18 +2714,34 @@ function buildMCQ(){
   mcqCurrent=pickRandom(mcqBank,12);
   const con=document.getElementById('mcqContainer');con.innerHTML='';mcqAnswered=0;mcqCorrect=0;updateMCQScore();
   mcqCurrent.forEach((item,idx)=>{
+    var qText = (isEn && item.qEn) ? item.qEn : item.q;
+    var optsArr = (isEn && item.optsEn) ? item.optsEn : item.opts;
+    var qLabel = isEn ? `Q${idx+1}.` : `第${idx+1}題．`;
     const div=document.createElement('div');div.className='quiz-card';
-    const opts=item.opts.map((o,i)=>`<div class="quiz-opt" onclick="checkMCQ(${idx},${i},this)"><span class="opt-letter">${['A','B','C','D'][i]}</span>${o.substring(2)}</div>`).join('');
-    div.innerHTML=`<div class="quiz-q"><strong>第${idx+1}題．</strong>${item.q}</div><div class="quiz-opts">${opts}</div><div class="quiz-feedback" id="mcq-fb-${idx}"></div>`;
+    const opts=optsArr.map((o,i)=>{
+      var txt = String(o).replace(/^[A-D]\.\s*/,'').replace(/^[A-D]\./,'');
+      return `<div class="quiz-opt" onclick="checkMCQ(${idx},${i},this)"><span class="opt-letter">${['A','B','C','D'][i]}</span>${txt}</div>`;
+    }).join('');
+    div.innerHTML=`<div class="quiz-q"><strong>${qLabel}</strong>${qText}</div><div class="quiz-opts">${opts}</div><div class="quiz-feedback" id="mcq-fb-${idx}"></div>`;
     con.appendChild(div);
   });
 }
 function checkMCQ(idx,chosen,el){
+  var isEn=LANG_MODE==='en';
   const item=mcqCurrent[idx];const opts=el.parentElement.querySelectorAll('.quiz-opt');opts.forEach(o=>o.classList.add('disabled'));
   const fb=document.getElementById(`mcq-fb-${idx}`);mcqAnswered++;
   var correct=(chosen===item.ans);
-  if(correct){el.classList.add('correct');fb.textContent='✅ 正確！'+item.exp;fb.className='quiz-feedback show feedback-correct';mcqCorrect++;}
-  else{el.classList.add('wrong');opts[item.ans].classList.add('correct');fb.textContent=`❌ 不正確。正解：${item.opts[item.ans]}。${item.exp}`;fb.className='quiz-feedback show feedback-wrong';}
+  var expText = (isEn && item.expEn) ? item.expEn : item.exp;
+  var correctOpt = (isEn && item.optsEn) ? String(item.optsEn[item.ans]).replace(/^[A-D]\. /,'') : item.opts[item.ans];
+  if(correct){
+    el.classList.add('correct');
+    fb.textContent = isEn ? '✅ Correct! '+expText : '✅ 正確！'+expText;
+    fb.className='quiz-feedback show feedback-correct';mcqCorrect++;
+  } else {
+    el.classList.add('wrong');opts[item.ans].classList.add('correct');
+    fb.textContent = isEn ? `❌ Incorrect. Answer: ${correctOpt}. ${expText}` : `❌ 不正確。正解：${item.opts[item.ans]}。${expText}`;
+    fb.className='quiz-feedback show feedback-wrong';
+  }
   updateMCQScore();
   try{logActivity('mcq',{q:item.q,a:item.opts[chosen],correct:correct});}catch(e){}
 }
@@ -2659,20 +2762,26 @@ let saCurrent=[{q:'請說明「菩薩六度」與十善業道的關係。',
    ans:'序分描述：佛在娑竭羅龍宮，與八千大比丘眾、三萬二千菩薩摩訶薩俱。世尊問龍王：「海中眾生形色種類各別，為何？」象徵意義：以海中眾生因業力不同而形色各異，引出「心想異故，造業亦異」的核心教理，說明萬法唯心，業由心造，善惡自取。'},
 ];
 function buildSA(){
-  saCurrent=pickRandom(saBank,6);const con=document.getElementById('saContainer');con.innerHTML='';
+  saCurrent=pickRandom(saBank,6);var isEn=LANG_MODE==='en';const con=document.getElementById('saContainer');con.innerHTML='';
   saCurrent.forEach((item,idx)=>{
+    var qText = (isEn && item.qEn) ? item.qEn : item.q;
+    var ansText = (isEn && item.ansEn) ? item.ansEn : item.ans;
+    var qLabel = isEn ? `Q${idx+1}.` : `第${idx+1}題．`;
+    var btnLabel = isEn ? '📖 View Reference Answer' : '📖 查看參考答案';
+    var ansLabel = isEn ? '【Reference Answer】' : '【參考答案】';
     const div=document.createElement('div');div.className='quiz-card';
-    div.innerHTML=`<div class="quiz-q"><strong>第${idx+1}題．</strong>${item.q}</div>
-    <textarea class="sa-textarea" placeholder="請在此輸入您的答案..."></textarea>
-    <div><button class="btn btn-secondary" onclick="toggleSA(${idx})">📖 查看參考答案</button></div>
-    <div class="sa-answer" id="sa-ans-${idx}"><strong>【參考答案】</strong><br><br>${item.ans}</div>`;
+    div.innerHTML=`<div class="quiz-q"><strong>${qLabel}</strong>${qText}</div>
+    <textarea class="sa-textarea" placeholder="${isEn ? 'Type your answer here...' : '請在此輸入您的答案...'}"></textarea>
+    <div><button class="btn btn-secondary" onclick="toggleSA(${idx})">${btnLabel}</button></div>
+    <div class="sa-answer" id="sa-ans-${idx}"><strong>${ansLabel}</strong><br><br>${ansText}</div>`;
     con.appendChild(div);
   });
 }
 function toggleSA(idx){
   const el=document.getElementById(`sa-ans-${idx}`);
   el.classList.toggle('show');
-  el.previousElementSibling.querySelector('button').textContent=el.classList.contains('show')?'🔒 隱藏答案':'📖 查看參考答案';
+  var isEnT=LANG_MODE==='en';
+    el.previousElementSibling.querySelector('button').textContent=el.classList.contains('show')?(isEnT?'🔒 Hide Answer':'🔒 隱藏答案'):(isEnT?'📖 View Reference Answer':'📖 查看參考答案');
   try{
     if(el.classList.contains('show')&&!el.dataset.logged){
       el.dataset.logged='1';
@@ -2688,52 +2797,96 @@ function toggleSA(idx){
 // Voice Q&A pool: {q: question, ref: reference answer}
 const vqPool=[
   {q:'請問十善業道分哪三大類別？每類各幾種？',
-   ref:'十善業道分三大類：身業3種（不殺生、不偷盜、不邪淫）、口業4種（不妄語、不兩舌、不惡口、不綺語）、意業3種（不貪欲、不瞋恚、不邪見），合計十種。口訣：「3-4-3」。'},
+   ref:'十善業道分三大類：身業3種（不殺生、不偷盜、不邪淫）、口業4種（不妄語、不兩舌、不惡口、不綺語）、意業3種（不貪欲、不瞋恚、不邪見），合計十種。口訣：「3-4-3」。',
+   qEn:'What are the three main categories of the ten wholesome courses of action, and how many are in each category?',
+   refEn:'The ten wholesome courses are divided into three categories: bodily karma with 3 types (non-killing, non-stealing, no sexual misconduct), verbal karma with 4 types (non-false speech, non-divisive speech, non-harsh speech, no idle chatter), and mental karma with 3 types (non-greed, non-hatred, non-wrong-view), totaling ten. Memory tip: \'3-4-3.\''},
   {q:'「不妄語」的功德是什麼？請列舉幾種。',
-   ref:'離妄語得八種天所讚法：①口常清淨如優缽羅香②為諸世間信伏③發言成證人天敬愛④常以愛語安慰眾生⑤三業清淨⑥言無誤失⑦發言尊重人天奉行⑧智慧殊勝。若迴向菩提，成佛時得如來真實語。'},
+   ref:'離妄語得八種天所讚法：①口常清淨如優缽羅香②為諸世間信伏③發言成證人天敬愛④常以愛語安慰眾生⑤三業清淨⑥言無誤失⑦發言尊重人天奉行⑧智慧殊勝。若迴向菩提，成佛時得如來真實語。',
+   qEn:'What are the virtues of non-false speech? Please list a few.',
+   refEn:'Non-false speech yields eight god-praised virtues: ①mouth ever pure as utpala lotus fragrance ②trusted by the world ③words become testimony, respected by humans and gods ④always using loving words to comfort beings ⑤three karmas pure ⑥speech without error ⑦words are respected and carried out ⑧wisdom supreme. When dedicated to bodhi, at buddhahood one attains the perfectly true speech of a tathāgata.'},
   {q:'本經是佛陀在哪裡說法的？對象是誰？',
-   ref:'佛在娑竭羅龍宮（海龍王宮殿），對八千大比丘眾、三萬二千菩薩摩訶薩，以及娑竭羅龍王說法。說法緣起：佛以海中眾生形色各異為喻，開示一切皆由心造業之差異。'},
+   ref:'佛在娑竭羅龍宮（海龍王宮殿），對八千大比丘眾、三萬二千菩薩摩訶薩，以及娑竭羅龍王說法。說法緣起：佛以海中眾生形色各異為喻，開示一切皆由心造業之差異。',
+   qEn:'Where in this sutra did the Buddha teach, and to whom?',
+   refEn:'The Buddha taught at the Palace of Sāgara the Dragon King (the underwater palace of the ocean dragon king), to eight thousand great bhikṣus, thirty-two thousand bodhisattva-mahāsattvas, and Sāgara the Dragon King. The occasion: the Buddha used the variety of ocean beings\' forms as a metaphor to teach that all arise from the mind creating different karma.'},
   {q:'什麼是「不兩舌」？在日常生活中您如何實踐？',
-   ref:'不兩舌：不搬弄是非、不挑撥離間，令眾和睦。離兩舌得五種不可壞法：不壞身、不壞眷屬、不壞信、不壞法行、不壞善知識。現代實踐：不在群組轉發是非，不在甲面前說乙壞話。'},
+   ref:'不兩舌：不搬弄是非、不挑撥離間，令眾和睦。離兩舌得五種不可壞法：不壞身、不壞眷屬、不壞信、不壞法行、不壞善知識。現代實踐：不在群組轉發是非，不在甲面前說乙壞話。',
+   qEn:'What is non-divisive speech? How do you practice it in daily life?',
+   refEn:'Non-divisive speech means not gossiping or stirring up conflict — keeping the community harmonious. Non-divisive speech yields five indestructible qualities: indestructible body, family, faith, practice, and virtuous friends. Modern practice: don\'t forward gossip in group chats, don\'t criticize others behind their backs.'},
   {q:'佛說「心想異故，造業亦異」，您如何理解這句話？',
-   ref:'心念不同，造業就不同，業力不同就感召不同的輪迴果報。全句：「一切眾生，心想異故，造業亦異，由是故有諸趣輪轉。」意義：修行根本在於淨化心念，心念改變則業力改變，命運也隨之改變。'},
+   ref:'心念不同，造業就不同，業力不同就感召不同的輪迴果報。全句：「一切眾生，心想異故，造業亦異，由是故有諸趣輪轉。」意義：修行根本在於淨化心念，心念改變則業力改變，命運也隨之改變。',
+   qEn:'How do you understand the teaching \'Because minds differ, karma differs, and thus beings transmigrate through various realms\'?',
+   refEn:'Different intentions create different karma; different karma leads to different realms in the cycle of rebirth. The full passage: \'Because the minds of sentient beings differ, their actions also differ, and thus they transmigrate through various realms.\' Meaning: the root of practice is purifying the mind — change the mind, change karma, and one\'s life trajectory changes accordingly.'},
   {q:'「不邪見」指的是什麼？離邪見有哪些功德？',
-   ref:'不邪見：相信因果業報，歸依三寶，正見人生，不持斷滅邪見。離邪見得十功德法：①真善意樂善侶②深信因果③唯歸依佛④直心正見⑤常生人天⑥福慧增勝⑦行於聖道⑧不起身見⑨住無礙見⑩不墮諸難。'},
+   ref:'不邪見：相信因果業報，歸依三寶，正見人生，不持斷滅邪見。離邪見得十功德法：①真善意樂善侶②深信因果③唯歸依佛④直心正見⑤常生人天⑥福慧增勝⑦行於聖道⑧不起身見⑨住無礙見⑩不墮諸難。',
+   qEn:'What is non-wrong-view? What virtues arise from non-wrong-view?',
+   refEn:'Non-wrong-view means believing in karma and rebirth, taking refuge in the Three Jewels, having right understanding of life, and not holding nihilistic wrong views. Non-wrong-view yields ten virtuous qualities: ①truly good intentions ②deeply trusting cause and effect ③taking refuge only in the Buddha ④straightforward mind with right view ⑤constantly reborn in human/heavenly realms ⑥merit and wisdom increasing ⑦walking the holy path ⑧not arising with wrong views of self ⑨dwelling in unobstructed views ⑩not falling into miserable states.'},
   {q:'請解釋「迴向阿耨多羅三藐三菩提」的意思。',
-   ref:'「阿耨多羅三藐三菩提」即無上正等正覺，是最圓滿的佛陀覺悟。「迴向」是將修行功德轉向以成就佛果為目標。本經每善業後都強調迴向菩提，使善業從世間福報提升為成佛資糧，體現大乘佛法特色。'},
+   ref:'「阿耨多羅三藐三菩提」即無上正等正覺，是最圓滿的佛陀覺悟。「迴向」是將修行功德轉向以成就佛果為目標。本經每善業後都強調迴向菩提，使善業從世間福報提升為成佛資糧，體現大乘佛法特色。',
+   qEn:'Please explain the meaning of \'dedicating to anuttarā-samyak-saṃbodhi.\'',
+   refEn:'Anuttarā-samyak-saṃbodhi is Sanskrit for \'unsurpassed perfect enlightenment\' — the most complete awakening of a buddha. \'Dedication\' means directing one\'s practice merit toward buddhahood as the goal. The sutra emphasizes dedication after each wholesome deed, transforming worldly merit into provision for buddhahood — a hallmark of Mahāyāna Buddhism.'},
   {q:'十善業道中，您認為哪一種最難實踐？為什麼？',
-   ref:'此題為開放性問題，重點在能說出理由並連結到具體生活。例如：不綺語——現代人刷無聊短影片、說廢話已成習慣；不貪欲——廣告和社交媒體不斷刺激欲望；不瞋恚——生活壓力大容易發怒。'},
+   ref:'此題為開放性問題，重點在能說出理由並連結到具體生活。例如：不綺語——現代人刷無聊短影片、說廢話已成習慣；不貪欲——廣告和社交媒體不斷刺激欲望；不瞋恚——生活壓力大容易發怒。',
+   qEn:'Among the ten wholesome courses of action, which do you find most difficult to practice, and why?',
+   refEn:'This is an open-ended question; what matters is being able to give reasons connected to real life. For example: no idle chatter — mindlessly scrolling short videos and chatting about nothing has become habitual in modern life; non-greed — advertising and social media constantly stimulate desire; non-hatred — life pressures make it easy to get angry.'},
   {q:'離殺生的功德包括哪些？請列舉三種。',
-   ref:'離殺生得十種離惱法：①普施無畏②常於眾生起大慈心③永斷瞋恚習氣④身常無病⑤壽命長遠⑥非人守護⑦常無惡夢⑧滅除怨結⑨無惡道怖⑩命終生天。若迴向菩提，後成佛時得隨心自在壽命。'},
+   ref:'離殺生得十種離惱法：①普施無畏②常於眾生起大慈心③永斷瞋恚習氣④身常無病⑤壽命長遠⑥非人守護⑦常無惡夢⑧滅除怨結⑨無惡道怖⑩命終生天。若迴向菩提，後成佛時得隨心自在壽命。',
+   qEn:'What are the virtues of non-killing? Please name three.',
+   refEn:'Non-killing yields ten freedom-from-affliction benefits: ①giving fearlessness to all ②great compassion arising toward beings ③forever cutting habits of anger ④body ever free from illness ⑤long life ⑥protected by non-humans ⑦always free from nightmares ⑧dissolving enmity ⑨no fear of evil paths ⑩rebirth in heaven. When dedicated to bodhi, at buddhahood one attains a lifespan of complete freedom.'},
   {q:'十善業道與五戒有何關係？',
-   ref:'五戒前四戒（不殺、不盜、不邪淫、不妄語）與十善前四種完全相同。十善超越五戒之處：多口業三種（不兩舌、不惡口、不綺語）和意業三種（不貪欲、不瞋恚、不邪見），範圍更廣，涵蓋心念層面。'},
+   ref:'五戒前四戒（不殺、不盜、不邪淫、不妄語）與十善前四種完全相同。十善超越五戒之處：多口業三種（不兩舌、不惡口、不綺語）和意業三種（不貪欲、不瞋恚、不邪見），範圍更廣，涵蓋心念層面。',
+   qEn:'What is the relationship between the ten wholesome courses of action and the five precepts?',
+   refEn:'The first four precepts (non-killing, non-stealing, no sexual misconduct, non-false speech) are identical to the first four of the ten wholesome deeds. The ten wholesome deeds go beyond the five precepts by adding three verbal deeds (non-divisive speech, non-harsh speech, no idle chatter) and three mental deeds (non-greed, non-hatred, non-wrong-view), covering the realm of thought.'},
   {q:'請說明身業三種分別是哪三種及其含義。',
-   ref:'身業三種：①不殺生——慈悲對待一切生命，不奪取生命②不偷盜——不取未被允許的財物，守廉潔③不邪淫——守護清淨的人際關係，不發生不正當男女關係。口訣：「身守三門心清淨」。'},
+   ref:'身業三種：①不殺生——慈悲對待一切生命，不奪取生命②不偷盜——不取未被允許的財物，守廉潔③不邪淫——守護清淨的人際關係，不發生不正當男女關係。口訣：「身守三門心清淨」。',
+   qEn:'Please explain what the three bodily deeds are and their meaning.',
+   refEn:'Three bodily deeds: ①Non-killing — compassion toward all living beings, not taking life ②Non-stealing — not taking what is not given, maintaining integrity ③No sexual misconduct — protecting pure human relationships, avoiding improper conduct. Memory phrase: \'guard three bodily gates, keep the mind pure.\''},
   {q:'什麼叫做「不綺語」？在現代生活中有哪些例子？',
-   ref:'不綺語：不說無意義散亂之言，語言莊重有益。離綺語得三種決定：定為智人所愛、定能如實答問、定於人天威德最勝。現代例子：少刷無意義短影片、不說廢話、說話前問「這句話有意義嗎？」'},
-{q:'請說明「六度」各與哪種莊嚴對應，並舉其功德。',
-   ref:'施莊嚴→能捨一切所有；戒莊嚴→遠離過失毀辱；忍莊嚴→得佛圓音具眾相好；進莊嚴→摧伏魔怨入佛法藏；禪莊嚴→生慚愧輕安；慧莊嚴→斷一切分別妄見。六度各有對應功德，以十善為根本。'},
+   ref:'不綺語：不說無意義散亂之言，語言莊重有益。離綺語得三種決定：定為智人所愛、定能如實答問、定於人天威德最勝。現代例子：少刷無意義短影片、不說廢話、說話前問「這句話有意義嗎？」',
+   qEn:'What is no idle chatter? Give some modern examples.',
+   refEn:'No idle chatter means not speaking meaninglessly or trivially — speech should be dignified and beneficial. No idle chatter yields three firm qualities: always valued by the wise, able to answer questions accurately, most distinguished in dignity among humans and gods. Modern examples: spend less time on meaningless short videos, avoid idle talk, ask before speaking \'Is this meaningful?\''},
+  {q:'請說明「六度」各與哪種莊嚴對應，並舉其功德。',
+   ref:'施莊嚴→能捨一切所有；戒莊嚴→遠離過失毀辱；忍莊嚴→得佛圓音具眾相好；進莊嚴→摧伏魔怨入佛法藏；禪莊嚴→生慚愧輕安；慧莊嚴→斷一切分別妄見。六度各有對應功德，以十善為根本。',
+   qEn:'Please explain how each of the six pāramitās corresponds to an ornament, and give its virtue.',
+   refEn:'Generosity ornament → able to relinquish all possessions; Precept ornament → far from all faults and disgrace; Patience ornament → attaining the Buddha\'s perfect vocal sound and marks of excellence; Diligence ornament → crushing māra adversaries, entering the storehouse of Buddha-dharma; Meditation ornament → generating remorse, ease, and other virtuous qualities; Wisdom ornament → cutting all discriminative false views. Each pāramitā has its corresponding virtue, all rooted in the ten wholesome deeds.'},
   {q:'本經「大地譬喻」說明了什麼道理？',
-   ref:'以大地能承載一切山河草木為喻，說明十善業道是一切善法的根本。人天福報、聲聞菩提、獨覺菩提、無上菩提，皆以十善業道為根本而建立，如萬物依大地而生長。'},
+   ref:'以大地能承載一切山河草木為喻，說明十善業道是一切善法的根本。人天福報、聲聞菩提、獨覺菩提、無上菩提，皆以十善業道為根本而建立，如萬物依大地而生長。',
+   qEn:'What principle does the \'great earth metaphor\' in this sutra illustrate?',
+   refEn:'Using the great earth as a metaphor — it supports all mountains, rivers, and plants — this illustrates that the ten wholesome courses of action are the foundation of all wholesome dharmas. Human and heavenly merit, śrāvaka-bodhi, pratyekabuddha-bodhi, and unsurpassed bodhi all rest on the ten wholesome courses of action, just as all things grow from the earth.'},
   {q:'您如何理解「心想異故，造業亦異」這句話在日常生活中的應用？',
-   ref:'這是本經的核心：心念不同則造業不同，業不同則輪迴果報不同。實際應用：遇到不順心的事，先觀察自己的起心動念是否貪、瞋、痴；每天反思當天的身口意三業；以十善業道作為生活準則，從根本上改善命運。'},
+   ref:'這是本經的核心：心念不同則造業不同，業不同則輪迴果報不同。實際應用：遇到不順心的事，先觀察自己的起心動念是否貪、瞋、痴；每天反思當天的身口意三業；以十善業道作為生活準則，從根本上改善命運。',
+   qEn:'How do you understand the application of \'Because minds differ, karma differs\' in daily life?',
+   refEn:'This is the sutra\'s core: different intentions create different karma; different karma leads to different fruits of rebirth. Practical application: when faced with adversity, first observe whether your arising intentions are greed, hatred, or delusion; reflect daily on your bodily, verbal, and mental karma; use the ten wholesome courses of action as a life guideline, changing your destiny from the root.'},
   {q:'十善業道中，您覺得「口業四種」在現代社會最難實踐的是哪一種，為什麼？',
-   ref:'開放性問題，重點在能連結現代生活。不綺語最難：社交媒體充斥無意義資訊，短影片、閒聊消耗大量時間。不兩舌難：群組傳播是非已成習慣。不妄語難：商業談判或人際關係中常有善意謊言。任何答案合理即可，重點是能舉出具體理由。'},
+   ref:'開放性問題，重點在能連結現代生活。不綺語最難：社交媒體充斥無意義資訊，短影片、閒聊消耗大量時間。不兩舌難：群組傳播是非已成習慣。不妄語難：商業談判或人際關係中常有善意謊言。任何答案合理即可，重點是能舉出具體理由。',
+   qEn:'Among the four types of verbal karma, which do you find most difficult to practice in modern society, and why?',
+   refEn:'Open-ended question; what matters is connecting to modern life. No idle chatter is most difficult: social media is full of meaningless content, short videos and casual chat consume huge amounts of time. Non-divisive speech is difficult: spreading gossip in group chats has become habitual. Non-false speech is difficult: there are often white lies in business negotiations or interpersonal relationships. Any reasonable answer is acceptable, as long as you can give specific reasons.'},
   {q:'離不偷盜可得十種「可保信法」，請舉出您記得的三種。',
-   ref:'十種可保信法：①資財盈積不散失；②多人愛念；③人不欺負；④十方讚美；⑤不憂損害；⑥善名流布；⑦處眾無畏；⑧財命色力辯才具足；⑨常懷施意；⑩命終生天。能說出其中三種即算完整。'},
+   ref:'十種可保信法：①資財盈積不散失；②多人愛念；③人不欺負；④十方讚美；⑤不憂損害；⑥善名流布；⑦處眾無畏；⑧財命色力辯才具足；⑨常懷施意；⑩命終生天。能說出其中三種即算完整。',
+   qEn:'What are the ten \'trustworthy qualities\' from non-stealing? Name three you remember.',
+   refEn:'Ten trustworthy qualities: ①wealth accumulates without being scattered; ②many people cherish and care for you; ③no one deceives you; ④praised in all directions; ⑤no worry about loss or harm; ⑥good reputation spreads; ⑦confident in any assembly; ⑧wealth, life, appearance, strength, and eloquence all perfect; ⑨always with a mind of generosity; ⑩rebirth in heaven. Being able to name three counts as complete.'},
   {q:'本經說「不惡口」得八種「淨業」，請說出其中三種並解釋。',
-   ref:'八種淨業：①言不乖度（說話適當）②言皆利益（說話有益）③言必契理（說話合理）④言詞美妙（語言悅耳）⑤言可承領（可被接受）⑥言則信用（說話可信）⑦言無可譏（無從挑剔）⑧言盡愛樂（令人歡喜）。能說出三種並簡單解釋即可。'},
+   ref:'八種淨業：①言不乖度（說話適當）②言皆利益（說話有益）③言必契理（說話合理）④言詞美妙（語言悅耳）⑤言可承領（可被接受）⑥言則信用（說話可信）⑦言無可譏（無從挑剔）⑧言盡愛樂（令人歡喜）。能說出三種並簡單解釋即可。',
+   qEn:'The sutra says non-harsh speech yields eight \'pure deeds.\' Please name three and explain them.',
+   refEn:'Eight pure deeds: ①Speech never contrary to proper measure (always appropriate) ②Speech always beneficial (helpful) ③Speech always in accord with truth (reasonable) ④Speech wonderfully pleasant (pleasing) ⑤Speech that can be accepted (receivable) ⑥Speech that is trustworthy (reliable) ⑦Speech beyond reproach (impeccable) ⑧Speech bringing joy to all (delightful). Naming three with a simple explanation is sufficient.'},
   {q:'如果要向一個完全不了解佛法的人解釋「十善業道」，您會怎麼說？',
-   ref:'可以用通俗語言：十善業道是佛陀教我們的十個讓人生變好的行為準則，分三類：行為上不傷害人（不殺、不盜、不邪淫）；說話上不欺騙傷人（不妄語、不兩舌、不惡口、不廢話）；心念上不貪嫉、不發怒、不亂信（不貪、不瞋、不邪見）。把這十條做到，人際關係、健康、財富都會改善。'},
+   ref:'可以用通俗語言：十善業道是佛陀教我們的十個讓人生變好的行為準則，分三類：行為上不傷害人（不殺、不盜、不邪淫）；說話上不欺騙傷人（不妄語、不兩舌、不惡口、不廢話）；心念上不貪嫉、不發怒、不亂信（不貪、不瞋、不邪見）。把這十條做到，人際關係、健康、財富都會改善。',
+   qEn:'If you were explaining the ten wholesome courses of action to someone with no Buddhist background, how would you do it?',
+   refEn:'You could use everyday language: The ten wholesome courses of action are ten life guidelines the Buddha taught us to improve our lives, divided into three categories: in behavior, not harming others (non-killing, non-stealing, no sexual misconduct); in speech, not deceiving or hurting others (non-false speech, non-divisive speech, non-harsh speech, no meaningless talk); in mind, not being greedy, not being hateful, not holding mistaken beliefs (non-greed, non-hatred, non-wrong-view). Practicing these ten improves relationships, health, and wellbeing.'},
   {q:'離殺生與離瞋恚有何內在關聯？',
-   ref:'兩者都與「慈悲心」有深刻關聯。離殺生第三個功德是「永斷一切嗔恚習氣」——不殺生可以對治瞋恚。而離瞋恚的根本是培養慈悲心。佛教認為，殺生的動機往往來自瞋恚，因此兩者相互扣連：行不殺生可以熄滅瞋火，培養慈心則自然不起殺念。'},
+   ref:'兩者都與「慈悲心」有深刻關聯。離殺生第三個功德是「永斷一切嗔恚習氣」——不殺生可以對治瞋恚。而離瞋恚的根本是培養慈悲心。佛教認為，殺生的動機往往來自瞋恚，因此兩者相互扣連：行不殺生可以熄滅瞋火，培養慈心則自然不起殺念。',
+   qEn:'What inner connection is there between non-killing and non-hatred?',
+   refEn:'Both have a profound connection to compassion. The third virtue of non-killing is \'forever cutting all habits of anger\' — non-killing can counteract hatred. And the root of non-hatred is cultivating compassion. Buddhism holds that the motivation for killing often comes from hatred, so the two are mutually connected: practicing non-killing extinguishes the fire of hatred, and cultivating compassion naturally eliminates the impulse to kill.'},
   {q:'本經提到「智慧莊嚴故，能斷一切分別妄見」，請解釋「分別妄見」是什麼。',
-   ref:'分別妄見指妄加分別判斷，以虛妄的認知看待世界，例如：執著「我」與「他人」的對立、對事物生起貪愛或憎恨的偏見、不相信因果的邪見等。智慧莊嚴（般若波羅蜜）能破除這些虛妄分別，見到諸法實相，與不邪見相輔相成。'},
+   ref:'分別妄見指妄加分別判斷，以虛妄的認知看待世界，例如：執著「我」與「他人」的對立、對事物生起貪愛或憎恨的偏見、不相信因果的邪見等。智慧莊嚴（般若波羅蜜）能破除這些虛妄分別，見到諸法實相，與不邪見相輔相成。',
+   qEn:'The sutra says \'the wisdom ornament enables one to cut through all discriminative false views.\' Please explain what discriminative false views are.',
+   refEn:'Discriminative false views refer to mistaken cognition added through discriminating judgment — seeing the world through a distorted lens. For example: clinging to the opposition between \'self\' and \'others,\' biased perceptions of love and hatred toward things, wrong views that deny cause and effect. The wisdom ornament (prajñā-pāramitā) can break through these discriminative false views and perceive the true nature of all phenomena, working hand-in-hand with non-wrong-view.'},
   {q:'「三業清淨」是什麼意思？如何在日常生活中實踐？',
-   ref:'三業清淨指身業（行為）、口業（語言）、意業（心念）全部合乎十善業道。日常實踐：身業清淨——不傷害任何生命，對人誠信；口業清淨——說話真實、和諧、有益、有意義；意業清淨——每天反思起心動念，不起貪念、不發怒、保持正確的因果觀。三業配合，就是真正的修行。'},
+   ref:'三業清淨指身業（行為）、口業（語言）、意業（心念）全部合乎十善業道。日常實踐：身業清淨——不傷害任何生命，對人誠信；口業清淨——說話真實、和諧、有益、有意義；意業清淨——每天反思起心動念，不起貪念、不發怒、保持正確的因果觀。三業配合，就是真正的修行。',
+   qEn:'What is \'the purity of the three karmas\'? How can it be practiced in daily life?',
+   refEn:'Purity of the three karmas means bodily karma (actions), verbal karma (speech), and mental karma (thought) all accord with the ten wholesome courses of action. Daily practice: bodily purity — not harming any living being, being trustworthy; verbal purity — speaking truthfully, harmoniously, beneficially, meaningfully; mental purity — daily reflecting on arising intentions, not giving rise to greed, not becoming angry, maintaining a correct understanding of cause and effect. When all three karmas align, that is true practice.'},
 ];
 let vSession={active:false,qIdx:0,pool:[],history:[],recognition:null,currentQ:''};
-async function speakAvatar(text,onEnd){
+async function speakAvatar(text,onEnd,lang){
   var ai=document.getElementById('avatarIcon');
   if(ai) ai.classList.add('speaking');
   var bubble=document.getElementById('voiceBubble');
@@ -2742,7 +2895,7 @@ async function speakAvatar(text,onEnd){
   try{
     var r=await fetch(TTS_PROXY,{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({text:text,lang:'zh-TW'})
+      body:JSON.stringify({text:text,lang:lang||'zh-TW',voice:TTS_VOICE||'female'})
     });
     var d=await r.json();
     if(!d.audioContent) throw new Error('no audio');
@@ -2773,15 +2926,25 @@ function startVoiceSession(){
 function askVQ(){
   if(vSession.qIdx>=vSession.pool.length){endVoiceSession();return;}
   var item=vSession.pool[vSession.qIdx];
-  vSession.currentQ=item.q;
-  vSession.currentRef=item.ref;
-  setVS('第 '+(vSession.qIdx+1)+' / '+vSession.pool.length+' 題');
-  var intro=vSession.qIdx===0?'好的，我們開始！第一題：':'很好，下一題：';
-  speakAvatar(intro+vSession.currentQ,function(){
-    setVS('請按麥克風🎤回答，或在下方文字框輸入');
+  var isEn=LANG_MODE==='en';
+  vSession.currentQ = (isEn && item.qEn) ? item.qEn : item.q;
+  vSession.currentRef = (isEn && item.refEn) ? item.refEn : item.ref;
+  var statusText = isEn
+    ? 'Question '+(vSession.qIdx+1)+' / '+vSession.pool.length
+    : '第 '+(vSession.qIdx+1)+' / '+vSession.pool.length+' 題';
+  setVS(statusText);
+  var intro = isEn
+    ? (vSession.qIdx===0 ? "Let's begin! Question one: " : "Great, next question: ")
+    : (vSession.qIdx===0 ? '好的，我們開始！第一題：' : '很好，下一題：');
+  var lang = isEn ? 'en-US' : 'zh-TW';
+  speakAvatar(intro+vSession.currentQ, function(){
+    var hint = isEn
+      ? 'Press 🎤 to answer, or type below'
+      : '請按麥克風🎤回答，或在下方文字框輸入';
+    setVS(hint);
     document.getElementById('textInputArea').style.display='block';
     document.getElementById('userTextInput').value='';
-  });
+  }, lang);
 }
 function nextVoiceQuestion(){vSession.qIdx++;document.getElementById('userBubble').style.display='none';document.getElementById('textInputArea').style.display='none';askVQ();}
 function endVoiceSession(){
@@ -3002,8 +3165,14 @@ function copyOpener(){
   var txt=document.getElementById('aiOpenerResult').textContent;
   safeCopy(txt,'✅ 演講稿已複製！');
 }
+var speechLang='zh';
+function setSpeechLang(lang,btn){
+  speechLang=lang;
+  document.querySelectorAll('.speech-lang-btn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-slang')===lang);});
+}
 async function generateOpener(){
-  var audience=document.getElementById('audienceInput').value.trim()||'一般大眾';
+  var isEnSpeech=speechLang==='en';
+  var audience=document.getElementById('audienceInput').value.trim()||(isEnSpeech?'general audience':'一般大眾');
   var res=document.getElementById('aiOpenerResult');
   res.style.display='block';res.classList.add('loading');
   document.getElementById('openerBtnRow').style.display='none';
@@ -3024,8 +3193,10 @@ async function generateOpener(){
   try{
     var txt=await callAnthropicAPI({
       model:'claude-sonnet-4-20250514',max_tokens:1500,
-      system:'你是一位演講教練，專精佛學推廣。請生成一篇關於《佛說十善業道經》十善業道的演講稿。要求：①適合指定聽眾 ②流暢自然如口語 ③有具體例子 ④'+structureGuide+'用繁體中文，直接輸出演講稿內容，不要標題或說明文字。',
-      messages:[{role:'user',content:'聽眾：'+audience+'\n演講時長：'+durLabel+'（約'+wordCount+'）\n請生成完整演講稿'}]
+      system:speechLang==='en'
+        ? 'You are a speech coach specializing in Buddhist dharma outreach. Generate a speech on the Ten Wholesome Courses of Action from the Sūtra of the Ten Wholesome Courses of Action. Requirements: ①appropriate for the specified audience ②natural spoken language ③concrete examples ④'+structureGuide+'Output in English. Output the speech content directly, no title or explanatory text.'
+        : '你是一位演講教練，專精佛學推廣。請生成一篇關於《佛說十善業道經》十善業道的演講稿。要求：①適合指定聽眾 ②流暢自然如口語 ③有具體例子 ④'+structureGuide+'用繁體中文，直接輸出演講稿內容，不要標題或說明文字。',
+      messages:[{role:'user',content:(speechLang==='en'?'Audience: ':'聽眾：')+audience+'\n'+(speechLang==='en'?'Speech length: ':'演講時長：')+durLabel+'\n'+(speechLang==='en'?'Please generate a complete speech.':'請生成完整演講稿')}]
     });
     res.textContent=txt;res.classList.remove('loading');document.getElementById('openerBtnRow').style.display='flex';
   }catch(e){
@@ -5168,6 +5339,12 @@ function restoreLineSession(){
   try{initJournal();}catch(e){console.warn('journal:',e);}
   // Show login button or user avatar after DOM ready
   try{updateAvatarBar();}catch(e){}
+  // Sync voice gender buttons
+  try{
+    document.querySelectorAll('.voice-gender-btn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-voice')===TTS_VOICE);
+    });
+  }catch(e){}
 
   // ── Deep link: ?add=CODE → auto-fill friend code and navigate to social panel ──
   try{
