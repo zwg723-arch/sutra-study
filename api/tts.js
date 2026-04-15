@@ -12,10 +12,13 @@ export default async function handler(req, res) {
   const { text, lang } = req.body;
   if (!text) return res.status(400).json({ error: 'Missing text' });
 
-  // Choose voice based on language
   const isZh = !lang || lang.startsWith('zh');
-  const voiceName  = isZh ? 'zh-TW-Neural2-A' : 'en-US-Neural2-F';
-  const langCode   = isZh ? 'zh-TW' : 'en-US';
+
+  // zh-TW-Neural2-A does NOT exist.
+  // Correct TW Chinese WaveNet: languageCode=cmn-TW, name=cmn-TW-Wavenet-A
+  const voiceConfig = isZh
+    ? { languageCode: 'cmn-TW', name: 'cmn-TW-Wavenet-A' }
+    : { languageCode: 'en-US', name: 'en-US-Neural2-F' };
 
   try {
     const r = await fetch(
@@ -25,14 +28,16 @@ export default async function handler(req, res) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           input: { text },
-          voice: { languageCode: langCode, name: voiceName },
-          audioConfig: { audioEncoding: 'MP3', speakingRate: 0.9, pitch: 0 }
+          voice: voiceConfig,
+          audioConfig: { audioEncoding: 'MP3', speakingRate: 0.88, pitch: 0 }
         })
       }
     );
     const data = await r.json();
-    if (!r.ok) return res.status(r.status).json({ error: data.error?.message || 'TTS failed' });
-    // Return base64 audio directly
+    if (!r.ok) {
+      console.error('TTS error:', JSON.stringify(data));
+      return res.status(r.status).json({ error: data.error?.message || 'TTS failed', detail: data });
+    }
     return res.status(200).json({ audioContent: data.audioContent });
   } catch (err) {
     return res.status(500).json({ error: err.message });
