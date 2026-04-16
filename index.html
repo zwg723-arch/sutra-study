@@ -566,6 +566,13 @@ body{
 .nav-tab.active{background:var(--pink);color:#fff;border-color:var(--outline);box-shadow:3px 4px 0 var(--outline);}
 
 /* Sections */
+/* Search bar row */
+#searchBar{background:var(--nav-bg);}
+@media(min-width:600px){
+  #searchBar{padding:8px 20px;}
+  #searchBar button{max-width:500px;margin:0 auto;}
+  .search-kbd{display:inline !important;}
+}
 .search-result-item{padding:10px 14px;border-radius:8px;cursor:pointer;border:1px solid var(--border);margin-bottom:8px;transition:background .15s;}
 .search-result-item:hover{background:var(--ans-bg,rgba(255,255,255,.06));}
 .search-result-type{font-size:.7rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;}
@@ -874,6 +881,16 @@ body{
   .kp-grid,.img-grid{grid-template-columns:1fr;}
   .tf-opts{flex-direction:column;}
   .phrase-grid{grid-template-columns:1fr;}
+  .section{padding:16px 12px;}
+  .section-title{font-size:1.8rem;}
+  .voice-avatar .avatar-icon{width:80px;height:80px;font-size:2.4rem;}
+  .pstat{min-width:70px;}
+  .plb-item{padding:10px 12px;}
+  .outline-card{margin-bottom:8px;}
+}
+@media(max-width:390px){
+  .nav-tab{padding:5px 7px;font-size:12px;}
+  .nav-group-label{font-size:9px;}
 }
 .plan-topbar{background:var(--paper);border-bottom:1px solid var(--border);padding:12px 18px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin:-26px -18px 22px;}
 .plan-prog-wrap{flex:1;min-width:180px;}
@@ -1282,7 +1299,8 @@ html[data-theme="classic"] .plb-score{color:var(--jade);}
   width:100%;max-width:720px; /* cap width on desktop */
   overflow-x:auto;-webkit-overflow-scrolling:touch;
   scrollbar-width:none;
-  padding:2px 8px 4px;
+  padding:2px 8px 4px 8px;
+  padding-right:16px; /* extra right padding so last item is fully visible */
   box-sizing:border-box;
 }
 .nav-group::-webkit-scrollbar{display:none;}
@@ -1605,7 +1623,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <button class="voice-gender-btn" data-voice="male" onclick="setTtsVoice('male')">男聲 Enceladus</button>
 </div>
 
-<nav class="nav-tabs" style="position:relative;">
+<nav class="nav-tabs">
   <div class="nav-group">
     <span class="nav-group-label">📚 學習</span>
     <div class="nav-group-btns">
@@ -1634,11 +1652,16 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
       <button class="nav-tab" onclick="showSection('journal',12)">📔 日誌</button>
     </div>
   </div>
-  <button class="search-trigger-btn" onclick="openSearch()" title="搜尋 Search" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:1px solid var(--border);border-radius:20px;padding:5px 14px;cursor:pointer;color:var(--text-muted);font-size:.82rem;display:flex;align-items:center;gap:5px;">
-    🔍 <span style="display:none;" class="search-btn-label">搜尋</span>
-  </button>
-
 </nav>
+
+<!-- Search bar row - mobile-first, always visible below nav -->
+<div id="searchBar" style="display:flex;align-items:center;padding:6px 12px;background:var(--nav-bg);border-bottom:1px solid var(--border);">
+  <button onclick="openSearch()" style="flex:1;display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:22px;cursor:pointer;color:var(--text-muted);font-size:.84rem;text-align:left;-webkit-appearance:none;max-width:600px;margin:0 auto;">
+    <span style="flex-shrink:0;">🔍</span>
+    <span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">搜尋知識點、題目… · Search</span>
+    <kbd style="font-size:.68rem;opacity:.45;background:var(--border);border-radius:3px;padding:1px 5px;" class="search-kbd">⌘K</kbd>
+  </button>
+</div>
 
 <!-- ═══════ 0. 白話故事 ═══════ -->
 <div class="section active" id="story">
@@ -1652,10 +1675,9 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <div class="lang-toggle-bar" style="margin-bottom:12px;">
     <button class="lang-toggle-btn active" id="storyLangZh" onclick="showStoryLang('zh',this)">中文故事</button>
     <button class="lang-toggle-btn" id="storyLangEn" onclick="showStoryLang('en',this)">English Story</button>
-    <button class="btn btn-sm btn-jade" style="padding:4px 12px;font-size:.78rem;" onclick="readStory()">🔊 朗讀</button>
+    <button class="btn btn-sm btn-jade" style="padding:4px 12px;font-size:.78rem;" onclick="speakStory()">🔊 朗讀</button>
   </div>
   <div id="storyZh" class="story-body">
-    <div style="text-align:right;margin-bottom:10px;"><button class="btn btn-secondary" style="font-size:.78rem;padding:4px 12px;" onclick="speakStory()">🔊 朗讀故事</button></div>
     <div id="storyZhVersion">
     <h3>🌅 第一章：海邊的漁夫</h3>
     <p>在南方一個小漁港，住著一個叫林大海的漁夫。他從小跟著父親出海，但也養成了許多壞習慣：捕魚時不分大小通吃<span class="deed-tag">殺生</span>，見到別人的浮標也順手拿走<span class="deed-tag">偷盜</span>，跟人爭執時口出惡言<span class="deed-tag">惡口</span>，喝了酒更是亂說謊話<span class="deed-tag">妄語</span>。鄰里之間沒有人不怕他，連碼頭老闆也不願借錢給他。</p>
@@ -1687,7 +1709,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 
     <h3>✨ Epilogue: The Seed of Dharma</h3>
     <p>This story illustrates the core teaching of the <strong>Sūtra on the Ten Wholesome Courses of Action</strong>: <em>Because minds differ, karma differs.</em> Change does not need to happen all at once — begin with a single wholesome deed, persist sincerely, and life will gradually transform. The ten wholesome courses are not distant Buddhist theory; they are a practical guide for daily living.</p>
-    <button class="btn btn-jade btn-sm" onclick="readStory()" style="margin-top:12px;">🔊 Read Aloud</button>
+    <button class="btn btn-jade btn-sm" onclick="speakStory()" style="margin-top:12px;">🔊 Read Aloud</button>
   </div>
     <div id="storyEnVersion" style="display:none;">
       <h3>🌅 Chapter 1: The Fisherman by the Sea</h3>
@@ -2024,16 +2046,23 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
       <div style="font-size:.82rem;color:var(--text-muted);">AI 佛法導師 · 只回答關於《佛說十善業道經》的問題</div>
     </div>
     <div id="chatHistory" style="max-height:380px;overflow-y:auto;padding:8px 4px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px;"></div>
-    <div style="display:flex;gap:8px;align-items:flex-end;">
-      <textarea id="chatInput" rows="2" placeholder="請問法師… Ask the Dharma Master…（關於十善業道的問題）"
+    <!-- Voice + Text input row -->
+    <div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:8px;">
+      <button id="chatVoiceBtn" onclick="toggleChatVoice()" 
+        style="flex-shrink:0;width:46px;height:46px;border-radius:50%;background:var(--card-bg);border:1.5px solid var(--border);font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;transition:all .2s;"
+        title="語音輸入 Voice Input">🎤</button>
+      <textarea id="chatInput" rows="2" placeholder="請問法師… 或點 🎤 語音輸入"
         style="flex:1;padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--input-bg,var(--card-bg));color:var(--text);font-size:.95rem;resize:none;outline:none;"
         onkeydown="if((event.ctrlKey||event.metaKey)&&event.key==='Enter')askHaijing()"></textarea>
-      <button class="btn btn-jade" onclick="askHaijing()" id="chatSendBtn" style="padding:10px 18px;white-space:nowrap;">
-        📨 發問
+      <button class="btn btn-jade" onclick="askHaijing()" id="chatSendBtn" style="padding:10px 18px;white-space:nowrap;flex-shrink:0;">
+        📨
       </button>
     </div>
-    <div style="font-size:.72rem;color:var(--text-muted);margin-top:6px;text-align:center;">
-      Ctrl/Cmd+Enter 送出 · 法師只回答關於本經典的問題
+    <div id="chatVoiceStatus" style="display:none;text-align:center;font-size:.82rem;color:var(--mint);font-weight:700;margin-bottom:6px;">
+      🔴 正在聆聽… 說完後自動送出
+    </div>
+    <div style="font-size:.72rem;color:var(--text-muted);text-align:center;">
+      Ctrl+Enter 送出 · 法師只回答關於本經典的問題
     </div>
   </div>
 
@@ -2901,6 +2930,80 @@ document.addEventListener('keydown', function(e){
 });
 
 // ══ VOICE MODE SWITCHER ══
+// ══ CHAT VOICE INPUT (我問法師 panel) ══
+var _chatRecognition = null;
+var _chatRecording = false;
+
+function toggleChatVoice(){
+  if(_chatRecording){ stopChatVoice(); return; }
+  startChatVoice();
+}
+
+function startChatVoice(){
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var btn = document.getElementById('chatVoiceBtn');
+  var status = document.getElementById('chatVoiceStatus');
+  
+  if(!SR){
+    if(status){ status.style.display='block'; status.textContent='⚠️ 此環境不支援語音辨識，請直接文字輸入'; status.style.color='var(--red)'; }
+    return;
+  }
+  try{
+    var isEn = LANG_MODE === 'en';
+    var r = new SR();
+    r.lang = isEn ? 'en-US' : 'zh-TW';
+    r.continuous = false;
+    r.interimResults = true;
+    _chatRecognition = r;
+    
+    r.onstart = function(){
+      _chatRecording = true;
+      if(btn){ btn.textContent='⏹'; btn.style.background='var(--red)'; btn.style.borderColor='var(--red)'; btn.style.color='#fff'; }
+      if(status){ status.style.display='block'; status.textContent='🔴 ' + (isEn ? 'Listening… speak now' : '正在聆聽… 請說話'); status.style.color='var(--mint)'; }
+    };
+    r.onresult = function(e){
+      var text = Array.from(e.results).map(function(x){ return x[0].transcript; }).join('');
+      var inp = document.getElementById('chatInput');
+      if(inp) inp.value = text;
+    };
+    r.onend = function(){
+      _chatRecording = false;
+      if(btn){ btn.textContent='🎤'; btn.style.background=''; btn.style.borderColor=''; btn.style.color=''; }
+      if(status){ status.style.display='none'; }
+      // Auto-submit if there's text
+      var inp = document.getElementById('chatInput');
+      if(inp && inp.value.trim()){
+        askHaijing();
+      }
+    };
+    r.onerror = function(e){
+      _chatRecording = false;
+      if(btn){ btn.textContent='🎤'; btn.style.background=''; btn.style.borderColor=''; btn.style.color=''; }
+      if(e.error==='not-allowed'||e.error==='permission-denied'){
+        if(status){ status.style.display='block'; status.textContent='⚠️ 請允許麥克風權限後重試'; status.style.color='var(--red)'; setTimeout(function(){if(status)status.style.display='none';},3000); }
+      } else {
+        if(status){ status.style.display='block'; status.textContent='⚠️ 語音辨識失敗，請用文字輸入'; status.style.color='var(--red)'; setTimeout(function(){if(status)status.style.display='none';},3000); }
+      }
+    };
+    r.start();
+  }catch(ex){
+    console.warn('startChatVoice:', ex);
+    if(status){ status.style.display='block'; status.textContent='⚠️ 語音無法啟動，請用文字輸入'; status.style.color='var(--red)'; }
+  }
+}
+
+function stopChatVoice(){
+  if(_chatRecognition){
+    try{ _chatRecognition.stop(); }catch(e){}
+    _chatRecognition = null;
+  }
+  _chatRecording = false;
+  var btn = document.getElementById('chatVoiceBtn');
+  var status = document.getElementById('chatVoiceStatus');
+  if(btn){ btn.textContent='🎤'; btn.style.background=''; btn.style.borderColor=''; btn.style.color=''; }
+  if(status) status.style.display='none';
+}
+
 function setVoiceMode(mode){
   var askPanel = document.getElementById('vPanelAsk');
   var chatPanel = document.getElementById('vPanelChat');
