@@ -100,7 +100,9 @@ html[data-theme="classic"] .btn-jade{background:linear-gradient(135deg,var(--jad
 html[data-theme="classic"] .btn-secondary{background:var(--card-bg);border:1.5px solid var(--border);}
 html[data-theme="classic"] .nav-tab,.html[data-theme="classic"] .fz-btn{font-family:'Noto Serif TC',serif;}
 html[data-theme="classic"] .sutra-passage,.html[data-theme="classic"] .kp-card{border-radius:10px;border:1px solid var(--border);box-shadow:0 2px 12px var(--shadow);}
-html[data-theme="classic"] .quiz-card{border:1px solid var(--border);border-radius:10px;box-shadow:none;}
+html[data-theme="classic"] .quiz-tts-btn{background:none;border:1px solid var(--border);border-radius:50%;width:26px;height:26px;min-width:26px;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:.6;transition:opacity .15s;-webkit-appearance:none;}
+.quiz-tts-btn:hover,.quiz-tts-btn.playing{opacity:1;background:var(--mint,#3dddd4);border-color:var(--mint,#3dddd4);}
+.quiz-card{border:1px solid var(--border);border-radius:10px;box-shadow:none;}
 html[data-theme="classic"] .quiz-opt{border:1.5px solid var(--paper-dk);border-radius:8px;box-shadow:none;}
 html[data-theme="classic"] .quiz-opt:hover{border-color:var(--gold);background:var(--gold-pale);}
 html[data-theme="classic"] .tf-btn{border:2px solid var(--paper-dk);border-radius:10px;box-shadow:none;}
@@ -293,6 +295,10 @@ html[data-theme="kawaii"] .achv-card.unlocked{border-color:#FF6BAD;background:li
 html[data-theme="kawaii"] .achv-card-desc{color:#B090CC;}
 html[data-theme="kawaii"] .lb-item{background:#1E1228;border-color:#5A3070;box-shadow:3px 4px 0 #0A0514;}
 html[data-theme="kawaii"] .lb-me{border-color:#FF6BAD;background:#2A0A1E;}
+html[data-theme="kawaii"] .plb-item.plb-me{border-color:#FF6BAD !important;background:#2A0A1E !important;}
+html[data-theme="kawaii"] .plb-name{color:#F5E8FF !important;}
+html[data-theme="kawaii"] .plb-detail{color:#C9A8FF !important;}
+html[data-theme="kawaii"] .plb-score{color:#FF6BAD !important;}
 html[data-theme="kawaii"] .lb-rank{color:#FFE566;}
 html[data-theme="kawaii"] .lb-name{color:#F5E8FF;}
 html[data-theme="kawaii"] .plan-col{background:#1E1228;border-color:#5A3070;}
@@ -361,6 +367,10 @@ html[data-theme="classic"] .lb-item{background:#1a0d00;border-color:#5a4020;colo
   html[data-theme="classic"] .lb-score{color:#d4a017 !important;}
   html[data-theme="classic"] .lb-prog{color:#3a9060 !important;}
   html[data-theme="classic"] .lb-me{border-color:#d4a017;background:#1e1000;}
+  html[data-theme="classic"] .plb-item.plb-me{border-color:#d4a017 !important;background:#1e1000 !important;}
+  html[data-theme="classic"] .plb-name{color:#f0e0c0 !important;}
+  html[data-theme="classic"] .plb-detail{color:#b09060 !important;}
+  html[data-theme="classic"] .plb-score{color:#d4a017 !important;}
   html[data-theme="classic"] .phrase-zh{color:#f0e0c0 !important;}
   html[data-theme="classic"] .phrase-en{color:#c0a070 !important;}
   html[data-theme="classic"] .phrase-card{background:#1e1000 !important;border-color:#5a4020 !important;}
@@ -449,6 +459,10 @@ html[data-theme="ink"] .lb-item{background:#0d1a2e;border-color:#1a3a5c;color:#d
   html[data-theme="ink"] .lb-score{color:#7ba4ff !important;}
   html[data-theme="ink"] .lb-prog{color:#3dddd4 !important;}
   html[data-theme="ink"] .lb-me{border-color:#7ba4ff;background:#0a1520;}
+  html[data-theme="ink"] .plb-item.plb-me{border-color:#7ba4ff !important;background:#0a1520 !important;}
+  html[data-theme="ink"] .plb-name{color:#d8e8f0 !important;}
+  html[data-theme="ink"] .plb-detail{color:#7890a8 !important;}
+  html[data-theme="ink"] .plb-score{color:#7ba4ff !important;}
   html[data-theme="ink"] .phrase-zh{color:#d8e8f0 !important;}
   html[data-theme="ink"] .phrase-en{color:#7890a8 !important;}
   html[data-theme="ink"] .phrase-card{background:#0d1a2e !important;border-color:#1a3a5c !important;}
@@ -1566,13 +1580,13 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   </div>
 </header>
 
-<div class="theme-bar">
+<div class="theme-bar" id="themeSwitcher">
   <span class="theme-bar-label">🎨 風格</span>
   <button class="theme-btn" data-t="classic" onclick="setTheme('classic')">🏛 禪風</button>
   <button class="theme-btn" data-t="ink" onclick="setTheme('ink')">🖌 古風</button>
   <button class="theme-btn active" data-t="kawaii" onclick="setTheme('kawaii')">🌸 少女風</button>
 </div>
-<div class="font-bar">
+<div class="font-bar" id="fontSwitcher">
   <span class="font-bar-label">字體大小：</span>
   <button class="fz-btn" onclick="setFont('small',this)">小</button>
   <button class="fz-btn active" onclick="setFont('medium',this)">中</button>
@@ -1645,6 +1659,23 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <h3>🌈 第四章：三年後的改變</h3>
     <p>三年之後，大海的生活真的改變了。身體越來越健康，老婆的病慢慢好轉，孩子得到資助可以繼續讀書。他在碼頭上建立了好口碑，心裡不再憤恨，睡得安穩，對人溫和，連面相都柔和許多。老法師臨走前問他：「你做的是什麼？」大海說：「我做的只是把壞事停下來，把好事做起來。」老法師微笑：「這就是十善業道——一切善法的根本。你走的，就是這條路。」</p>
     <div class="story-connect">☸ <strong>故事與經典的連結：</strong>林大海的故事，正是《佛說十善業道經》的現代版示範。十善業道不只是宗教戒律，更是人生轉化的實用法則。<br><br>👉 點選「📜 經文」進入原典的中英文學習。</div>
+    <div id="storyEn" class="story-body" style="display:none;">
+    <h3>🌅 Chapter 1: The Fisherman by the Sea</h3>
+    <p>In a small fishing port in the south lived a fisherman named Lin Dahai. Growing up fishing with his father, he also developed many bad habits: catching fish of all sizes indiscriminately<span class="deed-tag">Killing</span>, pocketing others' buoys<span class="deed-tag">Stealing</span>, shouting insults during disputes<span class="deed-tag">Harsh speech</span>, and lying under the influence of alcohol<span class="deed-tag">False speech</span>. Nobody in the neighborhood wanted anything to do with him, and even the dock manager refused to lend him money.</p>
+    <p>One winter, Dahai's wife fell gravely ill. His children had no money for school. The family debt kept mounting. Dahai stood at the sea's edge, staring into the boundless waves, not knowing which way to turn.</p>
+
+    <h3>🌊 Chapter 2: The Voice from the Waves</h3>
+    <p>One stormy night, an old monk sought shelter at his home. The old monk spoke gently: "Friend, have you heard of the <strong>Ten Wholesome Courses of Action</strong>? They can change a person's destiny." Dahai scoffed: "I'm just a poor fisherman — what do wholesome deeds have to do with me?" The old monk smiled: "Even more so for a fisherman. Because every cast of the net, every word spoken, and every thought you have — all of these are creating your future."</p>
+    <p>That night, the old monk told him: "The Buddha taught in the Dragon King's palace: <em>Because minds differ, karma differs; thus beings transmigrate through various realms.</em> Your life is shaped by your mind and your actions. Start with just one thing — stop killing carelessly."</p>
+
+    <h3>🌿 Chapter 3: One Step at a Time</h3>
+    <p>Dahai began. The first month, he stopped taking small fish and threw them back. The second month, he stopped taking others' buoys. The third month, he began speaking gently to his wife and children. Slowly, something strange happened — his neighbors began to greet him, the dock manager lent him money again, and his wife's health gradually improved.</p>
+    <p>One year later, Dahai sat on the dock watching the sunset. His neighbor Old Chen walked over: "Dahai, you've really changed." Dahai smiled: "I learned that my life is built from my thoughts and actions. If I want a different life, I have to start by changing myself."</p>
+
+    <h3>✨ Epilogue: The Seed of Dharma</h3>
+    <p>This story illustrates the core teaching of the <strong>Sūtra on the Ten Wholesome Courses of Action</strong>: <em>Because minds differ, karma differs.</em> Change does not need to happen all at once — begin with a single wholesome deed, persist sincerely, and life will gradually transform. The ten wholesome courses are not distant Buddhist theory; they are a practical guide for daily living.</p>
+    <button class="btn btn-jade btn-sm" onclick="readStory()" style="margin-top:12px;">🔊 Read Aloud</button>
+  </div>
   </div>
 </div>
     <div id="storyEnVersion" style="display:none;">
@@ -1682,6 +1713,11 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <div class="section-title">知識要點</div>
   <div class="section-title-en">Key Learning Points</div>
   <div class="ornament">❧ 卍 ❧</div>
+  <div class="lang-toggle-bar" style="margin-bottom:14px;">
+    <button class="lang-toggle-btn active" id="kpLangZh" onclick="setKpLang('zh')">中文版</button>
+    <button class="lang-toggle-btn" id="kpLangEn" onclick="setKpLang('en')">English</button>
+  </div>
+  <div id="kpZh">
   <div class="highlight-box"><strong>十善業道</strong>（梵：daśa-kuśala-karmapatha）分三類：<br>① <strong>身業</strong>×3：不殺生、不偷盜、不邪淫<br>② <strong>口業</strong>×4：不妄語、不兩舌、不惡口、不綺語<br>③ <strong>意業</strong>×3：不貪欲、不瞋恚、不邪見</div>
   <div style="overflow-x:auto;">
   <table class="deed-table">
@@ -1711,7 +1747,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <div class="kp-card"><h3><span>🔗</span>與五戒的關係</h3><p>身業3種（不殺、不盜、不邪淫）+ 不妄語，與五戒前四戒相同；十善更多了口業三種及意業三種。</p><span class="kp-tag">戒律關係</span></div>
     <div class="kp-card"><h3><span>🌕</span>迴向菩提</h3><p>若能將十善業道<strong>迴向阿耨多羅三藐三菩提</strong>（無上正等正覺），即能速成佛道，獲得圓滿佛果。</p><span class="kp-tag">發菩提心</span></div>
   </div>
-  <!-- /kpZh -->
+  </div><!-- /kpZh -->
 
   <div id="kpEn" style="display:none;">
   <div class="highlight-box"><strong>Ten Wholesome Courses of Action</strong> (Skt: daśa-kuśala-karmapatha):<br>① <strong>Bodily</strong> ×3: Non-killing, Non-stealing, No sexual misconduct<br>② <strong>Verbal</strong> ×4: Non-false speech, Non-divisive speech, Non-harsh speech, No idle chatter<br>③ <strong>Mental</strong> ×3: Non-greed, Non-hatred, Non-wrong-view</div>
@@ -1845,7 +1881,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
       <div class="avatar-icon" id="avatarIcon">🙏</div>
       <div class="avatar-name">海靜法師</div>
       <div class="avatar-role">AI 佛法導師 · AI Dharma Tutor</div>
-      <div class="voice-bubble" id="voiceBubble">阿彌陀佛！歡迎學習《佛說十善業道經》。點擊「開始問答」，我將以語音向您提問，您可語音或文字回答。🙏</div>
+      <div class="voice-bubble" id="voiceBubble"><span class="mem-label-zh">阿彌陀佛！歡迎學習《佛說十善業道經》。點擊「開始問答」，我將以語音向您提問，您可語音或文字回答。🙏</span><span class="mem-label-en" style="display:none;">Amitabha! Welcome to the Sūtra on the Ten Wholesome Courses of Action. Click "Start Q&amp;A" and I will ask you questions by voice — you may answer by voice or text. 🙏</span></div>
     </div>
     <div class="voice-status" id="voiceStatus">點擊「開始問答」啟動練習</div>
     <div class="lang-toggle-bar" style="margin:8px 0 12px;">
@@ -1889,7 +1925,6 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <div style="color:rgba(255,255,255,.6);font-size:.88rem;margin-bottom:8px;">演講計時器 · Speech Timer</div>
     <div class="timer-select">
       <button class="timer-mode-btn" onclick="setTimerMode(60,this)">1 分鐘版</button>
-      <button class="timer-mode-btn" onclick="setTimerMode(60,this)">60 秒版</button>
       <button class="timer-mode-btn active" onclick="setTimerMode(180,this)">3 分鐘版</button>
       <button class="timer-mode-btn" onclick="setTimerMode(300,this)">5 分鐘版</button>
     </div>
@@ -1918,25 +1953,8 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <!-- Key phrases -->
   <h3 style="color:var(--red);font-size:1.2rem;margin:24px 0 12px;">💎 核心金句（必背 6 句）</h3>
   <div class="phrase-grid" id="phraseGrid"></div>
-  </div><!-- /storyZh -->
 
-  <div id="storyEn" class="story-body" style="display:none;">
-    <h3>🌅 Chapter 1: The Fisherman by the Sea</h3>
-    <p>In a small fishing port in the south lived a fisherman named Lin Dahai. Growing up fishing with his father, he also developed many bad habits: catching fish of all sizes indiscriminately<span class="deed-tag">Killing</span>, pocketing others' buoys<span class="deed-tag">Stealing</span>, shouting insults during disputes<span class="deed-tag">Harsh speech</span>, and lying under the influence of alcohol<span class="deed-tag">False speech</span>. Nobody in the neighborhood wanted anything to do with him, and even the dock manager refused to lend him money.</p>
-    <p>One winter, Dahai's wife fell gravely ill. His children had no money for school. The family debt kept mounting. Dahai stood at the sea's edge, staring into the boundless waves, not knowing which way to turn.</p>
-
-    <h3>🌊 Chapter 2: The Voice from the Waves</h3>
-    <p>One stormy night, an old monk sought shelter at his home. The old monk spoke gently: "Friend, have you heard of the <strong>Ten Wholesome Courses of Action</strong>? They can change a person's destiny." Dahai scoffed: "I'm just a poor fisherman — what do wholesome deeds have to do with me?" The old monk smiled: "Even more so for a fisherman. Because every cast of the net, every word spoken, and every thought you have — all of these are creating your future."</p>
-    <p>That night, the old monk told him: "The Buddha taught in the Dragon King's palace: <em>Because minds differ, karma differs; thus beings transmigrate through various realms.</em> Your life is shaped by your mind and your actions. Start with just one thing — stop killing carelessly."</p>
-
-    <h3>🌿 Chapter 3: One Step at a Time</h3>
-    <p>Dahai began. The first month, he stopped taking small fish and threw them back. The second month, he stopped taking others' buoys. The third month, he began speaking gently to his wife and children. Slowly, something strange happened — his neighbors began to greet him, the dock manager lent him money again, and his wife's health gradually improved.</p>
-    <p>One year later, Dahai sat on the dock watching the sunset. His neighbor Old Chen walked over: "Dahai, you've really changed." Dahai smiled: "I learned that my life is built from my thoughts and actions. If I want a different life, I have to start by changing myself."</p>
-
-    <h3>✨ Epilogue: The Seed of Dharma</h3>
-    <p>This story illustrates the core teaching of the <strong>Sūtra on the Ten Wholesome Courses of Action</strong>: <em>Because minds differ, karma differs.</em> Change does not need to happen all at once — begin with a single wholesome deed, persist sincerely, and life will gradually transform. The ten wholesome courses are not distant Buddhist theory; they are a practical guide for daily living.</p>
-    <button class="btn btn-jade btn-sm" onclick="readStory()" style="margin-top:12px;">🔊 Read Aloud</button>
-  </div>
+  
 
   <!-- AI opener -->
   <div class="ai-speech-box">
@@ -1978,6 +1996,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <div class="kp-card"><h3><span>🌟</span><span class="mem-label-zh">與生活相連</span><span class="mem-label-en" style="display:none;">Connect to Real Life</span></h3><p class="mem-label-zh">把每個善業連到現代生活：不兩舌=不在群組轉發是非、不綺語=少刷短影片。讓聽眾感到切身相關。</p><p class="mem-label-en" style="display:none;">Connect each deed to modern life: non-divisive speech = avoid forwarding gossip; no idle chatter = spend less time on meaningless content. Make it personally relevant.</p><span class="kp-tag mem-label-zh">現代轉化</span><span class="kp-tag mem-label-en" style="display:none;">Modern Application</span></div>
   </div>
 
+</div>
 
 <!-- ═══════ 10. 記憶技巧 ═══════ -->
 <div class="section" id="memory">
@@ -2305,6 +2324,7 @@ function toggleHeader(){
     if(full){full.style.display = headerExpanded ? 'block' : 'none';}
     if(icon){icon.classList.toggle('open', headerExpanded);}
     if(hdr){hdr.classList.toggle('collapsed', !headerExpanded);}
+    // Bars (theme/font/voice) remain always visible - not toggled with header
     try{localStorage.setItem('sjyd_hdr', headerExpanded?'1':'0');}catch(e){}
   }catch(e){console.warn('toggleHeader:',e);}
 }
@@ -2319,10 +2339,12 @@ function toggleHeader(){
       if(full)full.style.display='block';
       if(icon)icon.classList.add('open');
       headerExpanded = true;
+
     } else {
       // Already collapsed by default (display:none on headerFull)
       var hdr = document.getElementById('siteHeader');
       if(hdr)hdr.classList.add('collapsed');
+
     }
   }catch(e){}
 })();
@@ -2491,6 +2513,16 @@ function setLangMode(mode){
   try{updateStoryLang();}catch(e){}
   // Img grid
   try{buildImgGrid();}catch(e){}
+  // Sync voice bubble greeting if session not active
+  try{
+    if(!vSession.active){
+      var bub=document.getElementById('voiceBubble');
+      if(bub){
+        bub.querySelectorAll('.mem-label-zh').forEach(function(el){el.style.display=LANG_MODE==='en'?'none':'';});
+        bub.querySelectorAll('.mem-label-en').forEach(function(el){el.style.display=LANG_MODE==='en'?'':'none';});
+      }
+    }
+  }catch(e){}
   // Sync memLang with global LANG_MODE
   try{
     var mlz=document.getElementById('memLangZh');
@@ -2573,6 +2605,22 @@ function toggleSpeechRec(btn){
 }
 
 // ── Story TTS ──
+function setKpLang(lang){
+  var zhEl = document.getElementById('kpZh');
+  var enEl = document.getElementById('kpEn');
+  var btnZh = document.getElementById('kpLangZh');
+  var btnEn = document.getElementById('kpLangEn');
+  if(zhEl) zhEl.style.display = lang==='en' ? 'none' : '';
+  if(enEl) enEl.style.display = lang==='en' ? '' : 'none';
+  if(btnZh){ btnZh.classList.toggle('active', lang==='zh'); }
+  if(btnEn){ btnEn.classList.toggle('active', lang==='en'); }
+}
+function speakQuizQ(btn, text, lang){
+  try{
+    var decoded = text.replace(/&apos;/g,"'").replace(/&amp;/g,"&");
+    speakText(decoded, lang||'zh-TW', btn);
+  }catch(e){}
+}
 function speakMnemonic(btn){
   var isEn=LANG_MODE==='en';
   var text=isEn
@@ -2811,8 +2859,19 @@ const fcCards=[
   {zh:'不貪欲',en:'No greed (abhidhyā-virati)',desc:'意業第一。不貪著他人財物，知足常樂，心地清淨。'},
   {zh:'不瞋恚',en:'No hatred (vyāpāda-virati)',desc:'意業第二。不起瞋怒怨恨，修忍辱慈悲。'},
   {zh:'不邪見',en:'No wrong view (mithyādṛṣṭi-virati)',desc:'意業第三。正見因果，信三寶，得十種功德法。'},
+  // Extra cards 11-20
+  {zh:'心想異故，造業亦異',en:'Because minds differ, karma differs.',desc:'本經開宗明義的核心業力觀。一切眾生因心念各異，造業各殊，輪迴果報也各不相同。'},
+  {zh:'一切善法以十善業道為根本',en:'All wholesome dharmas have the ten wholesome deeds as their root.',desc:'佛言一切善法（三乘菩提、六度萬行）皆以十善業道為根本。'},
+  {zh:'離殺生十種離惱法',en:'Ten freedoms from affliction through non-killing.',desc:'①施無畏②起慈心③斷瞋習④身無病⑤壽長遠⑥非人護⑦無惡夢⑧滅怨結⑨無惡道怖⑩命終生天。'},
+  {zh:'離妄語八種天所讚法',en:'Eight god-praised virtues of non-false speech.',desc:'①口如蓮香②世間信伏③發言成證④常以愛語⑤三業清淨⑥言無誤失⑦言尊人奉行⑧智慧殊勝。'},
+  {zh:'離兩舌五種不可壞法',en:'Five indestructible qualities through non-divisive speech.',desc:'①不壞身②不壞眷屬③不壞信④不壞法行⑤不壞善知識。'},
+  {zh:'施莊嚴能捨一切所有',en:'Generosity ornament: able to relinquish all possessions.',desc:'六度莊嚴之首：以布施波羅蜜莊嚴，能捨一切所有。'},
+  {zh:'忍辱莊嚴得佛圓音具眾相好',en:'Patience ornament: attaining the Buddha perfect voice and marks.',desc:'以忍辱波羅蜜莊嚴，得佛圓音，具眾相好，令見者歡喜。'},
+  {zh:'精進莊嚴能摧伏魔怨入佛法藏',en:'Diligence ornament: crushing māra, entering the Buddha treasury.',desc:'以精進波羅蜜莊嚴，能摧伏魔怨，入佛法藏，成就菩提。'},
+  {zh:'晝夜常念思惟觀察善法',en:'Day and night, constantly contemplate wholesome dharmas.',desc:'佛告龍王斷一切惡道苦之一法：晝夜常念思惟觀察善法，令善法念念增長，不容毫分不善間雜。'},
+  {zh:'迴向阿耨多羅三藐三菩提',en:'Dedicate all to unsurpassed perfect enlightenment.',desc:'十善業道若能以大菩提心迴向，可成就聲聞、獨覺、乃至無上正等菩提佛果。'},
 ];
-let fcIdx=0,fcOrder=[...Array(10).keys()],isFlipped=false;
+let fcIdx=0,fcOrder=[...Array(20).keys()],isFlipped=false;
 function updateCard(){
   var card=fcCards[fcOrder[fcIdx]];
   var isEn = LANG_MODE==='en';
@@ -2827,15 +2886,15 @@ function updateCard(){
   var hint=document.querySelector('.fc-hint');
   if(hint) hint.textContent = isEn ? 'Tap to flip' : '點擊翻轉';
   var prog=document.getElementById('fcProgress');
-  if(prog) prog.textContent = isEn ? `Card ${fcIdx+1} / 10` : `卡片 ${fcIdx+1} / 10`;
+  if(prog) prog.textContent = isEn ? `Card ${fcIdx+1} / 20` : `卡片 ${fcIdx+1} / 20`;
   var num=document.getElementById('fcNum');
   if(num) num.textContent=fcIdx+1;
   document.getElementById('fcCard').classList.remove('flipped');
   isFlipped=false;
 }
 function flipCard(){isFlipped=!isFlipped;document.getElementById('fcCard').classList.toggle('flipped',isFlipped);}
-function nextCard(){fcIdx=(fcIdx+1)%10;updateCard();}
-function prevCard(){fcIdx=(fcIdx+9)%10;updateCard();}
+function nextCard(){fcIdx=(fcIdx+1)%20;updateCard();}
+function prevCard(){fcIdx=(fcIdx+19)%20;updateCard();}
 function shuffleCards(){for(let i=fcOrder.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fcOrder[i],fcOrder[j]]=[fcOrder[j],fcOrder[i]];}fcIdx=0;updateCard();}
 
 // ══ Question Banks ══
@@ -2953,7 +3012,8 @@ function buildTF(){
     var tfQLabel = isEn ? `Q${idx+1}.` : `第${idx+1}題．`;
     var tfTrue  = isEn ? '○ True' : '○ 是（True）';
     var tfFalse = isEn ? '✕ False' : '✕ 非（False）';
-    div.innerHTML=`<div class="quiz-q"><strong>${tfQLabel}</strong>${qText}</div>
+    var ttsBtn = `<button class="quiz-tts-btn" onclick="speakQuizQ(this,'${(qText).replace(/'/g,'&apos;')}','${isEn?'en-US':'zh-TW'}')" title="朗讀題目">🔊</button>`;
+    div.innerHTML=`<div class="quiz-q" style="display:flex;align-items:flex-start;gap:8px;"><div style="flex:1"><strong>${tfQLabel}</strong>${qText}</div>${ttsBtn}</div>
     <div class="tf-opts"><button class="tf-btn" onclick="checkTF(${idx},true,this)">${tfTrue}</button><button class="tf-btn" onclick="checkTF(${idx},false,this)">${tfFalse}</button></div>
     <div class="quiz-feedback" id="tf-fb-${idx}"></div>`;
     con.appendChild(div);
@@ -3000,7 +3060,8 @@ function buildMCQ(){
       var txt = String(o).replace(/^[A-D]\.\s*/,'').replace(/^[A-D]\./,'');
       return `<div class="quiz-opt" onclick="checkMCQ(${idx},${i},this)"><span class="opt-letter">${['A','B','C','D'][i]}</span>${txt}</div>`;
     }).join('');
-    div.innerHTML=`<div class="quiz-q"><strong>${qLabel}</strong>${qText}</div><div class="quiz-opts">${opts}</div><div class="quiz-feedback" id="mcq-fb-${idx}"></div>`;
+    var ttsBtnM = `<button class="quiz-tts-btn" onclick="speakQuizQ(this,'${qText.replace(/'/g,'&apos;')}','${isEn?'en-US':'zh-TW'}')" title="朗讀題目">🔊</button>`;
+    div.innerHTML=`<div class="quiz-q" style="display:flex;align-items:flex-start;gap:8px;"><div style="flex:1"><strong>${qLabel}</strong>${qText}</div>${ttsBtnM}</div><div class="quiz-opts">${opts}</div><div class="quiz-feedback" id="mcq-fb-${idx}"></div>`;
     con.appendChild(div);
   });
 }
@@ -3048,7 +3109,8 @@ function buildSA(){
     var btnLabel = isEn ? '📖 View Reference Answer' : '📖 查看參考答案';
     var ansLabel = isEn ? '【Reference Answer】' : '【參考答案】';
     const div=document.createElement('div');div.className='quiz-card';
-    div.innerHTML=`<div class="quiz-q"><strong>${qLabel}</strong>${qText}</div>
+    var ttsBtnS = `<button class="quiz-tts-btn" onclick="speakQuizQ(this,'${qText.replace(/'/g,'&apos;')}','${isEn?'en-US':'zh-TW'}')" title="朗讀題目">🔊</button>`;
+    div.innerHTML=`<div class="quiz-q" style="display:flex;align-items:flex-start;gap:8px;"><div style="flex:1"><strong>${qLabel}</strong>${qText}</div>${ttsBtnS}</div>
     <textarea class="sa-textarea" placeholder="${isEn ? 'Type your answer here...' : '請在此輸入您的答案...'}"></textarea>
     <div><button class="btn btn-secondary" onclick="toggleSA(${idx})">${btnLabel}</button></div>
     <div class="sa-answer" id="sa-ans-${idx}"><strong>${ansLabel}</strong><br><br>${ansText}</div>`;
@@ -3434,7 +3496,10 @@ function buildPhrases(){
   if(!con)return;
   keyPhrases.forEach(function(p,i){
     var d=document.createElement('div');d.className='phrase-card';
-    d.innerHTML='<button class="phrase-tts" data-idx="'+i+'" onclick="phraseSpeak(this)">🔊</button>'
+    d.innerHTML='<div style="position:absolute;top:10px;right:10px;display:flex;gap:4px;">'
+        +'<button class="phrase-tts" data-idx="'+i+'" data-lang="zh" onclick="phraseSpeakLang(this)" title="朗讀中文" style="font-size:.72rem;padding:2px 7px;">🀄</button>'
+        +'<button class="phrase-tts" data-idx="'+i+'" data-lang="en" onclick="phraseSpeakLang(this)" title="Read English" style="font-size:.72rem;padding:2px 7px;">🔤</button>'
+        +'</div>'
       +'<div class="phrase-zh">'+p.zh+'</div>'
       +'<div class="phrase-en">'+p.en+'</div>'
       +'<div class="phrase-note">💡 '+p.note+'</div>';
@@ -3466,6 +3531,14 @@ function phraseSpeak(btn){
   var text=isEn?keyPhrases[idx].en:keyPhrases[idx].zh;
   var lang=isEn?'en-US':'zh-TW';
   speakText(text,lang,btn);
+}
+function phraseSpeakLang(btn){
+  var idx=parseInt(btn.getAttribute('data-idx'));
+  var lang=btn.getAttribute('data-lang');
+  if(!keyPhrases[idx])return;
+  var text=lang==='en'?keyPhrases[idx].en:keyPhrases[idx].zh;
+  var ttsLang=lang==='en'?'en-US':'zh-TW';
+  speakText(text,ttsLang,btn);
 }
 
 // AI Opener
