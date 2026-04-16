@@ -2224,6 +2224,11 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <!-- PRACTICE RECORDS panel -->
   <div class="j-panel" id="jp-practice">
     <div id="practiceStats" class="practice-stats-bar"></div>
+    <div id="practiceChartWrap" style="margin:16px 0 10px;padding:16px;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;">
+      <div style="font-size:.82rem;font-weight:700;color:var(--text-muted);margin-bottom:10px;text-align:center;">&#x1f4ca; 練習分布 Practice Breakdown</div>
+      <canvas id="practiceDonutCanvas" width="220" height="220" style="display:block;margin:0 auto 10px;max-width:220px;"></canvas>
+      <div id="practiceChartLegend" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;font-size:.78rem;"></div>
+    </div>
     <div id="practiceLeaderboard" style="margin-bottom:18px;"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
       <div style="font-size:.82rem;color:var(--muted);font-weight:700;">練習記錄（最新在前）</div>
@@ -3237,6 +3242,38 @@ const vqPool=[
    ref:'三業清淨指身業（行為）、口業（語言）、意業（心念）全部合乎十善業道。日常實踐：身業清淨——不傷害任何生命，對人誠信；口業清淨——說話真實、和諧、有益、有意義；意業清淨——每天反思起心動念，不起貪念、不發怒、保持正確的因果觀。三業配合，就是真正的修行。',
    qEn:'What is \'the purity of the three karmas\'? How can it be practiced in daily life?',
    refEn:'Purity of the three karmas means bodily karma (actions), verbal karma (speech), and mental karma (thought) all accord with the ten wholesome courses of action. Daily practice: bodily purity — not harming any living being, being trustworthy; verbal purity — speaking truthfully, harmoniously, beneficially, meaningfully; mental purity — daily reflecting on arising intentions, not giving rise to greed, not becoming angry, maintaining a correct understanding of cause and effect. When all three karmas align, that is true practice.'},
+  {q:'「不兩舌」在現代社交媒體時代有什麼具體的實踐方法？',
+   qEn:'How can "non-divisive speech" be practiced in the age of social media?',
+   ref:'不在群組轉發未查證消息；不在背後說朋友壞話；看到爭論時不加油添醋；即使知道別人私事也不到處說。現代的不兩舌就是做網路正能量的傳播者。',
+   refEn:'Not forwarding unverified content in chats; not speaking poorly of friends behind their backs; not fanning flames in arguments; keeping others private matters private. Non-divisive speech today means being a positive online presence.'},
+  {q:'佛陀說「心想異故，造業亦異」——請用生活例子說明這個道理。',
+   qEn:'The Buddha said "Because minds differ, karma differs." Explain with a life example.',
+   ref:'同一件事，心念不同結果不同：面對堵車，憤怒者傷身氣躁，善念者聽佛法音頻；面對失敗，怨天尤人者沈淪，反思改善者成長。心念是命運的種子。',
+   refEn:'Same situation, different mind equals different outcome: stuck in traffic, an angry person harms their health, while a wholesome-minded person listens to dharma; facing failure, those who blame sink, those who reflect grow. The mind is the seed of destiny.'},
+  {q:'《佛說十善業道經》是在什麼場合對誰說的？這個背景有何意義？',
+   qEn:'What was the occasion and audience for the Sutra on the Ten Wholesome Deeds? Why is this setting significant?',
+   ref:'佛陀在娑竭羅龍宮，對龍王及眷屬說法。龍王象徵世間有力量者。以海中眾生形色各異為喻，說明一切皆由心造業而感。十善業道是一切眾生都能實踐的普世法門。',
+   refEn:'The Buddha taught in the Dragon Palace of Sagara to the Dragon King and retinue. The Dragon King represents worldly power. The diversity of ocean creatures illustrates that all forms arise from different karma. The ten wholesome deeds are a universal path for all beings.'},
+  {q:'十善業道與六度波羅蜜有什麼關係？',
+   qEn:'What is the relationship between the ten wholesome deeds and the six perfections?',
+   ref:'十善業道是六度的根基：布施莊嚴能捨一切；持戒莊嚴即十善本身；忍辱莊嚴得圓音相好；精進莊嚴摧伏魔怨；禪定莊嚴斷除煩惱；智慧莊嚴通達諸法。十善是修六度的基礎土壤。',
+   refEn:'The ten wholesome deeds are the foundation of the six perfections: giving enables relinquishing all; ethics is the ten wholesome deeds; patience yields perfect marks; diligence crushes obstacles; meditation removes afflictions; wisdom illuminates all dharmas. The ten wholesome deeds are the soil in which all six perfections grow.'},
+  {q:'如何區分「不貪欲」和消極逃避？',
+   qEn:'How do you distinguish "non-greed" from passive avoidance?',
+   ref:'不貪欲不是什麼都不要，而是知足的積極態度。區別：①不貪欲仍可有合理目標只是不執著；②不貪欲包含布施心樂於給予；③消極逃避是因恐懼而退縮；④不貪欲是基於智慧而選擇簡樸快樂。',
+   refEn:'Non-greed is not about wanting nothing, but contentment. Differences: non-greed allows reasonable goals without clinging; it includes generosity; passive avoidance withdraws from fear; non-greed chooses simplicity based on wisdom, not fear.'},
+  {q:'口業的四種，您覺得現代人最難做到哪一種？為什麼？',
+   qEn:'Among the four verbal karmas, which do you find hardest for modern people? Why?',
+   ref:'各有其難：妄語——職場壓力易妥協誠信；兩舌——社媒轉發未查證資訊極易；惡口——匿名環境讓人放鬆口德；綺語——短影片文化氾濫。認識自己的弱點，從最薄弱處開始修練。',
+   refEn:'Each is challenging: false speech — workplace pressure compromises honesty; divisive speech — sharing unverified content online is too easy; harsh speech — anonymity loosens verbal care; idle chatter — short-video culture is pervasive. Know your weakness and start practicing from there.'},
+  {q:'不殺生的「十種離惱法」中，哪幾種在現代生活中最能感受到？',
+   qEn:'Among the ten freedoms from affliction through non-killing, which do you find most relevant to modern life?',
+   ref:'最能感受到的：①身常無病——不殺生者慈悲心強，身心健康；②壽命長遠——心態平和壓力少；③非人守護——善因善緣圍繞；④無惡夢——心地清淨夜夢安；⑤滅怨結——不造殺業少結仇敵。這些都是現代人渴求的身心平安。',
+   refEn:'Most relevant today: freedom from illness — a compassionate heart supports wellbeing; long life — a peaceful mind reduces stress; protection — good people gather around; peaceful sleep — a pure mind rests easily; freedom from enemies — not harming others reduces conflict. These are what modern people long for most.'},
+  {q:'如果要向一個從未接觸佛法的朋友介紹十善業道，您會怎麼說？',
+   qEn:'If you were introducing the ten wholesome deeds to a friend who has never encountered Buddhism, what would you say?',
+   ref:'可以這樣說：「我最近學了一套簡單的生活準則，只有十條：身體方面珍惜生命、尊重他人財物和感情；言語方面說真話、不搬弄是非、不說粗話、少說廢話；內心方面不過度貪心、不輕易生氣、相信善有善報。你試試實踐一週看看？」',
+   refEn:'You could say: "I recently learned a simple life guide with just ten principles: in body, respect life, others property and relationships; in speech, speak truth, avoid gossip, harsh words and meaningless talk; in mind, avoid excessive greed, manage anger, trust cause and effect. Why not try practicing for one week and see?"'},
 ];
 let vSession={active:false,qIdx:0,pool:[],history:[],recognition:null,currentQ:''};
 async function speakAvatar(text,onEnd,lang){
@@ -3253,11 +3290,30 @@ async function speakAvatar(text,onEnd,lang){
     var d=await r.json();
     if(!d.audioContent) throw new Error('no audio');
     var audio=new Audio('data:audio/mp3;base64,'+d.audioContent);
-    audio.onended=audio.onerror=function(){
+    audio.onended=function(){
       if(ai)ai.classList.remove('speaking');
       if(onEnd)onEnd();
     };
-    audio.play();
+    audio.onerror=function(){
+      if(ai)ai.classList.remove('speaking');
+      if(onEnd)onEnd();
+    };
+    var playPromise=audio.play();
+    if(playPromise!==undefined){
+      playPromise.catch(function(e){
+        console.warn('audio.play blocked:',e);
+        if(ai)ai.classList.remove('speaking');
+        if(onEnd)onEnd();
+        // Try Web Speech fallback
+        try{
+          window.speechSynthesis.cancel();
+          var u2=new SpeechSynthesisUtterance(text);
+          u2.lang=lang||'zh-TW';u2.rate=0.87;
+          u2.onend=u2.onerror=function(){if(ai)ai.classList.remove('speaking');if(onEnd)onEnd();};
+          window.speechSynthesis.speak(u2);
+        }catch(e2){}
+      });
+    }
   }catch(e){
     // Fallback
     window.speechSynthesis.cancel();
@@ -3270,7 +3326,10 @@ function setVS(msg){document.getElementById('voiceStatus').textContent=msg;}
 function startVoiceSession(){
   try{if(window.va)window.va('event',{name:'voice_qa_start'});}catch(e){}
   vSession.active=true;vSession.qIdx=0;vSession.history=[];
-  vSession.pool=pickRandom(vqPool,6);
+  vSession.pool=pickRandom(vqPool,8);
+  // Track last session questions to avoid repeats
+  if(!window._lastVQPool) window._lastVQPool=[];
+  vSession.pool.sort(function(){return Math.random()-0.5;});
   document.getElementById('startBtn').style.display='none';
   ['recordBtn','skipBtn','endBtn'].forEach(function(id){document.getElementById(id).style.display='inline-flex';});
   document.getElementById('voiceHistory').style.display='block';
@@ -5313,8 +5372,65 @@ function filterPractice(type, btn){
 }
 function renderPracticePanel(){
   renderPracticeStats();
+  renderPracticeChart();
   renderPracticeLeaderboard();
   renderPracticeList();
+}
+function renderPracticeChart(){
+  var canvas=document.getElementById('practiceDonutCanvas');
+  var legend=document.getElementById('practiceChartLegend');
+  if(!canvas||!legend)return;
+  var s=getPracticeStats();
+  var types=[
+    {key:'tf',label:'是非題',color:'#3dddd4'},
+    {key:'mcq',label:'問答題',color:'#7ba4ff'},
+    {key:'sa',label:'簡答題',color:'#f7c948'},
+    {key:'voice',label:'AI問答',color:'#ff7eb6'},
+    {key:'note',label:'筆記',color:'#82e0aa'},
+    {key:'plan',label:'計劃',color:'#f0a060'},
+  ];
+  var data=types.map(function(t){
+    return {label:t.label,color:t.color,count:(s.byType[t.key]||{count:0}).count};
+  }).filter(function(d){return d.count>0;});
+  if(data.length===0){
+    canvas.style.display='none';
+    legend.innerHTML='<span style="color:var(--text-muted);font-size:.8rem;">尚無練習記錄 · No records yet</span>';
+    return;
+  }
+  canvas.style.display='block';
+  var total=data.reduce(function(sum,d){return sum+d.count;},0);
+  var ctx=canvas.getContext('2d');
+  var cx=110,cy=110,R=90,r=52;
+  ctx.clearRect(0,0,220,220);
+  var angle=-Math.PI/2;
+  data.forEach(function(d){
+    var slice=d.count/total*Math.PI*2;
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,R,angle,angle+slice);ctx.closePath();
+    ctx.fillStyle=d.color;ctx.fill();
+    if(slice>0.35){
+      var mid=angle+slice/2;
+      var lx=cx+Math.cos(mid)*(R+r)/2,ly=cy+Math.sin(mid)*(R+r)/2;
+      ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(Math.round(d.count/total*100)+'%',lx,ly);
+    }
+    angle+=slice;
+  });
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--bg')||'#0d1117';
+  ctx.fill();
+  ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--text')||'#fff';
+  ctx.font='bold 18px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(total,cx,cy-8);
+  ctx.font='11px sans-serif';
+  ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--text-muted')||'#aaa';
+  ctx.fillText('次練習',cx,cy+10);
+  legend.innerHTML=data.map(function(d){
+    return '<span style="display:flex;align-items:center;gap:4px;white-space:nowrap;background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:3px 8px;">'+
+      '<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:'+d.color+'"></span>'+
+      d.label+' '+d.count+'次</span>';
+  }).join('');
 }
 
 function renderPracticeStats(){
