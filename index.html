@@ -2064,8 +2064,14 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <div id="chatVoiceStatus" style="display:none;text-align:center;font-size:.82rem;color:var(--mint);font-weight:700;margin-bottom:6px;">
       🔴 正在聆聽… 說完後自動送出
     </div>
+    <!-- Stop TTS button - appears during playback -->
+    <div id="chatTtsBar" style="display:none;text-align:center;margin-bottom:6px;">
+      <button onclick="stopChatTts()" style="background:rgba(231,76,60,.15);border:1.5px solid #e74c3c;color:#e74c3c;border-radius:20px;padding:6px 18px;font-size:.82rem;cursor:pointer;-webkit-appearance:none;">
+        ⏹ 停止朗讀
+      </button>
+    </div>
     <div style="font-size:.72rem;color:var(--text-muted);text-align:center;">
-      Ctrl+Enter 送出 · 法師只回答關於本經典的問題
+      Ctrl+Enter 送出 · 點 🔊 朗讀法師回答
     </div>
   </div>
 
@@ -3033,7 +3039,7 @@ function setVoiceMode(mode){
 var _chatHistory = [];
 var _chatLoading = false;
 
-function appendChatMsg(role, text){
+function appendChatMsg(role, text, addSpeakBtn){
   var hist = document.getElementById('chatHistory');
   if(!hist) return;
   var isMonk = role==='monk';
@@ -3051,6 +3057,37 @@ function appendChatMsg(role, text){
       : 'background:var(--mint,#3dddd4);color:#fff;border-bottom-right-radius:3px;');
   bubble.innerHTML = text.replace(/\n/g,'<br>');
   
+  // Add 🔊 speak button to monk final replies (addSpeakBtn=true means final reply)
+  if(isMonk && addSpeakBtn){
+    var speakRow = document.createElement('div');
+    speakRow.style.cssText = 'margin-top:8px;display:flex;justify-content:flex-end;';
+    var speakBtn = document.createElement('button');
+    speakBtn.style.cssText = 'background:none;border:1px solid var(--border);border-radius:16px;padding:3px 10px;font-size:.75rem;cursor:pointer;color:var(--text-muted);-webkit-appearance:none;';
+    speakBtn.textContent = '🔊 朗讀';
+    speakBtn.setAttribute('data-text', text.replace(/<[^>]+>/g,''));
+    speakBtn.setAttribute('data-lang', _lastChatLang || 'zh-TW');
+    speakBtn.onclick = function(){
+      var t = this.getAttribute('data-text');
+      var l = this.getAttribute('data-lang');
+      var btn = this;
+      if(btn.textContent.indexOf('⏹') >= 0){
+        stopChatTts(); btn.textContent='🔊 朗讀'; return;
+      }
+      btn.textContent = '⏹ 停止';
+      showChatTtsBar(true);
+      speakText(t, l, null);
+      // Poll to detect when TTS ends
+      var poll = setInterval(function(){
+        if(!currentTtsAudio && !window.speechSynthesis.speaking){
+          clearInterval(poll);
+          try{btn.textContent='🔊 朗讀'; showChatTtsBar(false);}catch(e){}
+        }
+      }, 500);
+    };
+    speakRow.appendChild(speakBtn);
+    bubble.appendChild(speakRow);
+  }
+  
   if(isMonk){
     wrap.appendChild(avatar);
     wrap.appendChild(bubble);
@@ -3060,7 +3097,24 @@ function appendChatMsg(role, text){
   }
   hist.appendChild(wrap);
   hist.scrollTop = hist.scrollHeight;
-  return wrap;
+  return bubble; // return bubble so askHaijing can update its innerHTML
+}
+
+var _lastChatLang = 'zh-TW';
+
+function showChatTtsBar(show){
+  var bar = document.getElementById('chatTtsBar');
+  if(bar) bar.style.display = show ? 'block' : 'none';
+}
+
+function stopChatTts(){
+  stopCurrentTts();
+  try{ window.speechSynthesis.cancel(); }catch(e){}
+  showChatTtsBar(false);
+  // Reset all speak buttons
+  document.querySelectorAll('#chatHistory button').forEach(function(b){
+    if(b.textContent.indexOf('⏹') >= 0) b.textContent = '🔊 朗讀';
+  });
 }
 
 async function askHaijing(){
@@ -3113,15 +3167,14 @@ async function askHaijing(){
       messages: messages
     });
     _chatHistory.push({role:'assistant', content:reply});
+    _lastChatLang = replyLang;
 
-    // Update loading bubble with reply
-    if(loadBubble) loadBubble.innerHTML = reply.replace(/\n/g,'<br>');
-
-    // ── TTS: use speakText (not speakAvatar) to avoid vPanelAsk dependency ──
-    try{
-      var spoken = reply.replace(/<[^>]+>/g,'').trim().substring(0,400);
-      speakText(spoken, replyLang, null);
-    }catch(ttsErr){ console.warn('chat TTS:', ttsErr); }
+    // Replace loading bubble with final reply + 🔊 button
+    // Remove the loading bubble wrap and add a proper final bubble
+    if(loadBubble && loadBubble.parentElement){
+      loadBubble.parentElement.remove();
+    }
+    appendChatMsg('monk', reply, true); // addSpeakBtn=true for final replies
 
   }catch(e){
     if(loadBubble) loadBubble.innerHTML = isEnQuestion
