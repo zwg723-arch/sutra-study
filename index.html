@@ -2618,9 +2618,21 @@ function setKpLang(lang){
 }
 function speakQuizQ(btn, text, lang){
   try{
-    var decoded = text.replace(/&apos;/g,"'").replace(/&amp;/g,"&");
-    speakText(decoded, lang||'zh-TW', btn);
-  }catch(e){}
+    var t, l;
+    if(text){
+      t=text.replace(/&apos;/g,"'").replace(/&amp;/g,"&").replace(/&#39;/g,"'");
+      l=lang||'zh-TW';
+    } else {
+      // Read text from DOM to avoid quote-escaping issues
+      l=btn.getAttribute('data-lang')||'zh-TW';
+      var wrapper=btn.closest('.quiz-q')||btn.parentElement;
+      var textDiv=wrapper?wrapper.querySelector('div'):null;
+      t=textDiv?(textDiv.textContent||textDiv.innerText||''):'';
+    }
+    t=t.trim();
+    if(!t)return;
+    speakText(t,l,btn);
+  }catch(e){console.warn('speakQuizQ:',e);}
 }
 function speakMnemonic(btn){
   var isEn=LANG_MODE==='en';
@@ -3013,7 +3025,7 @@ function buildTF(){
     var tfQLabel = isEn ? `Q${idx+1}.` : `第${idx+1}題．`;
     var tfTrue  = isEn ? '○ True' : '○ 是（True）';
     var tfFalse = isEn ? '✕ False' : '✕ 非（False）';
-    var ttsBtn = `<button class="quiz-tts-btn" onclick="speakQuizQ(this,'${(qText).replace(/'/g,'&apos;')}','${isEn?'en-US':'zh-TW'}')" title="朗讀題目">🔊</button>`;
+    var ttsBtn = '<button class="quiz-tts-btn" onclick="speakQuizQ(this)" title="朗讀題目" data-lang="'+(isEn?'en-US':'zh-TW')+'">🔊</button>';
     div.innerHTML=`<div class="quiz-q" style="display:flex;align-items:flex-start;gap:8px;"><div style="flex:1"><strong>${tfQLabel}</strong>${qText}</div>${ttsBtn}</div>
     <div class="tf-opts"><button class="tf-btn" onclick="checkTF(${idx},true,this)">${tfTrue}</button><button class="tf-btn" onclick="checkTF(${idx},false,this)">${tfFalse}</button></div>
     <div class="quiz-feedback" id="tf-fb-${idx}"></div>`;
@@ -3061,7 +3073,7 @@ function buildMCQ(){
       var txt = String(o).replace(/^[A-D]\.\s*/,'').replace(/^[A-D]\./,'');
       return `<div class="quiz-opt" onclick="checkMCQ(${idx},${i},this)"><span class="opt-letter">${['A','B','C','D'][i]}</span>${txt}</div>`;
     }).join('');
-    var ttsBtnM = `<button class="quiz-tts-btn" onclick="speakQuizQ(this,'${qText.replace(/'/g,'&apos;')}','${isEn?'en-US':'zh-TW'}')" title="朗讀題目">🔊</button>`;
+    var ttsBtnM = '<button class="quiz-tts-btn" onclick="speakQuizQ(this)" title="朗讀題目" data-lang="'+(isEn?'en-US':'zh-TW')+'">🔊</button>';
     div.innerHTML=`<div class="quiz-q" style="display:flex;align-items:flex-start;gap:8px;"><div style="flex:1"><strong>${qLabel}</strong>${qText}</div>${ttsBtnM}</div><div class="quiz-opts">${opts}</div><div class="quiz-feedback" id="mcq-fb-${idx}"></div>`;
     con.appendChild(div);
   });
@@ -3110,7 +3122,7 @@ function buildSA(){
     var btnLabel = isEn ? '📖 View Reference Answer' : '📖 查看參考答案';
     var ansLabel = isEn ? '【Reference Answer】' : '【參考答案】';
     const div=document.createElement('div');div.className='quiz-card';
-    var ttsBtnS = `<button class="quiz-tts-btn" onclick="speakQuizQ(this,'${qText.replace(/'/g,'&apos;')}','${isEn?'en-US':'zh-TW'}')" title="朗讀題目">🔊</button>`;
+    var ttsBtnS = '<button class="quiz-tts-btn" onclick="speakQuizQ(this)" title="朗讀題目" data-lang="'+(isEn?'en-US':'zh-TW')+'">🔊</button>';
     div.innerHTML=`<div class="quiz-q" style="display:flex;align-items:flex-start;gap:8px;"><div style="flex:1"><strong>${qLabel}</strong>${qText}</div>${ttsBtnS}</div>
     <textarea class="sa-textarea" placeholder="${isEn ? 'Type your answer here...' : '請在此輸入您的答案...'}"></textarea>
     <div><button class="btn btn-secondary" onclick="toggleSA(${idx})">${btnLabel}</button></div>
@@ -3969,6 +3981,11 @@ function planMarkDone(){
   try{var d=P[planCurDay-1];logActivity('plan',{q:'第'+planCurDay+'天：'+(d?d.title:'')});if(window.va)window.va('event',{name:'plan_day_done',day:planCurDay});}catch(e){}
   // Force immediate cloud sync (don't wait for debounce)
   try{if(FIREBASE_USER) syncToFirestore();}catch(e){}
+  // Update sync hint to show last sync time
+  try{
+    var hint=document.getElementById('planSyncHint');
+    if(hint && FIREBASE_USER) hint.textContent='☁️ 已同步到雲端！換任何裝置登入都能看到進度。';
+  }catch(e){}
 }
 function updatePlanProg(){
   var pct=Math.round(planDone.length/30*100);
@@ -4476,6 +4493,8 @@ function saveNote(){
   // flash success
   var btn=document.querySelector('[onclick="saveNote()"]');
   if(btn){var orig=btn.textContent;btn.textContent='✅ 已儲存！';setTimeout(function(){try{btn.textContent=orig;}catch(e){}},1500);}
+  // Direct cloud sync for notes
+  try{if(FIREBASE_USER) syncToFirestore();}catch(e){}
 }
 function loadNote(){
   var day=parseInt(document.getElementById('noteDay').value)||planCalcDay();
@@ -4513,8 +4532,12 @@ function initNoteDaySelect(){
   sel.appendChild(opt0);
   for(var d=1;d<=30;d++){
     var o=document.createElement('option');
-    o.value=d;o.text='第'+d+'天'+(d===today?' ←':'');
+    o.value=d;o.text='第'+d+'天'+(d===today?' ★ 今天':'');
     sel.appendChild(o);
+  }
+  // Default to current plan day (select the matching option)
+  if(today>1 && today<=30){
+    sel.selectedIndex=today; // option 0=today, options 1-30 = days 1-30
   }
   renderSavedNotes(today);
   var ni=document.getElementById('noteInput');
@@ -5249,6 +5272,8 @@ function logActivity(type, data){
     if(panel && panel.classList.contains('active')) renderPracticePanel();
     // check achievements
     try{checkAchievements();}catch(e){}
+    // Sync to cloud after each activity
+    try{if(FIREBASE_USER) syncToFirestore();}catch(e){}
   }catch(e){console.warn('logActivity:',e);}
 }
 
