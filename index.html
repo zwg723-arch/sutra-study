@@ -547,7 +547,7 @@ body{
 .nav-tabs{
   background:#fff;
   display:flex;flex-wrap:wrap;justify-content:center;gap:5px;
-  padding:8px 10px;position:sticky;top:0;z-index:100;
+  position:relative;
   border-bottom:3px solid var(--outline);
   box-shadow:0 4px 0 var(--pink);
   width:100%;max-width:100%;overflow:hidden;
@@ -1292,7 +1292,7 @@ html[data-theme="classic"] .plb-score{color:var(--jade);}
   flex-direction:column;gap:3px;padding:5px 0;
   width:100%;max-width:100%;overflow:hidden;
   box-sizing:border-box;
-  align-items:center; /* center nav groups on desktop */
+  align-items:center;
 }
 .nav-group{
   display:flex;align-items:center;gap:5px;
@@ -1580,6 +1580,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 </head>
 <body>
 
+<div id="stickyTop" style="position:sticky;top:0;z-index:200;width:100%;">
 <header class="site-header" id="siteHeader">
   <div class="header-compact" id="headerCompact" onclick="toggleHeader()">
     <span class="header-compact-lotus">☸</span>
@@ -1662,8 +1663,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <kbd style="font-size:.68rem;opacity:.45;background:var(--border);border-radius:3px;padding:1px 5px;" class="search-kbd">⌘K</kbd>
   </button>
 </div>
-
-<!-- ═══════ 0. 白話故事 ═══════ -->
+</div>═══════ 0. 白話故事 ═══════ -->
 <div class="section active" id="story">
   <div class="section-title">白話故事入門</div>
   <div class="section-title-en">A Modern Parable</div>
