@@ -1580,7 +1580,6 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 </head>
 <body>
 
-<div id="stickyTop" style="position:sticky;top:0;z-index:200;width:100%;">
 <header class="site-header" id="siteHeader">
   <div class="header-compact" id="headerCompact" onclick="toggleHeader()">
     <span class="header-compact-lotus">☸</span>
@@ -1624,6 +1623,8 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
   <button class="voice-gender-btn" data-voice="male" onclick="setTtsVoice('male')">男聲 Enceladus</button>
 </div>
 
+
+<div id="stickyTop" style="position:sticky;top:0;z-index:200;width:100%;">
 <nav class="nav-tabs">
   <div class="nav-group">
     <span class="nav-group-label">📚 學習</span>
@@ -3065,23 +3066,43 @@ async function askHaijing(){
   var inp = document.getElementById('chatInput');
   var question = (inp ? inp.value : '').trim();
   if(!question) return;
-  
+
+  // ── Detect question language ──
+  // Count CJK chars vs ASCII letters to decide language
+  var cjkCount = (question.match(/[\u4e00-\u9fff\u3400-\u4dbf]/g)||[]).length;
+  var asciiCount = (question.match(/[a-zA-Z]/g)||[]).length;
+  var isEnQuestion = asciiCount > cjkCount;
+  var replyLang = isEnQuestion ? 'en-US' : 'zh-TW';
+
   // Add user bubble
   appendChatMsg('user', question);
   _chatHistory.push({role:'user', content:question});
   if(inp) inp.value='';
-  
+
   // Loading bubble
   _chatLoading = true;
-  var loadBubble = appendChatMsg('monk', '正在思考… 🙏');
+  var loadingText = isEnQuestion ? 'Thinking… 🙏' : '正在思考… 🙏';
+  var loadBubble = appendChatMsg('monk', loadingText);
   var btn = document.getElementById('chatSendBtn');
   if(btn) btn.disabled = true;
-  
-  // Build strict system prompt
-  var systemPrompt = '你是海靜法師，一位AI佛法導師，專門講解《佛說十善業道經》。規則：只能回答關於此經和十善業道的問題；如問題無關，請婉轉說明；回答要引用經文；語氣慈悲溫和；中英文均可。本經核心：說法地點娑竭羅龍宮，對象龍王。業力觀：一切眾生心想異故造業亦異。十善業道：身業三種（不殺生不偷盜不邪淫）口業四種（不妄語不兩舌不惡口不綺語）意業三種（不貪欲不瞋恚不邪見）。十善是一切善法根本，含人天福報乃至無上菩提。金句：晝夜常念思惟觀察善法，令諸善法念念增長。';
 
-  var messages = _chatHistory.slice(-6); // Keep last 6 turns for context
-  
+  // ── System prompt: language-aware ──
+  var langInstruction = isEnQuestion
+    ? 'IMPORTANT: The user is asking in English. You MUST reply entirely in English.'
+    : '重要：用戶用中文提問，你必須完全用繁體中文回答。';
+
+  var coreKnowledge = isEnQuestion
+    ? 'Core knowledge: The Buddha taught in the Dragon Palace of Sagara to the Dragon King. Key insight: "Because minds differ, karma differs; thus beings cycle through realms." Ten Wholesome Deeds: Body (3) = non-killing, non-stealing, no sexual misconduct; Speech (4) = non-false speech, non-divisive speech, non-harsh speech, no idle chatter; Mind (3) = non-greed, non-hatred, non-wrong-view. The ten wholesome deeds are the root of all good dharmas, from human/heavenly realms to supreme enlightenment. Key quote: "Throughout day and night, cultivate wholesome dharmas, growing moment by moment."'
+    : '本經核心：說法地點娑竭羅龍宮，對象龍王。業力觀：一切眾生心想異故造業亦異。十善業道：身業三種（不殺生不偷盜不邪淫）口業四種（不妄語不兩舌不惡口不綺語）意業三種（不貪欲不瞋恚不邪見）。十善是一切善法根本，含人天福報乃至無上菩提。金句：晝夜常念思惟觀察善法，令諸善法念念增長。';
+
+  var roleDesc = isEnQuestion
+    ? 'You are Master Haijing, an AI Buddhist teacher specializing in the Sutra on the Ten Wholesome Courses of Action. Rules: only answer questions about this sutra and the ten wholesome deeds; gently decline off-topic questions; quote scripture when possible; speak with compassion and warmth.'
+    : '你是海靜法師，一位AI佛法導師，專門講解《佛說十善業道經》。規則：只能回答關於此經和十善業道的問題；如問題無關，請婉轉說明；回答要引用經文；語氣慈悲溫和。';
+
+  var systemPrompt = roleDesc + ' ' + langInstruction + ' ' + coreKnowledge;
+
+  var messages = _chatHistory.slice(-8);
+
   try{
     var reply = await callAnthropicAPI({
       model: 'claude-sonnet-4-20250514',
@@ -3090,13 +3111,20 @@ async function askHaijing(){
       messages: messages
     });
     _chatHistory.push({role:'assistant', content:reply});
-    if(loadBubble && loadBubble.querySelector) loadBubble.innerHTML = reply.replace(/\n/g,'<br>');
+
+    // Update loading bubble with reply
+    if(loadBubble) loadBubble.innerHTML = reply.replace(/\n/g,'<br>');
+
+    // ── TTS: use speakText (not speakAvatar) to avoid vPanelAsk dependency ──
     try{
-      var lang = /[一-鿿]/.test(reply) ? 'zh-TW' : 'en-US';
-      speakAvatar(reply.substring(0,300), null, lang);
-    }catch(e){}
+      var spoken = reply.replace(/<[^>]+>/g,'').trim().substring(0,400);
+      speakText(spoken, replyLang, null);
+    }catch(ttsErr){ console.warn('chat TTS:', ttsErr); }
+
   }catch(e){
-    if(loadBubble) loadBubble.innerHTML = '⚠️ 暫時無法連線，請稍後再試。';
+    if(loadBubble) loadBubble.innerHTML = isEnQuestion
+      ? '⚠️ Unable to connect. Please try again.'
+      : '⚠️ 暫時無法連線，請稍後再試。';
   }
   _chatLoading = false;
   if(btn) btn.disabled = false;
