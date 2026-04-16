@@ -3214,6 +3214,24 @@ async function speakText(text,lang,btn){
     btn.textContent='⏳ 載入中…';
   }
 
+  function onTtsEnd(audio){
+    if(btn){btn.classList.remove('playing');btn.textContent=btn.dataset.orig||btn.textContent;}
+    if(currentTtsAudio===audio){currentTtsAudio=null;currentTtsBtn=null;}
+  }
+
+  function fallbackWebSpeech(){
+    if(btn){btn.classList.remove('playing');btn.textContent=btn.dataset.orig||btn.textContent;currentTtsBtn=null;}
+    try{
+      window.speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(text);
+      u.lang=lang||'zh-TW';u.rate=0.85;
+      u.onend=u.onerror=function(){
+        if(btn){btn.classList.remove('playing');btn.textContent=btn.dataset.orig||btn.textContent;currentTtsBtn=null;}
+      };
+      window.speechSynthesis.speak(u);
+    }catch(e2){}
+  }
+
   try{
     var r=await fetch(TTS_PROXY,{
       method:'POST',
@@ -3227,22 +3245,22 @@ async function speakText(text,lang,btn){
     currentTtsAudio=audio;
     if(btn) btn.textContent='⏹ 停止';
 
-    audio.onended=audio.onerror=function(){
-      if(btn){btn.classList.remove('playing');btn.textContent=btn.dataset.orig||btn.textContent;}
-      if(currentTtsAudio===audio){currentTtsAudio=null;currentTtsBtn=null;}
-    };
-    audio.play();
+    audio.onended=function(){ onTtsEnd(audio); };
+    audio.onerror=function(){ onTtsEnd(audio); };
+
+    // Handle iOS audio.play() promise rejection gracefully
+    var playPromise=audio.play();
+    if(playPromise!==undefined){
+      playPromise.catch(function(e){
+        console.warn('speakText play blocked:',e.message||e);
+        // iOS blocked auto-play → fall back to Web Speech
+        currentTtsAudio=null;currentTtsBtn=null;
+        fallbackWebSpeech();
+      });
+    }
   }catch(e){
     console.warn('speakText error:',e.message||e);
-    // Fallback to browser TTS
-    if(btn){btn.classList.remove('playing');btn.textContent=btn.dataset.orig||btn.textContent;currentTtsBtn=null;}
-    showToast('⚠️ 朗讀載入失敗，使用系統語音。請確認網路連線。');
-    try{
-      window.speechSynthesis.cancel();
-      var u=new SpeechSynthesisUtterance(text);
-      u.lang=lang||'zh-TW';u.rate=0.85;
-      window.speechSynthesis.speak(u);
-    }catch(e2){}
+    fallbackWebSpeech();
   }
 }
 
