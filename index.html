@@ -2191,6 +2191,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button class="btn btn-outline btn-sm" onclick="planGoToday()" id="planTodayBtn">📅 今天</button>
+      <button class="btn btn-outline btn-sm" onclick="planEditStart()">✏️ 調整日期</button>
       <button class="btn btn-outline btn-sm" onclick="planReset()">🔄 重新開始</button>
     </div>
   </div>
@@ -2200,7 +2201,13 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <span style="font-size:3.5rem;display:block;margin-bottom:14px;">🪷</span>
     <h2 style="color:var(--gold,#d4a017);text-shadow:0 2px 8px rgba(0,0,0,.4);">開始您的30天學習之旅</h2>
     <p style="color:var(--sub-text,rgba(255,255,255,.75));line-height:1.8;">每天只需10–25分鐘，30天後您將能流暢地向他人分享《佛說十善業道經》的精髓。<br>每天打開即顯示當日經文、閃卡與練習，無需跳轉。進度自動儲存於您的裝置。</p>
-    <button class="btn btn-red" style="font-size:1.05rem;padding:13px 34px;" onclick="planStart()">🙏 今天開始第1天</button>
+    <div style="margin:16px 0 20px;text-align:center;">
+      <label style="display:block;color:var(--text-muted);font-size:.85rem;margin-bottom:8px;">📅 選擇開始日期（預設今天）</label>
+      <input type="date" id="planStartDateInput"
+        style="padding:8px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--card-bg);color:var(--text);font-size:.95rem;text-align:center;cursor:pointer;-webkit-appearance:none;"
+      >
+    </div>
+    <button class="btn btn-red" style="font-size:1.05rem;padding:13px 34px;" onclick="planStart()">🙏 開始學習計劃</button>
   </div>
 
   <!-- Daily view -->
@@ -4491,15 +4498,66 @@ function planCalcDay(){
   var diff=Math.floor((now-planStartDate)/86400000)+1;
   return Math.max(1,Math.min(diff,30));
 }
+function planEditStart(){
+  // Show inline date adjustment dialog
+  var current = planStartDate ? planStartDate.toISOString().slice(0,10) : new Date().toISOString().slice(0,10);
+  var modal = document.getElementById('planEditDateModal');
+  if(!modal){
+    // Create modal on first use
+    modal = document.createElement('div');
+    modal.id = 'planEditDateModal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;';
+    modal.innerHTML = '<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:28px 24px;max-width:340px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.5);">'
+      + '<div style="font-size:1.8rem;margin-bottom:8px;">📅</div>'
+      + '<div style="font-weight:700;font-size:1.1rem;color:var(--text);margin-bottom:6px;">調整學習計劃開始日期</div>'
+      + '<div style="font-size:.82rem;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">修改開始日期後，系統會重新計算當前是「第幾天」。<br>已完成的天數記錄<strong>不會</strong>被清除。</div>'
+      + '<input type="date" id="planEditDateInput" style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--input-bg,var(--card-bg));color:var(--text);font-size:1rem;margin-bottom:16px;box-sizing:border-box;text-align:center;">'
+      + '<div style="display:flex;gap:10px;justify-content:center;">'
+      + '<button id="planEditDateOk" class="btn btn-jade" style="flex:1;">✅ 確認</button>'
+      + '<button id="planEditCancelBtn" class="btn btn-outline" style="flex:1;">取消</button>'
+      + '</div></div>';
+    document.body.appendChild(modal);
+    // Add button listeners after DOM insertion
+    var okBtn2 = document.getElementById('planEditDateOk');
+    if(okBtn2) okBtn2.onclick = planEditDateConfirm;
+    var cancelBtn = document.getElementById('planEditCancelBtn');
+    if(cancelBtn) cancelBtn.onclick = function(){ document.getElementById('planEditDateModal').style.display='none'; };
+  }
+  // Set current start date as default
+  var inp = document.getElementById('planEditDateInput');
+  if(inp) inp.value = current;
+  modal.style.display = 'flex';
+}
+
+function planEditDateConfirm(){
+  var inp = document.getElementById('planEditDateInput');
+  if(!inp || !inp.value){ alert('請選擇日期'); return; }
+  planStartDate = new Date(inp.value + 'T00:00:00');
+  planSaveState();
+  planCurDay = planCalcDay();
+  try{if(FIREBASE_USER) syncToFirestore();}catch(e){}
+  document.getElementById('planEditDateModal').style.display='none';
+  renderPlanDay(planCurDay);renderPlanCal();updatePlanProg();
+  var dayStr = planCurDay;
+  showToast('✅ 已更新！今天是學習計劃第 ' + dayStr + ' 天。');
+}
+
 function planStart(){
-  planStartDate=new Date();planStartDate.setHours(0,0,0,0);
-  planDone=[];planSaveState();planCurDay=1;
+  // Use date picker value if available, otherwise today
+  var dateInput = document.getElementById('planStartDateInput');
+  if(dateInput && dateInput.value){
+    planStartDate = new Date(dateInput.value + 'T00:00:00');
+  } else {
+    planStartDate = new Date(); planStartDate.setHours(0,0,0,0);
+  }
+  planDone=[];planSaveState();
+  planCurDay = planCalcDay();
   // Immediately sync to cloud
   try{if(FIREBASE_USER) syncToFirestore();}catch(e){}
   document.getElementById('planStartScreen').style.display='none';
   document.getElementById('planMain').style.display='block';
   document.getElementById('planTopbar').style.display='flex';
-  renderPlanDay(1);renderPlanCal();updatePlanProg();
+  renderPlanDay(planCurDay);renderPlanCal();updatePlanProg();
 }
 function planReset(){
   if(!confirm('確定要重新開始嗎？所有記錄將清除。'))return;
@@ -4682,6 +4740,14 @@ function renderPlanCal(){
 // ── Plan Init ──
 (function planInit(){
   try{planLoadState();}catch(e){console.warn('planLoadState:',e);}
+  // Pre-fill the date picker with today's date
+  try{
+    var di = document.getElementById('planStartDateInput');
+    if(di && !di.value){
+      var today = new Date();
+      di.value = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+    }
+  }catch(e){}
   try{
     if(planStartDate){
       var ss=document.getElementById('planStartScreen');
