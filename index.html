@@ -895,6 +895,14 @@ html[data-theme="minimal"] .theme-bar{background:#FFFFFF !important;border-botto
 html[data-theme="minimal"] .theme-bar-label{color:#8E8E93 !important;}
 html[data-theme="minimal"] .font-bar,
 html[data-theme="minimal"] .voice-gender-bar{background:#FFFFFF !important;border-color:#D1D1D6;}
+/* Desktop centering — all header bars and nav centered */
+@media(min-width:600px){
+  html[data-theme="minimal"] .font-bar,
+  html[data-theme="minimal"] .voice-gender-bar{justify-content:center;}
+  html[data-theme="minimal"] .nav-tabs{align-items:center;}
+  html[data-theme="minimal"] .nav-group{margin:0 auto;}
+  html[data-theme="minimal"] .header-compact{justify-content:center;}
+}
 html[data-theme="minimal"] .fz-btn,
 html[data-theme="minimal"] .voice-gender-btn,
 html[data-theme="minimal"] .speech-dur-btn,
@@ -913,6 +921,11 @@ html[data-theme="minimal"] .fc-front{background:#FFFFFF !important;border:1px so
 html[data-theme="minimal"] .fc-back{background:#F5F5F7 !important;border:1px solid #D1D1D6 !important;color:#1D1D1F !important;}
 html[data-theme="minimal"] .plan-day-header,
 html[data-theme="minimal"] .plan-daynav{background:linear-gradient(135deg,#1D1D1F,#3A3A3C) !important;color:#FFFFFF !important;}
+/* child elements override parent color — must target explicitly */
+html[data-theme="minimal"] .plan-daynav *,
+html[data-theme="minimal"] .plan-day-num,
+html[data-theme="minimal"] .plan-day-date,
+html[data-theme="minimal"] .plan-day-theme{color:#FFFFFF !important;text-shadow:none !important;}
 html[data-theme="minimal"] .plan-cal-dot{background:#F5F5F7 !important;border:1px solid #D1D1D6;color:#8E8E93 !important;}
 html[data-theme="minimal"] .plan-cal-dot.pcd-done{background:#1D1D1F !important;color:#FFFFFF !important;}
 html[data-theme="minimal"] .plan-cal-dot.pcd-today{background:#636366 !important;color:#FFFFFF !important;}
@@ -2293,7 +2306,7 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
       <button class="nav-tab" onclick="showSection('flashcard',4)">🃏 閃卡</button>
       <button class="nav-tab" onclick="showSection('truefalse',5)">✅ 是非</button>
       <button class="nav-tab" onclick="showSection('mcq',6)">❓ 問答</button>
-      <button class="nav-tab" onclick="showSection('shortans',7)">✏️ 簡答</button>
+      <button class="nav-tab" onclick="showSection('shortans',7)">✏️ 費曼</button>
       <button class="nav-tab" onclick="showSection('voice',8)">🎙 AI 問答</button>
     </div>
   </div>
@@ -2550,13 +2563,9 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
 
 <!-- ═══════ 7. 簡答 ═══════ -->
 <div class="section" id="shortans">
-  <div class="section-title">簡答題</div><div class="section-title-en">Short Answer</div><div class="ornament">❧ 卍 ❧</div>
-  <p style="text-align:center;color:var(--text-muted);margin-bottom:20px;font-size:.92rem;">先自行作答，再點擊查看參考答案</p>
-  <div class="lang-toggle-bar">
-        <button class="lang-toggle-btn active" data-lang="zh" onclick="setLangMode('zh')">中文</button>
-        <button class="lang-toggle-btn" data-lang="en" onclick="setLangMode('en')">English</button>
-      </div>
-      <div id="saContainer"></div>
+  <div class="section-title">費曼挑戰題</div><div class="section-title-en">Feynman Challenges · Deep Understanding</div><div class="ornament">❧ 卍 ❧</div>
+  <p style="text-align:center;color:var(--text-muted);margin-bottom:20px;font-size:.92rem;">用自己的話解釋，再請 AI 教練點評——教是最好的學習</p>
+  <div id="saContainer"></div>
   <div class="btn-row mt20"><button class="btn btn-gold" onclick="buildSA()">🔀 換一批題目</button></div>
 </div>
 
@@ -2801,7 +2810,9 @@ html[data-theme="kawaii"] .user-avatar-name{color:rgba(255,255,255,.8);}
     <div class="feynman-box">
       <h3>🎓 費曼學習法：教是最好的學習</h3>
       <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:14px;">費曼定律：「如果你不能用簡單的話解釋清楚，代表你還沒有真正理解。」選一個主題，試著用最簡單的語言解釋給一個完全不懂的人聽。</p>
-
+      <div style="text-align:right;margin-bottom:12px;">
+        <button class="btn btn-outline btn-sm" onclick="shuffleFeyn();buildFeynman();">🔀 換一批題目</button>
+      </div>
       <div id="feynmanTopics"></div>
     </div>
     <div class="highlight-box" style="margin-top:20px;">💡 <strong>費曼學習四步驟：</strong><br>① 選一個概念 → ② 用自己的話解釋（假設對方是小學生）→ ③ 找出解釋不清楚的地方 → ④ 回到原典補充，再次解釋。重複直到解釋流暢。</div>
@@ -4271,21 +4282,42 @@ let saCurrent=[{q:'請說明「菩薩六度」與十善業道的關係。',
    ans:'序分描述：佛在娑竭羅龍宮，與八千大比丘眾、三萬二千菩薩摩訶薩俱。世尊問龍王：「海中眾生形色種類各別，為何？」象徵意義：以海中眾生因業力不同而形色各異，引出「心想異故，造業亦異」的核心教理，說明萬法唯心，業由心造，善惡自取。'},
 ];
 function buildSA(){
-  saCurrent=pickRandom(saBank,6);var isEn=LANG_MODE==='en';const con=document.getElementById('saContainer');con.innerHTML='';
+  saCurrent=pickRandom(saBank,5);const con=document.getElementById('saContainer');con.innerHTML='';
   saCurrent.forEach((item,idx)=>{
-    var qText = (isEn && item.qEn) ? item.qEn : item.q;
-    var ansText = (isEn && item.ansEn) ? item.ansEn : item.ans;
-    var qLabel = isEn ? `Q${idx+1}.` : `第${idx+1}題．`;
-    var btnLabel = isEn ? '📖 View Reference Answer' : '📖 查看參考答案';
-    var ansLabel = isEn ? '【Reference Answer】' : '【參考答案】';
     const div=document.createElement('div');div.className='quiz-card';
-    var ttsBtnS = '<button class="quiz-tts-btn" onclick="speakQuizQ(this)" title="朗讀題目" data-lang="'+(isEn?'en-US':'zh-TW')+'">🔊</button>';
-    div.innerHTML=`<div class="quiz-q" style="display:flex;align-items:flex-start;gap:8px;"><div style="flex:1"><strong>${qLabel}</strong>${qText}</div>${ttsBtnS}</div>
-    <textarea class="sa-textarea" placeholder="${isEn ? 'Type your answer here...' : '請在此輸入您的答案...'}"></textarea>
-    <div><button class="btn btn-secondary" onclick="toggleSA(${idx})">${btnLabel}</button></div>
-    <div class="sa-answer" id="sa-ans-${idx}"><strong>${ansLabel}</strong><br><br>${ansText}</div>`;
+    div.innerHTML=`<div class="feynman-prompt">💭 <strong>費曼挑戰 ${idx+1}：</strong>${item.q}</div>
+    <p style="font-size:.88rem;color:var(--text-muted);margin:8px 0;">用自己的話解釋這個概念，越清楚越好。寫完後可請 AI 點評，或查看參考要點。</p>
+    <textarea class="sa-textarea" placeholder="請用自己的話解釋...（寫完後，對照原典看哪裡說得不夠清楚）"></textarea>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+      <button class="btn btn-jade btn-sm" onclick="checkSAFeynman(${idx},this)">🤖 AI教練點評</button>
+      <button class="btn btn-secondary btn-sm" onclick="toggleSA(${idx})">📖 查看參考要點</button>
+    </div>
+    <div class="feynman-result" id="sa-feyn-${idx}" style="display:none;"></div>
+    <div class="sa-answer" id="sa-ans-${idx}"><strong>【參考要點】</strong><br><br>${item.ans}</div>`;
     con.appendChild(div);
   });
+}
+async function checkSAFeynman(idx,btn){
+  var card=btn.closest('.quiz-card');
+  var ta=card?card.querySelector('textarea'):null;
+  var text=ta?ta.value.trim():'';
+  if(!text){if(ta)ta.style.borderColor='var(--wrong-bd)';return;}
+  var res=document.getElementById('sa-feyn-'+idx);
+  res.style.display='block';res.textContent='AI教練正在評估...';
+  var item=saCurrent[idx];
+  try{
+    var reply=await callAnthropicAPI({
+      model:'claude-sonnet-4-20250514',max_tokens:600,
+      system:'你是費曼學習法教練，也是佛學專家。評估學生對《佛說十善業道經》概念的解釋，給予：①哪些解釋得好（1-2句）②哪些還可更清楚（1-2句）③更好的解釋方式（1-2句）④鼓勵語（1句，結尾加隨喜讚嘆！🙏）。繁體中文，語氣親切，總字數100-130字。',
+      messages:[{role:'user',content:'題目：'+item.q+'\n\n學生的解釋：'+text}]
+    });
+    res.textContent=reply;res.classList.add('show');
+    try{logActivity('feynman',{q:item.q,a:text,ai:reply.substring(0,200)});}catch(e){}
+  }catch(e){
+    res.textContent='⚠️ AI評估功能需在 Claude.ai 環境中使用。請對照參考要點自我檢視。';
+    res.classList.add('show');
+    try{logActivity('feynman',{q:item.q,a:text,ai:''});}catch(e2){}
+  }
 }
 function toggleSA(idx){
   const el=document.getElementById(`sa-ans-${idx}`);
@@ -4867,13 +4899,36 @@ function speakStoryChain(){
 
 // Feynman Topics
 const feynData=[
-  {topic:'如何向10歲小朋友解釋「十善業道」？',prompt:'試著用最簡單的語言，解釋給一個10歲小朋友聽：什麼是十善業道，為什麼要實踐它？（不要用佛學術語，用日常語言）'},
-  {topic:'如何向完全沒接觸佛法的朋友解釋「業」的概念？',prompt:'你的朋友聽到「業力」這個詞，覺得很玄。試著用現代科學或日常生活的例子，解釋「造業」和「業力輪迴」是什麼意思。'},
-  {topic:'如果有人問「十善業道和做一個好人有什麼關係？」你怎麼回答？',prompt:'用自己的話回答：十善業道只是宗教戒律嗎？還是每個人都應該實踐的普世道德？為什麼？'},
+  {topic:'如何向10歲小朋友解釋「十善業道」？',prompt:'用最簡單的語言，說明什麼是十善業道、為什麼要實踐它，不要用佛學術語。'},
+  {topic:'如何向完全沒接觸佛法的朋友解釋「業」的概念？',prompt:'用現代科學或日常生活的例子，解釋「造業」和「業力輪迴」是什麼意思。'},
+  {topic:'如果有人問「十善業道和做一個好人有什麼關係？」你怎麼回答？',prompt:'用自己的話：十善業道只是宗教戒律嗎？還是普世道德？為什麼？'},
+  {topic:'為什麼佛在龍宮說法？龍宮說法有何特殊意義？',prompt:'用白話解釋佛在海龍王宮說法的緣起，說明大海眾生的比喻代表什麼。'},
+  {topic:'如何向外國朋友解釋「不貪欲」，而不讓他們誤解為「不要追求成功」？',prompt:'區分正當願望與貪欲的界線，用生活例子說明不貪欲的真義。'},
+  {topic:'「大地」在本經結尾的譬喻是什麼意思？為什麼佛用大地比喻十善業道？',prompt:'解釋大地能生長萬物的比喻如何對應十善業道與一切善法的關係。'},
+  {topic:'如何用費曼式解釋「不惡口」的重要性，讓一個易動怒的人真正理解？',prompt:'不說粗惡語是什麼？給一個易怒的人舉具體例子，說明後果與轉化方法。'},
+  {topic:'「心想異故，造業亦異」——請用一個具體生活場景說明這句話。',prompt:'舉一個現實場景，說明同樣一件事，不同心念會產生不同業力和後果。'},
+  {topic:'如果有人說「我信佛但做壞事，反正念佛可以消業」，你如何用本經反駁？',prompt:'根據十善業道的教義，說明修行與行善的關係，指出這個想法哪裡有問題。'},
+  {topic:'不邪見和「相信科學」有矛盾嗎？請說明正見的現代詮釋。',prompt:'解釋什麼是邪見，說明正見（因果正見）與科學思維是否衝突及其理由。'},
+  {topic:'意業三種（不貪、不瞋、不邪見）為什麼排在最後？它們為何最難修？',prompt:'解釋意業與身業、口業的關係，說明修意業為什麼是最根本也最困難的。'},
+  {topic:'「離偷盜得十種可保信法」中的「資財盈積不散」，用白話解釋如何在現實中兌現？',prompt:'用現代人的語境解釋不偷盜如何帶來「財富穩固」的因果關係。'},
+  {topic:'為什麼本經說菩薩以「施波羅蜜」莊嚴十善業道？布施和十善有何聯繫？',prompt:'解釋布施波羅蜜（generosity）如何與十善業道相輔相成，以及菩薩行的整體架構。'},
+  {topic:'如果有人問「只要做個好人就夠了，為什麼還要學佛？」請用本經作答。',prompt:'用本經關於「迴向菩提」的教義，說明善行的不同層次與目標。'},
+  {topic:'在社交媒體時代，「不綺語」的標準是什麼？短影片、娛樂內容算不算綺語？',prompt:'分析現代媒體使用習慣，判斷哪些符合不綺語的標準，哪些違反。'},
+  {topic:'「口業清淨」為什麼與「智慧增長」有關？結合現代溝通學解釋。',prompt:'說明說話方式如何影響一個人的思維品質和人際智慧，連結佛法與現代心理學。'},
+  {topic:'如果你要做一個五分鐘「十善業道」分享，你的開場白、論點和結尾各是什麼？',prompt:'設計一個完整的五分鐘演說框架，包括吸引聽眾的開場、三個論點、有力的結尾。'},
+  {topic:'比較「不邪淫」在古代戒律和現代家庭倫理中的意涵，有何不同詮釋？',prompt:'從古代僧侶戒律到現代在家修行者，說明不邪淫的核心精神與不同時代的應用。'},
+  {topic:'「聲聞菩提」「獨覺菩提」「無上菩提」分別是什麼？十善業道如何通達三種菩提？',prompt:'用白話解釋三種菩提的差異，說明十善業道是如何成為三者共同基礎的。'},
+  {topic:'如何用「間隔重複法」設計記憶十善業道的計劃？請說出設計邏輯。',prompt:'根據遺忘曲線理論，設計一個切實可行的七天或三十天記憶計劃並說明原理。'},
+  {topic:'十善業道裡哪一條最適合「初學者」從今天就開始實踐？說明你的理由。',prompt:'選出一條最適合現代人從今天開始的善業，說明如何具體執行，預期會有什麼改變。'},
+  {topic:'「不妄語」和「善意的謊言」有衝突嗎？本經如何看待這個倫理困境？',prompt:'分析說謊保護他人感情的場景，從因果業力角度探討是否存在「善意謊言」的空間。'},
+  {topic:'如果地球上所有人都修行十善業道，世界會變成什麼樣？',prompt:'從個人修行出發，想象十善業道若被廣泛實踐，社會、環境和人際關係會如何改變。'},
 ];
+var feynBatch=[];
+function shuffleFeyn(){feynBatch=feynData.slice().sort(()=>Math.random()-.5).slice(0,5);}
 function buildFeynman(){
-  const con=document.getElementById('feynmanTopics');
-  feynData.forEach((t,idx)=>{
+  if(!feynBatch.length) shuffleFeyn();
+  const con=document.getElementById('feynmanTopics');con.innerHTML='';
+  feynBatch.forEach((t,idx)=>{
     const d=document.createElement('div');d.style.marginBottom='20px';
     d.innerHTML=`<div class="feynman-prompt">💭 <strong>費曼挑戰 ${idx+1}：</strong>${t.topic}</div>
     <p style="font-size:.88rem;color:var(--text-muted);margin:8px 0;">${t.prompt}</p>
